@@ -5,10 +5,11 @@
 Destroy all the fires on the level by colliding them with blocks of ice
 
 ### Instructions
- - Player can create blocks of ice by pushing down.
+ - Player can create blocks of ice(keypress down) only one level bellow himself.
+ - Player can push a single block of ice (keypress forward).
  - Player can't create an ice block inside a fire.
  - If the block of ice has nothing bellow it will fall down.
- - Player can climb only one level above you
+ - Player can climb only one level above itself
  - Player can fall down without harm
  - Player can't touch a fire (* still not applied)
 
