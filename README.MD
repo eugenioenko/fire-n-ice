@@ -5,4 +5,4 @@
 
 Work in progress, demo here:
 
-[Online demo Here](https://eugenioenko.github.io/fire-n-ice/game.html)
+[Online demo Here](https://eugenioenko.github.io/fire-n-ice/)
