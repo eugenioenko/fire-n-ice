@@ -2,9 +2,7 @@
 /**
  * Engine Loop
  */
-var Engine = function(base_url){
-    this.base_url = typeof base_url == "undefined" ? '' : base_url;
-    this.map = LevelMap;
+var Engine = function(){
     this.canvas = document.getElementById('canvas');
     this.cwidth = canvas.width;
     this.cheight = canvas.height;
@@ -19,6 +17,9 @@ var Engine = function(base_url){
     this.gameloop = this.gameloop_.bind(this); // jshint ignore:line
     this.sprites = [];
     this.sfxs = [];
+    this.level = 0;
+
+    this.init();
 };
 
 
@@ -46,8 +47,10 @@ Engine.prototype.draw = function() {
 
 
 Engine.prototype.collision = function() {
+    var fires = false;
     for (var i = 0; i < this.sprites.length; i++){
         if(this.sprites[i] instanceof Fire){
+            fires = true;
             var fire = this.sprites[i];
             for (var j = 0; j < this.sprites.length; j++){
                 if(this.sprites[j] instanceof Ice){
@@ -66,6 +69,12 @@ Engine.prototype.collision = function() {
             }
         }
     }
+    if(!fires){
+            this.level++;
+            this.load(levels[this.level]);
+            this.addSfx(new Sparks(this, this.player.xtile, this.player.ytile, '255,255,255', 200));
+
+        }
 };
 
 Engine.prototype.move = function() {
@@ -238,6 +247,7 @@ Engine.prototype.update = function(id){
     });
 };
 Engine.prototype.load = function(data) {
+    this.sprites = [];
     this.data = data;
     this.map = new TileMap(this, data.map);
     for(var i = 0; i < data.sprites.length; ++i){
@@ -258,16 +268,11 @@ Engine.prototype.load = function(data) {
                 break;
         }
     }
-    this.keyboard = new Keyboard();
-    this.gameloop();
 };
 
 Engine.prototype.init = function() {
-    this.map = new TileMap(this, LevelMap);
-    this.player = new Player(this, 5, 5);
-    this.add(new Fire(this, 4, 8));
-    this.add(this.player);
     this.keyboard = new Keyboard();
+    this.load(levels[this.level]);
     this.gameloop();
 };
 
