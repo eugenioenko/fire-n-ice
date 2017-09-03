@@ -36,7 +36,7 @@ TileMap.prototype.getTile = function(x, y) {
 TileMap.prototype.draw = function() {
     var state = TILE_MIDDLE;
     this.ctx.save();
-    //this.ctx.fillStyle = this.background;
+    //this.ctx.fillStyle =  this.background;
     //this.ctx.fillRect(0,0,this.engine.cwidth,this.engine.cheight);
     for(var i = 0; i <= this.width; ++i){
         for(var j = 0; j <= this.height; ++j){

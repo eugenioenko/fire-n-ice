@@ -1,0 +1,35 @@
+{
+  "name": "fire-n-ice",
+  "version": "1.0.0",
+  "description": "A remake of a NES game with the same name: Fire 'n Ice",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eugenioenko/fire-n-ice.git"
+  },
+  "keywords": [
+    "nes",
+    "game",
+    "fire",
+    "ice",
+    "javascript"
+  ],
+  "author": "eugenioenko",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eugenioenko/fire-n-ice/issues"
+  },
+  "homepage": "https://github.com/eugenioenko/fire-n-ice#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-append-prepend": "^1.0.4",
+    "gulp-concat": "^2.6.1",
+    "gulp-jshint": "^2.0.4",
+    "jshint": "^2.9.5",
+    "jshint-stylish": "^2.2.1"
+  },
+  "dependencies": {}
+}

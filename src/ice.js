@@ -1,4 +1,3 @@
-
 var Ice = function(engine, tx, ty, length, frozen){
     var _length = (typeof length === 'undefined') ? 1 : length;
     AnimSprite.call(this, this.id, engine, 'img_ice', tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 1, true);
@@ -29,6 +28,7 @@ Ice.prototype.add = function(tx) {
     this.x = this.xtile * TILE_WIDTH;
     this.length++;
 };
+
 Ice.prototype.isSpriteAt = function(tx, ty){
     if(this.ytile == ty){
         if(tx >= this.xtile && tx < (this.xtile + this.length)){
@@ -155,6 +155,7 @@ Ice.prototype.draw = function() {
 
     this.ctx.restore();
 };
+
 Ice.prototype.glide = function(){
     this.counter += 4;
     if(this.counter <= TILE_WIDTH){
@@ -163,6 +164,7 @@ Ice.prototype.glide = function(){
         this.push();
     }
 };
+
 Ice.prototype.doDown = function(){
     this.counter += 4;
     if(this.counter <= TILE_WIDTH){
@@ -171,6 +173,7 @@ Ice.prototype.doDown = function(){
         this.setState(MOVE_STAND, false);
     }
 };
+
 Ice.prototype.push = function(dir) {
     this.dirrection = (typeof dir === 'undefined') ? this.dirrection : dir;
     if(!this.collision()){

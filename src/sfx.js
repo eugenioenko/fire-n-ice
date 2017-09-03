@@ -1,13 +1,13 @@
 
 
 
-var Particle = function(ctx, x, y, color){
+var Particle = function(ctx, x, y, color, intencity){
     this.color = (typeof color === 'undefined') ? '255,255,255' : color;
     this.r = 2;
     this.x = x;
     this.y = y;
-    this.vx = Math.random() * 4 - 2;
-    this.vy = Math.random() * 6 - 4;
+    this.vx = (Math.random() * 4 - 2) * intencity;
+    this.vy = (Math.random() * 6 - 4) * intencity;
     this.speed = 0.15;
     this.life = 255;
     this.ctx = ctx;
@@ -26,13 +26,14 @@ Particle.prototype.move = function() {
     this.vy += this.speed;
     this.life -= 5;
 };
-var Sparks = function(engine, tx,ty,color, length){
+var Sparks = function(engine, tx,ty,color, length, intencity){
     this.color = (typeof color === 'undefined') ? '255,255,255' : color;
-    this.length = (typeof color === 'undefined') ? 10 : length;
+    this.length = (typeof length === 'undefined') ? 10 : length;
+    this.intencity = (typeof intencity === 'undefined') ? 1 : intencity;
     Sprite.call(this, null, engine, tx, ty, 32, 32);
     this.particles = [];
     for(var i=0; i<=this.length; i++){
-        this.particles[i] = new Particle(this.engine.ctx, tx*TILE_WIDTH+16, ty*TILE_WIDTH+16, this.color);
+        this.particles[i] = new Particle(this.engine.ctx, tx*TILE_WIDTH+16, ty*TILE_WIDTH+16, this.color, this.intencity);
     }
 };
 Sparks.inherits(Sprite);

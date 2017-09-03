@@ -7,37 +7,21 @@ var Engine = function(){
     this.cwidth = canvas.width;
     this.cheight = canvas.height;
     this.ctx = this.canvas.getContext('2d');
-    this.fps = 30;
-    this.skipFrame = false;
-    this.dificulty = 30;
-    this.delay = 0;
-    this.engineState = 'play';
-    this.lastTime = (new Date()).getTime();
-    this.currTime = 0,
-    this.gameloop = this.gameloop_.bind(this); // jshint ignore:line
     this.sprites = [];
     this.sfxs = [];
+    this.player = {};
     this.level = 0;
+    this.levels = levels;
+    this.keyboard = new Keyboard();
+    this.load(levels[this.level]);
 
-    this.init();
-};
-
-
-
-Engine.prototype.gameloop_ = function() {
-    window.requestAnimationFrame(this.gameloop);
-    this.doGame();
-};
-
-Engine.prototype.doGame = function(){
-    this.draw();
-    this.move();
 };
 
 Engine.prototype.draw = function() {
     this.ctx.clearRect(0,0,this.cwidth,this.cheight);
     this.map.draw();
-    for (var i = 0; i < this.sprites.length; ++i){
+    // reverse loop, player draws last
+    for (var i = this.sprites.length - 1; i >= 0; i--) {
         this.sprites[i].draw();
     }
     for (i = 0; i < this.sfxs.length; ++i){
@@ -52,11 +36,15 @@ Engine.prototype.collision = function() {
         if(this.sprites[i] instanceof Fire){
             fires = true;
             var fire = this.sprites[i];
+            // player collisions
+            if(fire.xtile == this.player.xtile && fire.ytile == this.player.ytile){
+                this.player.burn();
+                return true;
+            }
+            // ice collisions
             for (var j = 0; j < this.sprites.length; j++){
                 if(this.sprites[j] instanceof Ice){
-
                     var ice = this.sprites[j];
-
                     if(fire.xtile >= ice.xtile && fire.xtile < ice.xtile+ice.length  && fire.ytile  == ice.ytile){
                         this.removeFire(fire.xtile, fire.ytile);
                         this.removeIce(fire.xtile, fire.ytile);
@@ -97,6 +85,10 @@ Engine.prototype.move = function() {
         }
         if(this.keyboard.right){
             this.player.right();
+        }
+        if(this.keyboard.enter){
+           this.load(levels[this.level]);
+           this.keyboard.enter = false;
         }
     }
     this.collision();
@@ -210,7 +202,6 @@ Engine.prototype.spriteAt = function(tx, ty){
     } else {
         return this.map.map[ty][tx];
     }
-
     return OBJECT_BACKGROUND;
 };
 
@@ -269,14 +260,7 @@ Engine.prototype.load = function(data) {
     }
 };
 
-Engine.prototype.init = function() {
-    this.keyboard = new Keyboard();
-    this.load(levels[this.level]);
-    this.gameloop();
-};
-
-
-
 Engine.prototype.add = function(sprite){
     this.sprites.push(sprite);
 };
+

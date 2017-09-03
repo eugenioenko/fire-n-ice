@@ -1,22 +1,23 @@
 # Fire 'n Ice
 > Fire n Ice, a remake in progress of the game from NES with the same name
 
-##### Objective
+## Objective
 Destroy all the fires on the level by colliding them with blocks of ice
 
-### Instructions
- - Player can create blocks of ice(keypress down) only one level bellow himself.
- - Player can push a single block of ice (keypress forward).
+## Rules
+ - Player can create blocks of ice only one level bellow himself.
+ - Player can push a single block of ice.
+ - Player can climb only one level above himself.
+ - Player can fall down without harm.
+ - Player can't touch a fire.
  - Player can't create an ice block inside a fire.
- - If the block of ice has nothing bellow it will fall down.
- - Player can climb only one level above itself
- - Player can fall down without harm
- - Player can't touch a fire (* still not applied)
+ - Player can't move if a block of ice is being pushed.
 
 #### Controls
- - **Left**: move left
- - **Right**: move right
- - **Down**: create or destroy block of ice
+ - **Left**: Move left
+ - **Right**: Move right
+ - **Down**: Create or destroy block of ice
+ - **Enter**: Reloads current level
 
 #### Work in progress, demo:
 [Online demo Here](https://eugenioenko.github.io/fire-n-ice/)

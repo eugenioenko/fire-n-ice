@@ -1,8 +1,5 @@
-
-
-'use strict';
-
 var TILE_WIDTH = 32;
+
 var GAME_FPS = 40;
 var MOVE_STAND = 0;
 var MOVE_LEFT = 1;
@@ -14,6 +11,7 @@ var MOVE_ICE_MAKE = 6;
 var MOVE_ICE_REMOVE = 7;
 var MOVE_ICE_MOVING = 8;
 var MOVE_ICE_CHECK = 9;
+var MOVE_RIP = 10;
 var MOVE_PUSH = 8;
 
 var DIR_LEFT = -1;
@@ -42,6 +40,8 @@ var ANIM_ICE_START = 18;
 var ANIM_ICE_END = 19;
 var ANIM_CROUCH_START = 20;
 var ANIM_CROUCH_END = 22;
+var ANIM_RIP_START = 23;
+var ANIM_RIP_END = 24;
 
 var TILE_MIDDLE = 0;
 var TILE_LEFT = 32;

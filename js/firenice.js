@@ -1,8 +1,7 @@
-
-
-'use strict';
-
+(function(){ 
+ "use strict";
 var TILE_WIDTH = 32;
+
 var GAME_FPS = 40;
 var MOVE_STAND = 0;
 var MOVE_LEFT = 1;
@@ -14,6 +13,7 @@ var MOVE_ICE_MAKE = 6;
 var MOVE_ICE_REMOVE = 7;
 var MOVE_ICE_MOVING = 8;
 var MOVE_ICE_CHECK = 9;
+var MOVE_RIP = 10;
 var MOVE_PUSH = 8;
 
 var DIR_LEFT = -1;
@@ -42,6 +42,8 @@ var ANIM_ICE_START = 18;
 var ANIM_ICE_END = 19;
 var ANIM_CROUCH_START = 20;
 var ANIM_CROUCH_END = 22;
+var ANIM_RIP_START = 23;
+var ANIM_RIP_END = 24;
 
 var TILE_MIDDLE = 0;
 var TILE_LEFT = 32;
@@ -57,8 +59,6 @@ var OBJECT_FIRE = 666;
 var OBJECT_ICE = 333;
 var OBJECT_OUT = 255;
 var OBJECT_PLAYER = 777;
-
-
 
 
 /**
@@ -92,8 +92,6 @@ var Coor = function(tx,ty){
 function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-
 
 
 
@@ -153,8 +151,6 @@ Keyboard.prototype.keyup_ = function(e) {
 
 
 
-
-
 var Tile = new (function(){ // jshint ignore:line
     this.tiles = {};
     this.tiles[OBJECT_BACKGROUND] = {
@@ -208,8 +204,6 @@ var Tile = new (function(){ // jshint ignore:line
 
 
 
-
-
 /**
  * Tilemap class
  * @param {object} engine Engine
@@ -246,7 +240,7 @@ TileMap.prototype.getTile = function(x, y) {
 TileMap.prototype.draw = function() {
     var state = TILE_MIDDLE;
     this.ctx.save();
-    //this.ctx.fillStyle = this.background;
+    //this.ctx.fillStyle =  this.background;
     //this.ctx.fillRect(0,0,this.engine.cwidth,this.engine.cheight);
     for(var i = 0; i <= this.width; ++i){
         for(var j = 0; j <= this.height; ++j){
@@ -272,8 +266,6 @@ TileMap.prototype.draw = function() {
 };
 TileMap.prototype.move = function(){};
 TileMap.prototype.engineMove = function(){};
-
-
 
 
 
@@ -344,8 +336,6 @@ Sprite.prototype.engineMove = function(){
     this.xtile = Math.floor(this.x / TILE_WIDTH);
     this.ytile = Math.floor(this.y / TILE_WIDTH);
 };
-
-
 
 
 /**
@@ -433,8 +423,6 @@ AnimSprite.prototype.draw = function() {
 
 
 
-
-
 var Player = function(engine, tx, ty){
     AnimSprite.call(this, this.id, engine, 'img_dona', tx, ty, 48, 64, -10, -32, 2, 2, false);
     this.id = OBJECT_PLAYER;
@@ -516,11 +504,22 @@ Player.prototype.right = function() {
         }
     }
 };
+
+Player.prototype.burn = function() {
+    if(this.state != MOVE_RIP){
+        this.setState(MOVE_RIP, true);
+        this.setAnim(ANIM_RIP_START,ANIM_RIP_END, true, ANIM_RIGHT_ROW);
+    }
+};
+
+Player.prototype.doRip = function(){
+
+};
+
 Player.prototype.gravity = function() {
     if(!this.moving){
         if(typeof this.coorners.d == "undefined"){
-            console.log('UNDEFINEDDDD');
-            console.log(this.engine);
+            console.eror('undefined coorner');
         }
         if (!Tile.isSolid(this.coorners.d)) {
             this.setState(MOVE_DOWN, true);
@@ -654,8 +653,8 @@ Player.prototype.push = function() {
     }
 };
 Player.prototype.doPush = function() {
-    this.counter += 4;
-    if(this.counter <= TILE_WIDTH){
+    this.counter += 2;
+    if(this.counter <= ANIM_FRAME_COUNT){
     } else {
         var ice =  this.engine.iceAt(this.xtile+this.dirrection, this.ytile);
         if(ice){
@@ -665,15 +664,16 @@ Player.prototype.doPush = function() {
     }
 };
 Player.prototype.doIce = function() {
-    this.counter += 2;
-    if(this.counter <= TILE_WIDTH){
-    } else {
-        this.counter = 0;
+    if(this.counter == 8){
         if(this.state == MOVE_ICE_MAKE){
             this.makeIce();
         } else{
             this.removeIce();
         }
+    }
+    this.counter += 1;
+    if(this.counter >= ANIM_FRAME_COUNT){
+        this.counter = 0;
         this.setState(MOVE_STAND, false);
     }
 };
@@ -709,12 +709,11 @@ Player.prototype.move = function (){
         case MOVE_PUSH:
             this.doPush();
             break;
+        case MOVE_RIP:
+            this.doRip();
+            break;
     }
 };
-
-
-
-
 
 /**
  * [Fire description]
@@ -730,6 +729,7 @@ var Fire = function(engine, tx, ty){
     AnimSprite.call(this, this.id, engine, 'img_fire', tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 3, true);
 };
 Fire.inherits(AnimSprite);
+
 Fire.prototype.move = function() {
     if(!this.moving){
         this.gravity();
@@ -740,6 +740,7 @@ Fire.prototype.move = function() {
             break;
     }
 };
+
 Fire.prototype.gravity = function() {
     if(!this.coorners.d){
         this.setState(MOVE_DOWN, true);
@@ -747,6 +748,7 @@ Fire.prototype.gravity = function() {
     }
     return false;
 };
+
 Fire.prototype.doDown = function(){
     this.counter += 4;
     if(this.counter <= TILE_WIDTH){
@@ -755,6 +757,7 @@ Fire.prototype.doDown = function(){
         this.setState(MOVE_STAND, false);
     }
 };
+
 Fire.prototype.draw = function(){
     AnimSprite.prototype.draw.call(this);
     if(this.spriteAt(this.xtile, this.ytile+1) == OBJECT_ICE){
@@ -762,11 +765,6 @@ Fire.prototype.draw = function(){
         this.ctx.strokeRect(this.xtile*32, this.ytile*32,32,32);
     }
 };
-
-
-
-
-
 var Ice = function(engine, tx, ty, length, frozen){
     var _length = (typeof length === 'undefined') ? 1 : length;
     AnimSprite.call(this, this.id, engine, 'img_ice', tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 1, true);
@@ -797,6 +795,7 @@ Ice.prototype.add = function(tx) {
     this.x = this.xtile * TILE_WIDTH;
     this.length++;
 };
+
 Ice.prototype.isSpriteAt = function(tx, ty){
     if(this.ytile == ty){
         if(tx >= this.xtile && tx < (this.xtile + this.length)){
@@ -923,6 +922,7 @@ Ice.prototype.draw = function() {
 
     this.ctx.restore();
 };
+
 Ice.prototype.glide = function(){
     this.counter += 4;
     if(this.counter <= TILE_WIDTH){
@@ -931,6 +931,7 @@ Ice.prototype.glide = function(){
         this.push();
     }
 };
+
 Ice.prototype.doDown = function(){
     this.counter += 4;
     if(this.counter <= TILE_WIDTH){
@@ -939,6 +940,7 @@ Ice.prototype.doDown = function(){
         this.setState(MOVE_STAND, false);
     }
 };
+
 Ice.prototype.push = function(dir) {
     this.dirrection = (typeof dir === 'undefined') ? this.dirrection : dir;
     if(!this.collision()){
@@ -952,15 +954,13 @@ Ice.prototype.push = function(dir) {
 
 
 
-
-
-var Particle = function(ctx, x, y, color){
+var Particle = function(ctx, x, y, color, intencity){
     this.color = (typeof color === 'undefined') ? '255,255,255' : color;
     this.r = 2;
     this.x = x;
     this.y = y;
-    this.vx = Math.random() * 4 - 2;
-    this.vy = Math.random() * 6 - 4;
+    this.vx = (Math.random() * 4 - 2) * intencity;
+    this.vy = (Math.random() * 6 - 4) * intencity;
     this.speed = 0.15;
     this.life = 255;
     this.ctx = ctx;
@@ -979,13 +979,14 @@ Particle.prototype.move = function() {
     this.vy += this.speed;
     this.life -= 5;
 };
-var Sparks = function(engine, tx,ty,color, length){
+var Sparks = function(engine, tx,ty,color, length, intencity){
     this.color = (typeof color === 'undefined') ? '255,255,255' : color;
-    this.length = (typeof color === 'undefined') ? 10 : length;
+    this.length = (typeof length === 'undefined') ? 10 : length;
+    this.intencity = (typeof intencity === 'undefined') ? 1 : intencity;
     Sprite.call(this, null, engine, tx, ty, 32, 32);
     this.particles = [];
     for(var i=0; i<=this.length; i++){
-        this.particles[i] = new Particle(this.engine.ctx, tx*TILE_WIDTH+16, ty*TILE_WIDTH+16, this.color);
+        this.particles[i] = new Particle(this.engine.ctx, tx*TILE_WIDTH+16, ty*TILE_WIDTH+16, this.color, this.intencity);
     }
 };
 Sparks.inherits(Sprite);
@@ -1012,8 +1013,6 @@ Sparks.prototype.move = function() {
         this.engine.removeSfx(this);
     }
 };
-
-
 var levels = [
 	{"map":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],[1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],[1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"sprites":[{"id":"777","x":"11","y":"4","l":"1"},{"id":"333","x":"5","y":"9","l":"1"},{"id":"333","x":"5","y":"8","l":"1"},{"id":"333","x":"5","y":"7","l":"1"},{"id":"333","x":"5","y":"6","l":"1"},{"id":"666","x":"6","y":"4","l":"1"},{"id":"333","x":"8","y":"4","l":"1"},{"id":"666","x":"7","y":"9","l":"1"},{"id":"666","x":"7","y":"8","l":"1"},{"id":"666","x":"7","y":"7","l":"1"},{"id":"666","x":"9","y":"10","l":"1"}],"image":"base64","category":"0","world":"0","name":"","theme":"0"},
 	{"map":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1],[1,1,1,0,0,0,0,1,0,0,0,0,0,0,1,1,1],[1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1],[1,1,1,0,0,0,0,1,0,0,0,0,0,0,1,1,1],[1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"sprites":[{"id":"777","x":"3","y":"7","l":"1"},{"id":"666","x":"6","y":"7","l":"1"},{"id":"666","x":"12","y":"8","l":"1"},{"id":"666","x":"11","y":"8","l":"1"},{"id":"666","x":"11","y":"7","l":"1"},{"id":"666","x":"11","y":"6","l":"1"},{"id":"333","x":"4","y":"7","l":"1"},{"id":"333","x":"10","y":"8","l":"1"},{"id":"333","x":"10","y":"7","l":"1"},{"id":"333","x":"10","y":"6","l":"1"},{"id":"333","x":"9","y":"5","l":"4"}],"image":"base64","category":"0","world":"0","name":"","theme":"0"},
@@ -1025,8 +1024,6 @@ var levels = [
 	{"map":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1],[1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1],[1,1,0,1,0,0,0,0,0,0,0,1,1,1,0,1,1],[1,1,0,1,1,0,0,0,0,0,1,1,1,1,0,1,1],[1,1,0,1,1,1,0,0,0,0,1,1,1,1,0,1,1],[1,1,0,0,1,1,1,1,1,1,1,1,1,1,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"sprites":[{"id":"777","x":"13","y":"2","l":"1"},{"id":"333","x":"4","y":"4","l":"8"},{"id":"333","x":"11","y":"3","l":"4"},{"id":"666","x":"3","y":"5","l":"1"},{"id":"666","x":"4","y":"6","l":"1"},{"id":"666","x":"5","y":"7","l":"1"},{"id":"666","x":"10","y":"6","l":"1"},{"id":"666","x":"11","y":"5","l":"1"},{"id":"666","x":"14","y":"10","l":"1"},{"id":"666","x":"14","y":"9","l":"1"},{"id":"666","x":"2","y":"10","l":"1"},{"id":"666","x":"9","y":"8","l":"1"},{"id":"666","x":"2","y":"9","l":"1"},{"id":"666","x":"8","y":"8","l":"1"},{"id":"666","x":"7","y":"8","l":"1"},{"id":"666","x":"6","y":"8","l":"1"},{"id":"666","x":"8","y":"10","l":"1"},{"id":"666","x":"7","y":"10","l":"1"}],"image":"base64","category":"0","world":"0","name":"","theme":"0"}
 ];
 
-
-
 /**
  * Engine Loop
  */
@@ -1035,37 +1032,21 @@ var Engine = function(){
     this.cwidth = canvas.width;
     this.cheight = canvas.height;
     this.ctx = this.canvas.getContext('2d');
-    this.fps = 30;
-    this.skipFrame = false;
-    this.dificulty = 30;
-    this.delay = 0;
-    this.engineState = 'play';
-    this.lastTime = (new Date()).getTime();
-    this.currTime = 0,
-    this.gameloop = this.gameloop_.bind(this); // jshint ignore:line
     this.sprites = [];
     this.sfxs = [];
+    this.player = {};
     this.level = 0;
+    this.levels = levels;
+    this.keyboard = new Keyboard();
+    this.load(levels[this.level]);
 
-    this.init();
-};
-
-
-
-Engine.prototype.gameloop_ = function() {
-    window.requestAnimationFrame(this.gameloop);
-    this.doGame();
-};
-
-Engine.prototype.doGame = function(){
-    this.draw();
-    this.move();
 };
 
 Engine.prototype.draw = function() {
     this.ctx.clearRect(0,0,this.cwidth,this.cheight);
     this.map.draw();
-    for (var i = 0; i < this.sprites.length; ++i){
+    // reverse loop, player draws last
+    for (var i = this.sprites.length - 1; i >= 0; i--) {
         this.sprites[i].draw();
     }
     for (i = 0; i < this.sfxs.length; ++i){
@@ -1080,11 +1061,15 @@ Engine.prototype.collision = function() {
         if(this.sprites[i] instanceof Fire){
             fires = true;
             var fire = this.sprites[i];
+            // player collisions
+            if(fire.xtile == this.player.xtile && fire.ytile == this.player.ytile){
+                this.player.burn();
+                return true;
+            }
+            // ice collisions
             for (var j = 0; j < this.sprites.length; j++){
                 if(this.sprites[j] instanceof Ice){
-
                     var ice = this.sprites[j];
-
                     if(fire.xtile >= ice.xtile && fire.xtile < ice.xtile+ice.length  && fire.ytile  == ice.ytile){
                         this.removeFire(fire.xtile, fire.ytile);
                         this.removeIce(fire.xtile, fire.ytile);
@@ -1125,6 +1110,10 @@ Engine.prototype.move = function() {
         }
         if(this.keyboard.right){
             this.player.right();
+        }
+        if(this.keyboard.enter){
+           this.load(levels[this.level]);
+           this.keyboard.enter = false;
         }
     }
     this.collision();
@@ -1238,7 +1227,6 @@ Engine.prototype.spriteAt = function(tx, ty){
     } else {
         return this.map.map[ty][tx];
     }
-
     return OBJECT_BACKGROUND;
 };
 
@@ -1297,14 +1285,29 @@ Engine.prototype.load = function(data) {
     }
 };
 
-Engine.prototype.init = function() {
-    this.keyboard = new Keyboard();
-    this.load(levels[this.level]);
-    this.gameloop();
-};
-
-
-
 Engine.prototype.add = function(sprite){
     this.sprites.push(sprite);
 };
+
+
+/**
+ * Game Loop
+ */
+var Game = function(){
+    this.state = 'play';
+    this.gameloop = this.gameloop_.bind(this); // jshint ignore:line
+    this.engine = new Engine();
+
+    this.gameloop();
+};
+
+Game.prototype.gameloop_ = function() {
+    window.requestAnimationFrame(this.gameloop);
+    this.engine.draw();
+    this.engine.move();
+};
+
+var game = new Game();
+window.game = game;
+
+})();

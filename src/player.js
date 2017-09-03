@@ -82,11 +82,22 @@ Player.prototype.right = function() {
         }
     }
 };
+
+Player.prototype.burn = function() {
+    if(this.state != MOVE_RIP){
+        this.setState(MOVE_RIP, true);
+        this.setAnim(ANIM_RIP_START,ANIM_RIP_END, true, ANIM_RIGHT_ROW);
+    }
+};
+
+Player.prototype.doRip = function(){
+
+};
+
 Player.prototype.gravity = function() {
     if(!this.moving){
         if(typeof this.coorners.d == "undefined"){
-            console.log('UNDEFINEDDDD');
-            console.log(this.engine);
+            console.eror('undefined coorner');
         }
         if (!Tile.isSolid(this.coorners.d)) {
             this.setState(MOVE_DOWN, true);
@@ -220,8 +231,8 @@ Player.prototype.push = function() {
     }
 };
 Player.prototype.doPush = function() {
-    this.counter += 4;
-    if(this.counter <= TILE_WIDTH){
+    this.counter += 2;
+    if(this.counter <= ANIM_FRAME_COUNT){
     } else {
         var ice =  this.engine.iceAt(this.xtile+this.dirrection, this.ytile);
         if(ice){
@@ -231,15 +242,16 @@ Player.prototype.doPush = function() {
     }
 };
 Player.prototype.doIce = function() {
-    this.counter += 2;
-    if(this.counter <= TILE_WIDTH){
-    } else {
-        this.counter = 0;
+    if(this.counter == 8){
         if(this.state == MOVE_ICE_MAKE){
             this.makeIce();
         } else{
             this.removeIce();
         }
+    }
+    this.counter += 1;
+    if(this.counter >= ANIM_FRAME_COUNT){
+        this.counter = 0;
         this.setState(MOVE_STAND, false);
     }
 };
@@ -274,6 +286,9 @@ Player.prototype.move = function (){
             break;
         case MOVE_PUSH:
             this.doPush();
+            break;
+        case MOVE_RIP:
+            this.doRip();
             break;
     }
 };
