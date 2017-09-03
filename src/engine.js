@@ -70,11 +70,10 @@ Engine.prototype.collision = function() {
         }
     }
     if(!fires){
-            this.level++;
-            this.load(levels[this.level]);
-            this.addSfx(new Sparks(this, this.player.xtile, this.player.ytile, '255,255,255', 200));
-
-        }
+        this.level++;
+        this.load(levels[this.level]);
+        this.addSfx(new Sparks(this, this.player.xtile, this.player.ytile, '255,255,255', 200));
+    }
 };
 
 Engine.prototype.move = function() {
