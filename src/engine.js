@@ -35,7 +35,7 @@ Engine.prototype.doGame = function(){
 };
 
 Engine.prototype.draw = function() {
-    this.ctx.clearRect(0,0,this.cw,this.ch);
+    this.ctx.clearRect(0,0,this.cwidth,this.cheight);
     this.map.draw();
     for (var i = 0; i < this.sprites.length; ++i){
         this.sprites[i].draw();

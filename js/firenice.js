@@ -246,26 +246,26 @@ TileMap.prototype.getTile = function(x, y) {
 TileMap.prototype.draw = function() {
     var state = TILE_MIDDLE;
     this.ctx.save();
-    this.ctx.fillStyle = this.background;
-    this.ctx.fillRect(0,0,this.engine.cwidth,this.engine.cheight);
+    //this.ctx.fillStyle = this.background;
+    //this.ctx.fillRect(0,0,this.engine.cwidth,this.engine.cheight);
     for(var i = 0; i <= this.width; ++i){
         for(var j = 0; j <= this.height; ++j){
-            if(this.map[j][i] && Tile.getImage(this.map[j][i])){
-                if(this.map[j][i] == 1){
-                    if(!this.getTile(i-1, j) && !this.getTile(i+1, j)){
-                        state = TILE_BOTH;
-                    } else if(!this.getTile(i-1, j)){
-                        state = TILE_LEFT;
-                    }else if(!this.getTile(i+1, j)){
-                        state = TILE_RIGHT;
-                    }else{
-                        state = TILE_MIDDLE;
-                    }
-                } else {
-                    state = 0;
+           // if(this.map[j][i] && Tile.getImage(this.map[j][i])){
+            if(this.map[j][i] == 1){
+                if(!this.getTile(i-1, j) && !this.getTile(i+1, j)){
+                    state = TILE_BOTH;
+                } else if(!this.getTile(i-1, j)){
+                    state = TILE_LEFT;
+                }else if(!this.getTile(i+1, j)){
+                    state = TILE_RIGHT;
+                }else{
+                    state = TILE_MIDDLE;
                 }
-                this.ctx.drawImage(Tile.getImage(this.map[j][i]), state, 0, this.tileWidth, this.tileHeight, i*this.tileWidth, j*this.tileHeight, this.tileWidth, this.tileHeight);
+            } else {
+                state = 0;
             }
+            this.ctx.drawImage(Tile.getImage(this.map[j][i]), state, 0, this.tileWidth, this.tileHeight, i*this.tileWidth, j*this.tileHeight, this.tileWidth, this.tileHeight);
+           //}
         }
     }
     this.ctx.restore();
@@ -1063,7 +1063,7 @@ Engine.prototype.doGame = function(){
 };
 
 Engine.prototype.draw = function() {
-    this.ctx.clearRect(0,0,this.cw,this.ch);
+    this.ctx.clearRect(0,0,this.cwidth,this.cheight);
     this.map.draw();
     for (var i = 0; i < this.sprites.length; ++i){
         this.sprites[i].draw();
