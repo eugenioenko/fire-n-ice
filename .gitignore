@@ -31,3 +31,7 @@ scss/.sass-cache
 scss/.sass-cache/*
 .sass-cache
 .sass-cache/*
+
+# Node modules
+node_modules/
+node_modules/*
