@@ -51,7 +51,9 @@ AnimSprite.prototype.setAnim = function(start, end, loop, row, delay, once){
         this.animDelay = _delay;
         this.animRow = _row;
     } else {
-        if(this.animStart != start || this.animEnd != end || this.animLoop != loop || this.animRow != _row){
+        if(this.animStart != start || this.animEnd != end ||
+            this.animLoop != loop || this.animRow != _row)
+        {
             this.animStart = start;
             this.animEnd = end;
             this.animCount = start;
@@ -67,7 +69,10 @@ AnimSprite.prototype.setAnim = function(start, end, loop, row, delay, once){
  */
 AnimSprite.prototype.draw = function() {
     this.ctx.save();
-    this.ctx.drawImage(this.image, this.animCount*this.width, this.animRow * this.height, this.width, this.height, this.x+this.offsetX, this.y+this.offsetY, this.width, this.height);
+    this.ctx.drawImage(this.image, this.animCount*this.width,
+        this.animRow * this.height, this.width, this.height,
+        this.x+this.offsetX, this.y+this.offsetY,
+        this.width, this.height);
     if(this.animDelayCount++ > this.animDelay){
         if(++this.animCount > this.animEnd){
             if(this.animLoop){

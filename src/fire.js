@@ -9,7 +9,8 @@
 
 var Fire = function(engine, tx, ty){
     this.id = OBJECT_FIRE;
-    AnimSprite.call(this, this.id, engine, 'img_fire', tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 3, true);
+    AnimSprite.call(this, this.id, engine, 'img_fire',
+        tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 3, true);
 };
 Fire.inherits(AnimSprite);
 

@@ -1,6 +1,7 @@
 var Ice = function(engine, tx, ty, length, frozen){
     var _length = (typeof length === 'undefined') ? 1 : length;
-    AnimSprite.call(this, this.id, engine, 'img_ice', tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 1, true);
+    AnimSprite.call(this, this.id, engine, 'img_ice',
+        tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 1, true);
     this.xtile = tx;
     this.ytile = ty;
     this.frozen = (typeof frozen === 'undefined') ? false : frozen;
@@ -12,7 +13,9 @@ var Ice = function(engine, tx, ty, length, frozen){
     this.old_ty = 0;
     this.dirrection = 0;
     this.id = OBJECT_ICE;
-    if((this.getTile(this.xtile-1, this.ytile) == OBJECT_WALL) || (this.getTile(this.xtile+this.length, this.ytile) == OBJECT_WALL)){
+    if((this.getTile(this.xtile-1, this.ytile) == OBJECT_WALL) ||
+        (this.getTile(this.xtile+this.length, this.ytile) == OBJECT_WALL))
+    {
         this.frozen = true;
     } else{
         this.frozen = false;
@@ -20,8 +23,10 @@ var Ice = function(engine, tx, ty, length, frozen){
 };
 Ice.inherits(AnimSprite);
 
-Ice.prototype.add = function(tx) {
-    if((tx > this.xtile && this.getTile(tx+1, this.ytile) == OBJECT_WALL) || (tx < this.xtile && this.getTile(tx-1, this.ytile) == OBJECT_WALL)){
+Ice.prototype.addBlock = function(tx) {
+    if((tx > this.xtile && this.getTile(tx+1, this.ytile) == OBJECT_WALL) ||
+        (tx < this.xtile && this.getTile(tx-1, this.ytile) == OBJECT_WALL))
+    {
         this.frozen = true;
     }
     this.xtile = tx < this.xtile ? tx : this.xtile;
@@ -42,7 +47,7 @@ Ice.prototype.isSpriteAt = function(tx, ty){
 
 };
 
-Ice.prototype.remove = function(tx) {
+Ice.prototype.removeBlock = function(tx) {
     if(tx == this.xtile){
         this.xtile += 1;
         this.x += TILE_WIDTH;
@@ -50,7 +55,8 @@ Ice.prototype.remove = function(tx) {
     }else if(tx == this.xtile+this.length-1){
         this.length--;
     }else{
-        this.engine.addSprite(new Ice(this.engine, tx+1, this.ytile, this.xtile+this.length-tx-1));
+        this.engine.addSprite(
+            new Ice(this.engine, tx+1, this.ytile, this.xtile+this.length-tx-1));
         this.length = tx - this.xtile;
     }
     return this.length;
@@ -107,7 +113,6 @@ Ice.prototype.move = function() {
             this.frozen = false;
         }
     }
-
     if(!this.moving){
         this.gravity();
     }
@@ -133,13 +138,18 @@ Ice.prototype.draw = function() {
     if(this.length == 1){
         this.ctx.drawImage(this.image, 0, TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
     }else if(this.length == 2){
-        this.ctx.drawImage(this.image, 1*TILE_WIDTH, TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
-        this.ctx.drawImage(this.image, 3*TILE_WIDTH, TILE_WIDTH*this.animRow, this.width, this.height,  this.x+TILE_WIDTH, this.y, this.width, this.height);
+        this.ctx.drawImage(this.image, 1*TILE_WIDTH, TILE_WIDTH*this.animRow,
+            this.width, this.height,  this.x, this.y, this.width, this.height);
+        this.ctx.drawImage(this.image, 3*TILE_WIDTH, TILE_WIDTH*this.animRow,
+            this.width, this.height,  this.x+TILE_WIDTH, this.y, this.width, this.height);
     }else{
-        this.ctx.drawImage(this.image, 1*TILE_WIDTH, TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
-        this.ctx.drawImage(this.image, 3*TILE_WIDTH, TILE_WIDTH*this.animRow, this.width, this.height,  this.x+TILE_WIDTH*(this.length-1), this.y, this.width, this.height);
+        this.ctx.drawImage(this.image, 1*TILE_WIDTH, TILE_WIDTH*this.animRow,
+            this.width, this.height,  this.x, this.y, this.width, this.height);
+        this.ctx.drawImage(this.image, 3*TILE_WIDTH, TILE_WIDTH*this.animRow,
+            this.width, this.height,  this.x+TILE_WIDTH*(this.length-1), this.y, this.width, this.height);
         for(var i = 1;  i < this.length-1; i++){
-            this.ctx.drawImage(this.image, 2*TILE_WIDTH, TILE_WIDTH*this.animRow, this.width, this.height,  this.x+(TILE_WIDTH*i), this.y, this.width, this.height);
+            this.ctx.drawImage(this.image, 2*TILE_WIDTH, TILE_WIDTH*this.animRow,
+                this.width, this.height,  this.x+(TILE_WIDTH*i), this.y, this.width, this.height);
         }
     }
     if(this.frozen){

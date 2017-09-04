@@ -216,11 +216,11 @@ Player.prototype.doUp = function() {
     }
 };
 Player.prototype.makeIce = function() {
-    this.engine.addIce(this.xtile + this.dirrection, this.ytile+1);
+    this.engine.addIceBlock(this.xtile + this.dirrection, this.ytile+1);
     this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1));
 };
-Player.prototype.removeIce = function() {
-    this.engine.removeIce(this.xtile + this.dirrection, this.ytile+1);
+Player.prototype.removeIceBlock = function() {
+    this.engine.removeIceBlock(this.xtile + this.dirrection, this.ytile+1);
     this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1));
 };
 Player.prototype.push = function() {
@@ -246,7 +246,7 @@ Player.prototype.doIce = function() {
         if(this.state == MOVE_ICE_MAKE){
             this.makeIce();
         } else{
-            this.removeIce();
+            this.removeIceBlock();
         }
     }
     this.counter += 1;

@@ -389,7 +389,9 @@ AnimSprite.prototype.setAnim = function(start, end, loop, row, delay, once){
         this.animDelay = _delay;
         this.animRow = _row;
     } else {
-        if(this.animStart != start || this.animEnd != end || this.animLoop != loop || this.animRow != _row){
+        if(this.animStart != start || this.animEnd != end ||
+            this.animLoop != loop || this.animRow != _row)
+        {
             this.animStart = start;
             this.animEnd = end;
             this.animCount = start;
@@ -405,7 +407,10 @@ AnimSprite.prototype.setAnim = function(start, end, loop, row, delay, once){
  */
 AnimSprite.prototype.draw = function() {
     this.ctx.save();
-    this.ctx.drawImage(this.image, this.animCount*this.width, this.animRow * this.height, this.width, this.height, this.x+this.offsetX, this.y+this.offsetY, this.width, this.height);
+    this.ctx.drawImage(this.image, this.animCount*this.width,
+        this.animRow * this.height, this.width, this.height,
+        this.x+this.offsetX, this.y+this.offsetY,
+        this.width, this.height);
     if(this.animDelayCount++ > this.animDelay){
         if(++this.animCount > this.animEnd){
             if(this.animLoop){
@@ -638,11 +643,11 @@ Player.prototype.doUp = function() {
     }
 };
 Player.prototype.makeIce = function() {
-    this.engine.addIce(this.xtile + this.dirrection, this.ytile+1);
+    this.engine.addIceBlock(this.xtile + this.dirrection, this.ytile+1);
     this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1));
 };
-Player.prototype.removeIce = function() {
-    this.engine.removeIce(this.xtile + this.dirrection, this.ytile+1);
+Player.prototype.removeIceBlock = function() {
+    this.engine.removeIceBlock(this.xtile + this.dirrection, this.ytile+1);
     this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1));
 };
 Player.prototype.push = function() {
@@ -668,7 +673,7 @@ Player.prototype.doIce = function() {
         if(this.state == MOVE_ICE_MAKE){
             this.makeIce();
         } else{
-            this.removeIce();
+            this.removeIceBlock();
         }
     }
     this.counter += 1;
@@ -726,7 +731,8 @@ Player.prototype.move = function (){
 
 var Fire = function(engine, tx, ty){
     this.id = OBJECT_FIRE;
-    AnimSprite.call(this, this.id, engine, 'img_fire', tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 3, true);
+    AnimSprite.call(this, this.id, engine, 'img_fire',
+        tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 3, true);
 };
 Fire.inherits(AnimSprite);
 
@@ -767,7 +773,8 @@ Fire.prototype.draw = function(){
 };
 var Ice = function(engine, tx, ty, length, frozen){
     var _length = (typeof length === 'undefined') ? 1 : length;
-    AnimSprite.call(this, this.id, engine, 'img_ice', tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 1, true);
+    AnimSprite.call(this, this.id, engine, 'img_ice',
+        tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 1, true);
     this.xtile = tx;
     this.ytile = ty;
     this.frozen = (typeof frozen === 'undefined') ? false : frozen;
@@ -779,7 +786,9 @@ var Ice = function(engine, tx, ty, length, frozen){
     this.old_ty = 0;
     this.dirrection = 0;
     this.id = OBJECT_ICE;
-    if((this.getTile(this.xtile-1, this.ytile) == OBJECT_WALL) || (this.getTile(this.xtile+this.length, this.ytile) == OBJECT_WALL)){
+    if((this.getTile(this.xtile-1, this.ytile) == OBJECT_WALL) ||
+        (this.getTile(this.xtile+this.length, this.ytile) == OBJECT_WALL))
+    {
         this.frozen = true;
     } else{
         this.frozen = false;
@@ -787,8 +796,10 @@ var Ice = function(engine, tx, ty, length, frozen){
 };
 Ice.inherits(AnimSprite);
 
-Ice.prototype.add = function(tx) {
-    if((tx > this.xtile && this.getTile(tx+1, this.ytile) == OBJECT_WALL) || (tx < this.xtile && this.getTile(tx-1, this.ytile) == OBJECT_WALL)){
+Ice.prototype.addBlock = function(tx) {
+    if((tx > this.xtile && this.getTile(tx+1, this.ytile) == OBJECT_WALL) ||
+        (tx < this.xtile && this.getTile(tx-1, this.ytile) == OBJECT_WALL))
+    {
         this.frozen = true;
     }
     this.xtile = tx < this.xtile ? tx : this.xtile;
@@ -809,7 +820,7 @@ Ice.prototype.isSpriteAt = function(tx, ty){
 
 };
 
-Ice.prototype.remove = function(tx) {
+Ice.prototype.removeBlock = function(tx) {
     if(tx == this.xtile){
         this.xtile += 1;
         this.x += TILE_WIDTH;
@@ -817,7 +828,8 @@ Ice.prototype.remove = function(tx) {
     }else if(tx == this.xtile+this.length-1){
         this.length--;
     }else{
-        this.engine.addSprite(new Ice(this.engine, tx+1, this.ytile, this.xtile+this.length-tx-1));
+        this.engine.addSprite(
+            new Ice(this.engine, tx+1, this.ytile, this.xtile+this.length-tx-1));
         this.length = tx - this.xtile;
     }
     return this.length;
@@ -874,7 +886,6 @@ Ice.prototype.move = function() {
             this.frozen = false;
         }
     }
-
     if(!this.moving){
         this.gravity();
     }
@@ -900,13 +911,18 @@ Ice.prototype.draw = function() {
     if(this.length == 1){
         this.ctx.drawImage(this.image, 0, TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
     }else if(this.length == 2){
-        this.ctx.drawImage(this.image, 1*TILE_WIDTH, TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
-        this.ctx.drawImage(this.image, 3*TILE_WIDTH, TILE_WIDTH*this.animRow, this.width, this.height,  this.x+TILE_WIDTH, this.y, this.width, this.height);
+        this.ctx.drawImage(this.image, 1*TILE_WIDTH, TILE_WIDTH*this.animRow,
+            this.width, this.height,  this.x, this.y, this.width, this.height);
+        this.ctx.drawImage(this.image, 3*TILE_WIDTH, TILE_WIDTH*this.animRow,
+            this.width, this.height,  this.x+TILE_WIDTH, this.y, this.width, this.height);
     }else{
-        this.ctx.drawImage(this.image, 1*TILE_WIDTH, TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
-        this.ctx.drawImage(this.image, 3*TILE_WIDTH, TILE_WIDTH*this.animRow, this.width, this.height,  this.x+TILE_WIDTH*(this.length-1), this.y, this.width, this.height);
+        this.ctx.drawImage(this.image, 1*TILE_WIDTH, TILE_WIDTH*this.animRow,
+            this.width, this.height,  this.x, this.y, this.width, this.height);
+        this.ctx.drawImage(this.image, 3*TILE_WIDTH, TILE_WIDTH*this.animRow,
+            this.width, this.height,  this.x+TILE_WIDTH*(this.length-1), this.y, this.width, this.height);
         for(var i = 1;  i < this.length-1; i++){
-            this.ctx.drawImage(this.image, 2*TILE_WIDTH, TILE_WIDTH*this.animRow, this.width, this.height,  this.x+(TILE_WIDTH*i), this.y, this.width, this.height);
+            this.ctx.drawImage(this.image, 2*TILE_WIDTH, TILE_WIDTH*this.animRow,
+                this.width, this.height,  this.x+(TILE_WIDTH*i), this.y, this.width, this.height);
         }
     }
     if(this.frozen){
@@ -1014,15 +1030,268 @@ Sparks.prototype.move = function() {
     }
 };
 var levels = [
-	{"map":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],[1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],[1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"sprites":[{"id":"777","x":"11","y":"4","l":"1"},{"id":"333","x":"5","y":"9","l":"1"},{"id":"333","x":"5","y":"8","l":"1"},{"id":"333","x":"5","y":"7","l":"1"},{"id":"333","x":"5","y":"6","l":"1"},{"id":"666","x":"6","y":"4","l":"1"},{"id":"333","x":"8","y":"4","l":"1"},{"id":"666","x":"7","y":"9","l":"1"},{"id":"666","x":"7","y":"8","l":"1"},{"id":"666","x":"7","y":"7","l":"1"},{"id":"666","x":"9","y":"10","l":"1"}],"image":"base64","category":"0","world":"0","name":"","theme":"0"},
-	{"map":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1],[1,1,1,0,0,0,0,1,0,0,0,0,0,0,1,1,1],[1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1],[1,1,1,0,0,0,0,1,0,0,0,0,0,0,1,1,1],[1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"sprites":[{"id":"777","x":"3","y":"7","l":"1"},{"id":"666","x":"6","y":"7","l":"1"},{"id":"666","x":"12","y":"8","l":"1"},{"id":"666","x":"11","y":"8","l":"1"},{"id":"666","x":"11","y":"7","l":"1"},{"id":"666","x":"11","y":"6","l":"1"},{"id":"333","x":"4","y":"7","l":"1"},{"id":"333","x":"10","y":"8","l":"1"},{"id":"333","x":"10","y":"7","l":"1"},{"id":"333","x":"10","y":"6","l":"1"},{"id":"333","x":"9","y":"5","l":"4"}],"image":"base64","category":"0","world":"0","name":"","theme":"0"},
-	{"map":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1],[1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,1,1],[1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,1,1],[1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,0,0,1,1,1,1,1,0,0,0,0,1,1,1],[1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"sprites":[{"id":"777","x":"14","y":"6","l":"1"},{"id":"666","x":"10","y":"9","l":"1"},{"id":"333","x":"5","y":"4","l":"1"},{"id":"666","x":"9","y":"6","l":"1"},{"id":"666","x":"9","y":"5","l":"1"},{"id":"333","x":"11","y":"6","l":"1"},{"id":"333","x":"11","y":"5","l":"1"},{"id":"333","x":"8","y":"6","l":"1"}],"image":"base64","category":"0","world":"0","name":"","theme":"0"},
-	{"map":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,1],[1,1,0,1,1,0,0,0,0,0,0,0,1,1,0,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"sprites":[{"id":"777","x":"8","y":"9","l":"1"},{"id":"666","x":"12","y":"8","l":"1"},{"id":"666","x":"13","y":"7","l":"1"},{"id":"666","x":"11","y":"9","l":"1"},{"id":"333","x":"6","y":"8","l":"5"},{"id":"333","x":"10","y":"9","l":"1"},{"id":"333","x":"10","y":"7","l":"3"},{"id":"333","x":"12","y":"6","l":"2"},{"id":"333","x":"6","y":"9","l":"1"},{"id":"333","x":"4","y":"7","l":"3"},{"id":"333","x":"3","y":"6","l":"2"},{"id":"666","x":"5","y":"9","l":"1"},{"id":"666","x":"4","y":"8","l":"1"},{"id":"666","x":"3","y":"7","l":"1"}],"image":"base64","category":"0","world":"0","name":"","theme":"0"},
-	{"map":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1],[1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1],[1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,1,1],[1,1,1,0,1,1,0,0,0,0,0,0,0,0,1,1,1],[1,1,1,0,1,1,0,0,0,0,0,0,0,0,1,1,1],[1,1,1,0,1,1,1,1,1,1,0,0,0,1,1,1,1],[1,1,1,0,1,1,1,1,1,1,0,0,0,1,1,1,1],[1,1,1,0,1,1,1,1,1,1,0,0,0,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"sprites":[{"id":"777","x":"13","y":"7","l":"1"},{"id":"333","x":"10","y":"10","l":"3"},{"id":"333","x":"10","y":"9","l":"3"},{"id":"333","x":"7","y":"7","l":"1"},{"id":"333","x":"10","y":"8","l":"3"},{"id":"333","x":"3","y":"5","l":"1"},{"id":"333","x":"9","y":"7","l":"1"},{"id":"666","x":"3","y":"10","l":"1"},{"id":"333","x":"3","y":"4","l":"1"}],"image":"base64","category":"0","world":"0","name":"","theme":"0"},{"map":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,1,1,0,0,0,0,0,1,1,1,0,0,1,1],[1,1,1,1,1,0,0,0,0,0,0,1,1,0,1,1,1],[1,1,1,1,1,0,0,0,0,0,0,1,1,0,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"sprites":[{"id":"777","x":"3","y":"6","l":"1"},{"id":"666","x":"13","y":"10","l":"1"},{"id":"333","x":"5","y":"6","l":"4"}],"image":"base64","category":"0","world":"0","name":"","theme":"0"},
-	{"map":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,1,1],[1,1,0,1,1,0,0,0,0,0,0,0,1,1,0,1,1],[1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1],[1,1,0,1,1,0,0,0,0,0,0,0,1,1,0,1,1],[1,1,0,1,1,0,0,0,0,0,0,0,1,1,0,1,1],[1,1,0,1,1,0,0,0,0,0,0,0,1,1,0,1,1],[1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"sprites":[{"id":"777","x":"5","y":"4","l":"1"},{"id":"666","x":"5","y":"8","l":"1"},{"id":"333","x":"8","y":"5","l":"1"},{"id":"333","x":"8","y":"4","l":"1"},{"id":"666","x":"11","y":"8","l":"1"}],"image":"base64","category":"0","world":"0","name":"","theme":"0"},
-	{"map":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1],[1,1,0,1,1,0,0,0,0,0,0,0,0,0,1,1,1],[1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,1,1,0,0,0,0,1,1,1,1,1,1,1,1],[1,1,0,1,1,0,1,1,0,0,0,0,0,1,1,1,1],[1,1,0,1,1,0,0,0,1,0,0,0,0,0,0,1,1],[1,1,0,1,1,0,0,0,0,0,1,1,1,0,0,1,1],[1,1,0,1,1,0,1,1,0,0,0,0,0,0,1,1,1],[1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"sprites":[{"id":"777","x":"5","y":"10","l":"1"},{"id":"666","x":"2","y":"10","l":"1"},{"id":"333","x":"3","y":"3","l":"1"},{"id":"666","x":"14","y":"5","l":"1"},{"id":"666","x":"12","y":"11","l":"1"}],"image":"base64","category":"0","world":"0","name":"","theme":"0"},
-	{"map":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1],[1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1],[1,1,0,1,0,0,0,0,0,0,0,1,1,1,0,1,1],[1,1,0,1,1,0,0,0,0,0,1,1,1,1,0,1,1],[1,1,0,1,1,1,0,0,0,0,1,1,1,1,0,1,1],[1,1,0,0,1,1,1,1,1,1,1,1,1,1,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"sprites":[{"id":"777","x":"13","y":"2","l":"1"},{"id":"333","x":"4","y":"4","l":"8"},{"id":"333","x":"11","y":"3","l":"4"},{"id":"666","x":"3","y":"5","l":"1"},{"id":"666","x":"4","y":"6","l":"1"},{"id":"666","x":"5","y":"7","l":"1"},{"id":"666","x":"10","y":"6","l":"1"},{"id":"666","x":"11","y":"5","l":"1"},{"id":"666","x":"14","y":"10","l":"1"},{"id":"666","x":"14","y":"9","l":"1"},{"id":"666","x":"2","y":"10","l":"1"},{"id":"666","x":"9","y":"8","l":"1"},{"id":"666","x":"2","y":"9","l":"1"},{"id":"666","x":"8","y":"8","l":"1"},{"id":"666","x":"7","y":"8","l":"1"},{"id":"666","x":"6","y":"8","l":"1"},{"id":"666","x":"8","y":"10","l":"1"},{"id":"666","x":"7","y":"10","l":"1"}],"image":"base64","category":"0","world":"0","name":"","theme":"0"},
-	{"map":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"sprites":[{"id":"777","x":"5","y":"11","l":"1"},{"id":"333","x":"8","y":"9","l":"1"},{"id":"333","x":"8","y":"8","l":"1"},{"id":"333","x":"4","y":"7","l":"9"},{"id":"333","x":"8","y":"6","l":"1"},{"id":"333","x":"8","y":"5","l":"1"},{"id":"666","x":"8","y":"1","l":"1"}],"image":"base64","category":"0","world":"0","name":"","theme":"0"}
+	{
+		"map":[
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
+			[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
+			[1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1],
+			[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
+			[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
+			[1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+		],"sprites":[
+			{"id":"777","x":"11","y":"4","l":"1"},
+			{"id":"333","x":"5","y":"9","l":"1"},
+			{"id":"333","x":"5","y":"8","l":"1"},
+			{"id":"333","x":"5","y":"7","l":"1"},
+			{"id":"333","x":"5","y":"6","l":"1"},
+			{"id":"666","x":"6","y":"4","l":"1"},
+			{"id":"333","x":"8","y":"4","l":"1"},
+			{"id":"666","x":"7","y":"9","l":"1"},
+			{"id":"666","x":"7","y":"8","l":"1"},
+			{"id":"666","x":"7","y":"7","l":"1"},
+			{"id":"666","x":"9","y":"10","l":"1"}
+		],"image":"base64","category":"0","world":"0","name":"","theme":"0"
+	},{
+		"map":[
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1],
+			[1,1,1,0,0,0,0,1,0,0,0,0,0,0,1,1,1],
+			[1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
+			[1,1,1,0,0,0,0,1,0,0,0,0,0,0,1,1,1],
+			[1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+		],"sprites":[
+			{"id":"777","x":"3","y":"7","l":"1"},
+			{"id":"666","x":"6","y":"7","l":"1"},
+			{"id":"666","x":"12","y":"8","l":"1"},
+			{"id":"666","x":"11","y":"8","l":"1"},
+			{"id":"666","x":"11","y":"7","l":"1"},
+			{"id":"666","x":"11","y":"6","l":"1"},
+			{"id":"333","x":"4","y":"7","l":"1"},
+			{"id":"333","x":"10","y":"8","l":"1"},
+			{"id":"333","x":"10","y":"7","l":"1"},
+			{"id":"333","x":"10","y":"6","l":"1"},
+			{"id":"333","x":"9","y":"5","l":"4"}
+		],"image":"base64","category":"0","world":"0","name":"","theme":"0"
+	},{
+		"map":[
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
+			[1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,1,1],
+			[1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,1,1],
+			[1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,0,0,1,1,1,1,1,0,0,0,0,1,1,1],
+			[1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+		],"sprites":[
+			{"id":"777","x":"14","y":"6","l":"1"},
+			{"id":"666","x":"10","y":"9","l":"1"},
+			{"id":"333","x":"5","y":"4","l":"1"},
+			{"id":"666","x":"9","y":"6","l":"1"},
+			{"id":"666","x":"9","y":"5","l":"1"},
+			{"id":"333","x":"11","y":"6","l":"1"},
+			{"id":"333","x":"11","y":"5","l":"1"},
+			{"id":"333","x":"8","y":"6","l":"1"}
+		],"image":"base64","category":"0","world":"0","name":"","theme":"0"
+	},{
+		"map":[
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,1],
+			[1,1,0,1,1,0,0,0,0,0,0,0,1,1,0,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+		],"sprites":[
+			{"id":"777","x":"8","y":"9","l":"1"},
+			{"id":"666","x":"12","y":"8","l":"1"},
+			{"id":"666","x":"13","y":"7","l":"1"},
+			{"id":"666","x":"11","y":"9","l":"1"},
+			{"id":"333","x":"6","y":"8","l":"5"},
+			{"id":"333","x":"10","y":"9","l":"1"},
+			{"id":"333","x":"10","y":"7","l":"3"},
+			{"id":"333","x":"12","y":"6","l":"2"},
+			{"id":"333","x":"6","y":"9","l":"1"},
+			{"id":"333","x":"4","y":"7","l":"3"},
+			{"id":"333","x":"3","y":"6","l":"2"},
+			{"id":"666","x":"5","y":"9","l":"1"},
+			{"id":"666","x":"4","y":"8","l":"1"},
+			{"id":"666","x":"3","y":"7","l":"1"}
+		],"image":"base64","category":"0","world":"0","name":"","theme":"0"
+	},{
+		"map":[
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1],
+			[1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1],
+			[1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,1,1],
+			[1,1,1,0,1,1,0,0,0,0,0,0,0,0,1,1,1],
+			[1,1,1,0,1,1,0,0,0,0,0,0,0,0,1,1,1],
+			[1,1,1,0,1,1,1,1,1,1,0,0,0,1,1,1,1],
+			[1,1,1,0,1,1,1,1,1,1,0,0,0,1,1,1,1],
+			[1,1,1,0,1,1,1,1,1,1,0,0,0,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+		],"sprites":[
+			{"id":"777","x":"13","y":"7","l":"1"},
+			{"id":"333","x":"10","y":"10","l":"3"},
+			{"id":"333","x":"10","y":"9","l":"3"},
+			{"id":"333","x":"7","y":"7","l":"1"},
+			{"id":"333","x":"10","y":"8","l":"3"},
+			{"id":"333","x":"3","y":"5","l":"1"},
+			{"id":"333","x":"9","y":"7","l":"1"},
+			{"id":"666","x":"3","y":"10","l":"1"},
+			{"id":"333","x":"3","y":"4","l":"1"}
+		],"image":"base64","category":"0","world":"0","name":"","theme":"0"
+	},{
+		"map":[
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,1,1,1,0,0,0,0,0,1,1,1,0,0,1,1],
+			[1,1,1,1,1,0,0,0,0,0,0,1,1,0,1,1,1],
+			[1,1,1,1,1,0,0,0,0,0,0,1,1,0,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+		],"sprites":[
+			{"id":"777","x":"3","y":"6","l":"1"},
+			{"id":"666","x":"13","y":"10","l":"1"},
+			{"id":"333","x":"5","y":"6","l":"4"}
+		],"image":"base64","category":"0","world":"0","name":"","theme":"0"
+	},{
+		"map":[
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,1,1],
+			[1,1,0,1,1,0,0,0,0,0,0,0,1,1,0,1,1],
+			[1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1],
+			[1,1,0,1,1,0,0,0,0,0,0,0,1,1,0,1,1],
+			[1,1,0,1,1,0,0,0,0,0,0,0,1,1,0,1,1],
+			[1,1,0,1,1,0,0,0,0,0,0,0,1,1,0,1,1],
+			[1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+		],"sprites":[
+			{"id":"777","x":"5","y":"4","l":"1"},
+			{"id":"666","x":"5","y":"8","l":"1"},
+			{"id":"333","x":"8","y":"5","l":"1"},
+			{"id":"333","x":"8","y":"4","l":"1"},
+			{"id":"666","x":"11","y":"8","l":"1"}
+		],"image":"base64","category":"0","world":"0","name":"","theme":"0"
+	},{
+		"map":[
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1],
+			[1,1,0,1,1,0,0,0,0,0,0,0,0,0,1,1,1],
+			[1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,1,1,0,0,0,0,1,1,1,1,1,1,1,1],
+			[1,1,0,1,1,0,1,1,0,0,0,0,0,1,1,1,1],
+			[1,1,0,1,1,0,0,0,1,0,0,0,0,0,0,1,1],
+			[1,1,0,1,1,0,0,0,0,0,1,1,1,0,0,1,1],
+			[1,1,0,1,1,0,1,1,0,0,0,0,0,0,1,1,1],
+			[1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+		],"sprites":[
+			{"id":"777","x":"5","y":"10","l":"1"},
+			{"id":"666","x":"2","y":"10","l":"1"},
+			{"id":"333","x":"3","y":"3","l":"1"},
+			{"id":"666","x":"14","y":"5","l":"1"},
+			{"id":"666","x":"12","y":"11","l":"1"}
+		],"image":"base64","category":"0","world":"0","name":"","theme":"0"
+	},{
+		"map":[
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1],
+			[1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1],
+			[1,1,0,1,0,0,0,0,0,0,0,1,1,1,0,1,1],
+			[1,1,0,1,1,0,0,0,0,0,1,1,1,1,0,1,1],
+			[1,1,0,1,1,1,0,0,0,0,1,1,1,1,0,1,1],
+			[1,1,0,0,1,1,1,1,1,1,1,1,1,1,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+		],"sprites":[
+			{"id":"777","x":"13","y":"2","l":"1"},
+			{"id":"333","x":"4","y":"4","l":"8"},
+			{"id":"333","x":"11","y":"3","l":"4"},
+			{"id":"666","x":"3","y":"5","l":"1"},
+			{"id":"666","x":"4","y":"6","l":"1"},
+			{"id":"666","x":"5","y":"7","l":"1"},
+			{"id":"666","x":"10","y":"6","l":"1"},
+			{"id":"666","x":"11","y":"5","l":"1"},
+			{"id":"666","x":"14","y":"10","l":"1"},
+			{"id":"666","x":"14","y":"9","l":"1"},
+			{"id":"666","x":"2","y":"10","l":"1"},
+			{"id":"666","x":"9","y":"8","l":"1"},
+			{"id":"666","x":"2","y":"9","l":"1"},
+			{"id":"666","x":"8","y":"8","l":"1"},
+			{"id":"666","x":"7","y":"8","l":"1"},
+			{"id":"666","x":"6","y":"8","l":"1"},
+			{"id":"666","x":"8","y":"10","l":"1"},
+			{"id":"666","x":"7","y":"10","l":"1"}
+		],"image":"base64","category":"0","world":"0","name":"","theme":"0"
+	},{
+		"map":[
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1],
+			[1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+		],"sprites":[
+			{"id":"777","x":"5","y":"11","l":"1"},
+			{"id":"333","x":"8","y":"9","l":"1"},
+			{"id":"333","x":"8","y":"8","l":"1"},
+			{"id":"333","x":"4","y":"7","l":"9"},
+			{"id":"333","x":"8","y":"6","l":"1"},
+			{"id":"333","x":"8","y":"5","l":"1"},
+			{"id":"666","x":"8","y":"1","l":"1"}
+		],"image":"base64","category":"0","world":"0","name":"","theme":"0"
+	}
 ];
 
 /**
@@ -1063,7 +1332,9 @@ Engine.prototype.collision = function() {
             fires = true;
             var fire = this.sprites[i];
             // player collisions
-            if(fire.xtile == this.player.xtile && fire.ytile == this.player.ytile){
+            if(fire.xtile == this.player.xtile &&
+                fire.ytile == this.player.ytile)
+            {
                 this.player.burn();
                 return true;
             }
@@ -1071,11 +1342,16 @@ Engine.prototype.collision = function() {
             for (var j = 0; j < this.sprites.length; j++){
                 if(this.sprites[j] instanceof Ice){
                     var ice = this.sprites[j];
-                    if(fire.xtile >= ice.xtile && fire.xtile < ice.xtile+ice.length  && fire.ytile  == ice.ytile){
+                    if(fire.xtile >= ice.xtile &&
+                        fire.xtile < ice.xtile+ice.length  &&
+                        fire.ytile  == ice.ytile)
+                    {
                         this.removeFire(fire.xtile, fire.ytile);
-                        this.removeIce(fire.xtile, fire.ytile);
-                        this.addSfx(new Sparks(this, fire.xtile, fire.ytile, '255, 87, 34', 20));
-                        this.addSfx(new Sparks(this, fire.xtile, fire.ytile, '255, 122, 88', 20));
+                        this.removeIceBlock(fire.xtile, fire.ytile);
+                        this.addSfx(new Sparks(this, fire.xtile, fire.ytile,
+                            '255, 87, 34', 20));
+                        this.addSfx(new Sparks(this, fire.xtile, fire.ytile,
+                            '255, 122, 88', 20));
                         //this.fires.splice(i,1);
                         return true;
                     }
@@ -1086,14 +1362,19 @@ Engine.prototype.collision = function() {
     if(!fires){
         this.level++;
         this.load(levels[this.level]);
-        this.addSfx(new Sparks(this, this.player.xtile, this.player.ytile, '255,255,255', 200));
+        this.addSfx(new Sparks(this, this.player.xtile,
+            this.player.ytile, '255,255,255', 200));
     }
 };
 
 Engine.prototype.move = function() {
     var objectsMoving = false;
     for(var i = 0; i < this.sprites.length; ++i){
-        if(!(this.sprites[i] instanceof Player) && this.sprites[i].moving) objectsMoving = true;
+        if(!(this.sprites[i] instanceof Player) &&
+            this.sprites[i].moving)
+        {
+            objectsMoving = true;
+        }
         this.sprites[i].engineMove();
     }
     for(i = 0; i < this.sfxs.length; ++i){
@@ -1129,49 +1410,44 @@ Engine.prototype.iceAt = function(tx, ty){
     return false;
 };
 
-Engine.prototype.addIce = function(tx, ty, frozen) {
-    var found = false;
-    var j = 0;
+
+Engine.prototype.addIceBlock = function(tx, ty, frozen) {
+    var foundIceBlocks = [];
     frozen = (typeof length === 'undefined') ? false : frozen;
     for(var i = 0; i < this.sprites.length; i++){
         if(this.sprites[i] instanceof Ice && this.sprites[i].ytile == ty){
             var ice = this.sprites[i];
             if(ice.xtile - 1 == tx || ice.xtile + ice.length == tx){
-                if(!found){
-                    found = true;
-                    j = i;
-                }else{
-                    this.joinIce(j,i);
-                    return;
-                }
+                foundIceBlocks.push(ice);
             }
         }
     }
-    if(found){
-        this.sprites[j].add(tx);
-        return;
-    }
-    this.sprites.push(new Ice(this, tx, ty, 1, frozen));
-};
-
-Engine.prototype.joinIce = function(i,j) {
-    var tx = this.sprites[i].xtile <= this.sprites[j].xtile ? this.sprites[i].xtile : this.sprites[j].xtile;
-    var ty = this.sprites[i].ytile;
-    var length = this.sprites[i].length + this.sprites[j].length +1;
-    this.sprites.push(new Ice(this, tx, ty, length));
-    if(i>j){
-        this.sprites.splice(i,1);
-        this.sprites.splice(j,1);
-    }else{
-        this.sprites.splice(j,1);
-        this.sprites.splice(i,1);
+    if(foundIceBlocks.length == 0){
+        this.sprites.push(new Ice(this, tx, ty, 1, frozen));
+    } else if(foundIceBlocks.length == 1){
+        foundIceBlocks[0].addBlock(tx);
+    } else {
+        this.joinIceBlocks(foundIceBlocks[0], foundIceBlocks[1]);
     }
 };
 
-Engine.prototype.removeIce = function(tx, ty){
+Engine.prototype.joinIceBlocks = function(iceblockA,iceblockB) {
+    var tx = iceblockA.xtile <= iceblockB.xtile ? iceblockA.xtile : iceblockB.xtile;
+    var ty = iceblockA.ytile;
+    var length = iceblockA.length + iceblockB.length + 1;
+    this.addSprite(new Ice(this, tx, ty, length));
+    this.removeSprite(iceblockA);
+    this.removeSprite(iceblockB);
+};
+
+Engine.prototype.removeIceBlock = function(tx, ty){
     for (var i = 0; i < this.sprites.length; i++){
-        if(this.sprites[i] instanceof Ice && this.sprites[i].ytile == ty && tx >= this.sprites[i].xtile && tx < this.sprites[i].xtile + this.sprites[i].length){
-            if(this.sprites[i].remove(tx) <= 0){
+        if(this.sprites[i] instanceof Ice &&
+            this.sprites[i].ytile == ty &&
+            tx >= this.sprites[i].xtile &&
+            tx < this.sprites[i].xtile + this.sprites[i].length)
+        {
+            if(this.sprites[i].removeBlock(tx) <= 0){
                 this.sprites.splice(i,1);
             }
             return;
@@ -1179,9 +1455,6 @@ Engine.prototype.removeIce = function(tx, ty){
     }
 };
 
-Engine.prototype.addFire = function(tx, ty){
-    this.sprites.push(new Fire(this, tx, ty));
-};
 Engine.prototype.removeFire = function(tx, ty){
     for (var i = 0; i < this.sprites.length; i++){
         if((this.sprites[i].ytile == ty) && (tx == this.sprites[i].xtile) && (this.sprites[i] instanceof Fire)){
@@ -1194,14 +1467,24 @@ Engine.prototype.removeFire = function(tx, ty){
 Engine.prototype.addSprite = function(sprite) {
     this.sprites.push(sprite);
 };
-Engine.prototype.removeSprite = function(tx, ty){
+Engine.prototype.removeSprite = function(sprite){
+    for (var i = 0; i < this.sprites.length; i++){
+        if(this.sprites[i] == sprite){
+            this.sprites.splice(i,1);
+            return true;
+        }
+    }
+    return false;
+};
+/*
+Engine.prototype.removeSpriteAt = function(tx, ty){
     for (var i = 0; i < this.sprites.length; i++){
         if(this.sprites[i].xtile == tx && this.sprites[i].ytile == ty){
             this.sprites.splice(i,1);
         }
     }
 };
-
+*/
 Engine.prototype.addSfx = function(sfx) {
     this.sfxs.push(sfx);
 };
@@ -1231,15 +1514,8 @@ Engine.prototype.spriteAt = function(tx, ty){
     return OBJECT_BACKGROUND;
 };
 
-Engine.prototype.remove = function(sprite){
-    for (var i = 0; i < this.sprites.length; i++){
-        if(this.sprites[i] == sprite){
-            this.sprites.splice(i,1);
-            return true;
-        }
-    }
-    return false;
-};
+
+
 Engine.prototype.save = function(name, theme, category, world){
     var data = {};
     data.map = this.map.map;
@@ -1247,7 +1523,12 @@ Engine.prototype.save = function(name, theme, category, world){
     for (var i = 0; i < this.sprites.length; i++){
         var sprite = this.sprites[i];
         sprite.length = (typeof sprite.length == "undefined") ? 1 : sprite.length;
-        data.sprites.push({"id": sprite.id, "x": sprite.xtile, "y": sprite.ytile, "l": sprite.length});
+        data.sprites.push({
+            "id": sprite.id,
+            "x": sprite.xtile,
+            "y": sprite.ytile,
+            "l": sprite.length
+        });
     }
     data.image = this.canvas.toDataURL('image/png').slice(22);
     data.category = (typeof category == "undefined") ? 0 : category;
@@ -1257,10 +1538,10 @@ Engine.prototype.save = function(name, theme, category, world){
     return data;
 };
 Engine.prototype.update = function(id){
-    var data = this.save();
+   /* var data = this.save();
     $.post(this.base_url+'api/update/'+id, data, function(){
         console.log('updated');
-    });
+    });*/
 };
 Engine.prototype.load = function(data) {
     this.sprites = [];
@@ -1273,22 +1554,20 @@ Engine.prototype.load = function(data) {
         switch(sprite.id){
             case "777":
                 this.player = new Player(this, sprite.x, sprite.y);
-                this.add(this.player);
+                this.addSprite(this.player);
                 break;
             case "333":
                 sprite.l = typeof sprite.l == "undefined" ? 1 : sprite.l;
-                this.add(new Ice(this, sprite.x, sprite.y, parseInt(sprite.l)));
+                this.addSprite(new Ice(this, sprite.x, sprite.y, parseInt(sprite.l)));
                 break;
             case "666":
-                this.add(new Fire(this, sprite.x, sprite.y));
+                this.addSprite(new Fire(this, sprite.x, sprite.y));
                 break;
         }
     }
 };
 
-Engine.prototype.add = function(sprite){
-    this.sprites.push(sprite);
-};
+
 
 
 /**
