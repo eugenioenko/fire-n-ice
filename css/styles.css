@@ -37,6 +37,8 @@ div#wrapper{
 	margin-left: auto;
 	margin-right: auto;
 	width: 544px;
+	padding: 0 15px;
+	box-sizing: border-box;
 }
 
 ul#controls{
