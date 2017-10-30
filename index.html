@@ -2,15 +2,15 @@
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
-
 </head>
 <body>
+
 	<div class="vertical-center">
 		<div class="vertical-centered">
 			<div class="wrapper">
 				<h1>Fire 'n Ice</h1>
 				<p>A remake in progress of the game from NES with the same name</p>
-				
+
 			</div>
 			<canvas id="canvas" height="416" width="544">
 				<div style="display: none;">
@@ -20,7 +20,11 @@
 					<img src="images/fire.png" id="img_fire">
 					<img src="images/dona.png" id="img_dona">
 				</div>
+
 			</canvas>
+			<div class="wrapper">
+				<audio id="music" src="music/sparks.mp3" autoplay controls style="margin-left: -15px"></audio>
+			</div>
 			<div class="wrapper">
 				<h3>Controls</h3>
 				<ul id="controls">
@@ -33,5 +37,9 @@
 		</div>
 	</div>
 	<script src="js/firenice.js"></script>
+	<script>
+		var music = document.getElementById('music');
+		music.volume = 0.3;
+	</script>
 </body>
 </html>
