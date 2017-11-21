@@ -19,5 +19,9 @@ Destroy all the fires on the level by colliding them with blocks of ice
  - **Down**: Create or destroy block of ice
  - **Enter**: Reloads current level
 
-#### Work in progress, demo:
-[Online demo Here](https://eugenioenko.github.io/fire-n-ice/)
+Work in progress, demo:
+## [Online demo Here](https://eugenioenko.github.io/fire-n-ice/)
+
+### Credits
+- Game development: Eugene Enko
+- Music composition: Margaret Nelson
