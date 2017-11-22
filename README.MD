@@ -25,3 +25,5 @@ Work in progress, demo:
 ### Credits
 - Game development: Eugene Enko
 - Music composition: Margaret Nelson
+- Level design: wallypg
+- Testing and QA: gdzabaleta
