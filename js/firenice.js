@@ -44,6 +44,8 @@ var ANIM_CROUCH_START = 20;
 var ANIM_CROUCH_END = 22;
 var ANIM_RIP_START = 23;
 var ANIM_RIP_END = 24;
+var ANIM_SLEEP_START = 25;
+var ANIM_SLEEP_END = 26;
 
 var TILE_MIDDLE = 0;
 var TILE_LEFT = 32;
@@ -164,7 +166,7 @@ function Sound(){
 		"danger" : document.getElementById('sfx-danger'),
 		"ice-remove" : document.getElementById('sfx-ice-remove'),
 		"state-leave" : document.getElementById('sfx-state-leave')
-	}
+	};
 
 	this.play = function(sfx){
 		this.sfx[sfx].volume = this.sfxVolume;
@@ -474,6 +476,7 @@ var Player = function(engine, tx, ty){
     this.animDelay = 3;
     this.counter = 0;
     this.fallCounter = 0;
+    this.standCounter = 0;
     return this;
 };
 Player.inherits(AnimSprite);
@@ -505,7 +508,7 @@ Player.prototype.left = function() {
             if(this.coorners.l == OBJECT_ICE){
                 this.push();
             }
-            //climbe
+            //climb
             if (Tile.isSolid(this.coorners.l) && Tile.isSolid(this.coorners.d)  && !Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ul) && !this.moving) {
                 this.setAnim(ANIM_PUSH_START,ANIM_PUSH_START,false, ANIM_LEFT_ROW);
                 this.setState(MOVE_UP, true);
@@ -545,6 +548,7 @@ Player.prototype.right = function() {
 
 Player.prototype.burn = function() {
     if(this.state != MOVE_RIP){
+        this.engine.sound.playOnce('danger');
         this.setState(MOVE_RIP, true);
         this.setAnim(ANIM_RIP_START,ANIM_RIP_END, true, ANIM_RIGHT_ROW);
     }
@@ -642,7 +646,11 @@ Player.prototype.doGravity = function() {
 };
 Player.prototype.doStand = function() {
     if(!Tile.isSolid(this.coorners.u)){
-        this.setAnim(ANIM_STAND_START,ANIM_STAND_END,true, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
+        if(this.standCounter++ > 500){
+            this.setAnim(ANIM_SLEEP_START,ANIM_SLEEP_END,true, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 48, true);
+        } else {
+            this.setAnim(ANIM_STAND_START,ANIM_STAND_END,true, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
+        }
     }else{
         this.setAnim(ANIM_CROUCH_START,ANIM_CROUCH_START, false, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
     }
@@ -729,6 +737,9 @@ Player.prototype.draw = function(){
 Player.prototype.move = function (){
     Sprite.prototype.move.call(this);
     this.gravity();
+    if(this.state != MOVE_STAND){
+        this.standCounter = 0;
+    }
     switch (this.state) {
         case MOVE_RIGHT:
             this.doRun();
@@ -826,6 +837,7 @@ var Ice = function(engine, tx, ty, length, frozen){
     this.old_tx = 0;
     this.old_ty = 0;
     this.dirrection = 0;
+    this.falling = false;
     this.id = OBJECT_ICE;
     if((this.getTile(this.xtile-1, this.ytile) == OBJECT_WALL) ||
         (this.getTile(this.xtile+this.length, this.ytile) == OBJECT_WALL))
@@ -891,8 +903,13 @@ Ice.prototype.canGlide = function(dir){
 
 Ice.prototype.gravity = function() {
     if(!this.coorners.d && !this.frozen){
+        this.falling = true;
         this.setState(MOVE_DOWN, true);
         return true;
+    }
+    if(this.falling){
+        this.falling = false;
+        this.engine.sound.play('ice-collision');
     }
     return false;
 };
@@ -1389,6 +1406,7 @@ Engine.prototype.collision = function() {
                         fire.xtile < ice.xtile+ice.length  &&
                         fire.ytile  == ice.ytile)
                     {
+                        this.sound.play('fire-off');
                         this.removeFire(fire.xtile, fire.ytile);
                         this.removeIceBlock(fire.xtile, fire.ytile);
                         this.addSfx(new Sparks(this, fire.xtile, fire.ytile,

@@ -14,6 +14,7 @@ var Player = function(engine, tx, ty){
     this.animDelay = 3;
     this.counter = 0;
     this.fallCounter = 0;
+    this.standCounter = 0;
     return this;
 };
 Player.inherits(AnimSprite);
@@ -45,7 +46,7 @@ Player.prototype.left = function() {
             if(this.coorners.l == OBJECT_ICE){
                 this.push();
             }
-            //climbe
+            //climb
             if (Tile.isSolid(this.coorners.l) && Tile.isSolid(this.coorners.d)  && !Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ul) && !this.moving) {
                 this.setAnim(ANIM_PUSH_START,ANIM_PUSH_START,false, ANIM_LEFT_ROW);
                 this.setState(MOVE_UP, true);
@@ -85,6 +86,7 @@ Player.prototype.right = function() {
 
 Player.prototype.burn = function() {
     if(this.state != MOVE_RIP){
+        this.engine.sound.playOnce('danger');
         this.setState(MOVE_RIP, true);
         this.setAnim(ANIM_RIP_START,ANIM_RIP_END, true, ANIM_RIGHT_ROW);
     }
@@ -182,7 +184,11 @@ Player.prototype.doGravity = function() {
 };
 Player.prototype.doStand = function() {
     if(!Tile.isSolid(this.coorners.u)){
-        this.setAnim(ANIM_STAND_START,ANIM_STAND_END,true, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
+        if(this.standCounter++ > 500){
+            this.setAnim(ANIM_SLEEP_START,ANIM_SLEEP_END,true, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 48, true);
+        } else {
+            this.setAnim(ANIM_STAND_START,ANIM_STAND_END,true, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
+        }
     }else{
         this.setAnim(ANIM_CROUCH_START,ANIM_CROUCH_START, false, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
     }
@@ -269,6 +275,9 @@ Player.prototype.draw = function(){
 Player.prototype.move = function (){
     Sprite.prototype.move.call(this);
     this.gravity();
+    if(this.state != MOVE_STAND){
+        this.standCounter = 0;
+    }
     switch (this.state) {
         case MOVE_RIGHT:
             this.doRun();

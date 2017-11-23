@@ -52,6 +52,7 @@ Engine.prototype.collision = function() {
                         fire.xtile < ice.xtile+ice.length  &&
                         fire.ytile  == ice.ytile)
                     {
+                        this.sound.play('fire-off');
                         this.removeFire(fire.xtile, fire.ytile);
                         this.removeIceBlock(fire.xtile, fire.ytile);
                         this.addSfx(new Sparks(this, fire.xtile, fire.ytile,

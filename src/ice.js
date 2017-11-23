@@ -12,6 +12,7 @@ var Ice = function(engine, tx, ty, length, frozen){
     this.old_tx = 0;
     this.old_ty = 0;
     this.dirrection = 0;
+    this.falling = false;
     this.id = OBJECT_ICE;
     if((this.getTile(this.xtile-1, this.ytile) == OBJECT_WALL) ||
         (this.getTile(this.xtile+this.length, this.ytile) == OBJECT_WALL))
@@ -77,8 +78,13 @@ Ice.prototype.canGlide = function(dir){
 
 Ice.prototype.gravity = function() {
     if(!this.coorners.d && !this.frozen){
+        this.falling = true;
         this.setState(MOVE_DOWN, true);
         return true;
+    }
+    if(this.falling){
+        this.falling = false;
+        this.engine.sound.play('ice-collision');
     }
     return false;
 };
