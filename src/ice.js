@@ -86,6 +86,7 @@ Ice.prototype.gravity = function() {
 Ice.prototype.collision = function(){
     if(!this.canGlide(this.dirrection)){
         this.dirrection = 0;
+        this.engine.sound.play('ice-collision');
         this.setState(MOVE_STAND, false);
         return true;
     }

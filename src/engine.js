@@ -13,6 +13,7 @@ var Engine = function(){
     this.level = 0;
     this.levels = levels;
     this.keyboard = new Keyboard();
+    this.sound = new Sound();
     this.load(levels[this.level]);
 
 };
@@ -181,15 +182,7 @@ Engine.prototype.removeSprite = function(sprite){
     }
     return false;
 };
-/*
-Engine.prototype.removeSpriteAt = function(tx, ty){
-    for (var i = 0; i < this.sprites.length; i++){
-        if(this.sprites[i].xtile == tx && this.sprites[i].ytile == ty){
-            this.sprites.splice(i,1);
-        }
-    }
-};
-*/
+
 Engine.prototype.addSfx = function(sfx) {
     this.sfxs.push(sfx);
 };

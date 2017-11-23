@@ -25,7 +25,7 @@ gulp.task('wrap', function(){
 });
 
 gulp.task('combine', function() {
-  return gulp.src(['src/constants.js', 'src/struct.js', 'src/keyboard.js', 'src/tiles.js', 'src/tilemap.js', 'src/sprite.js', 'src/animsprite.js', 'src/player.js', 'src/fire.js', 'src/ice.js', 'src/sfx.js', 'src/levels.js', 'src/engine.js', 'src/game.js'])
+  return gulp.src(['src/constants.js', 'src/struct.js', 'src/keyboard.js', 'src/sound.js', 'src/tiles.js', 'src/tilemap.js', 'src/sprite.js', 'src/animsprite.js', 'src/player.js', 'src/fire.js', 'src/ice.js', 'src/sfx.js', 'src/levels.js', 'src/engine.js', 'src/game.js'])
     .pipe(concat({ path: 'firenice.js'}))
     .pipe(gulp.dest('./js'));
 });

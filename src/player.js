@@ -101,6 +101,9 @@ Player.prototype.gravity = function() {
         }
         if (!Tile.isSolid(this.coorners.d)) {
             this.setState(MOVE_DOWN, true);
+            if(this.fallCounter >= 1){
+                this.engine.sound.playOnce("falling");
+            }
             if(this.fallCounter >= 2){
                 this.setAnim(ANIM_FALL_START,ANIM_FALL_END,true, ANIM_RIGHT_ROW);
             } else {
@@ -108,6 +111,7 @@ Player.prototype.gravity = function() {
             }
         } else {
             this.fallCounter = 0;
+            this.engine.sound.stop("falling");
             this.setState(MOVE_STAND, false);
         }
     }
@@ -188,6 +192,7 @@ Player.prototype.doUp = function() {
     if(++this.counter <= 18){
         switch (this.counter) {
             case 3:
+                this.engine.sound.play('climb');
                 this.setAnim(ANIM_PUSH_END, ANIM_PUSH_END, false, this.dirrection == DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
                 break;
             case 6:
@@ -216,10 +221,12 @@ Player.prototype.doUp = function() {
     }
 };
 Player.prototype.makeIce = function() {
+    this.engine.sound.play('new-ice');
     this.engine.addIceBlock(this.xtile + this.dirrection, this.ytile+1);
     this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1));
 };
 Player.prototype.removeIceBlock = function() {
+    this.engine.sound.play('ice-remove');
     this.engine.removeIceBlock(this.xtile + this.dirrection, this.ytile+1);
     this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1));
 };
@@ -236,6 +243,7 @@ Player.prototype.doPush = function() {
     } else {
         var ice =  this.engine.iceAt(this.xtile+this.dirrection, this.ytile);
         if(ice){
+            this.engine.sound.play('ice-push');
             ice.push(this.dirrection);
         }
         this.setState(MOVE_STAND, false);
