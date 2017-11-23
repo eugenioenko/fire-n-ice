@@ -1,4 +1,4 @@
-(function(){ 
+(function(){
  "use strict";
 var TILE_WIDTH = 32;
 
@@ -61,6 +61,16 @@ var OBJECT_FIRE = 666;
 var OBJECT_ICE = 333;
 var OBJECT_OUT = 255;
 var OBJECT_PLAYER = 777;
+
+
+var url_param = window.location.href.split('?').pop();
+var THEMES = {
+  lotr : {
+    ice_sparks_color: '255,0,0',
+    block_glue_color: 'rgba(115,115,115,0.90)'
+  }
+};
+var THEME = THEMES.hasOwnProperty(url_param) ? THEMES[url_param] : false;
 
 
 /**
@@ -985,7 +995,7 @@ Ice.prototype.draw = function() {
         }
     }
     if(this.frozen){
-        this.ctx.fillStyle = "rgba(255,255,255,0.95)";
+        this.ctx.fillStyle = THEME ? THEME.block_glue_color : "rgba(255,255,255,0.95)";
         if(this.getTile(this.xtile-1, this.ytile) == OBJECT_WALL){
             this.ctx.fillRect((this.xtile*this.width)-7, 3+this.ytile*this.height, 18,this.height-6);
         }
@@ -1055,6 +1065,7 @@ Particle.prototype.move = function() {
     this.life -= 5;
 };
 var Sparks = function(engine, tx,ty,color, length, intencity){
+    if(!color && THEME) color = THEME.ice_sparks_color;
     this.color = (typeof color === 'undefined') ? '255,255,255' : color;
     this.length = (typeof length === 'undefined') ? 10 : length;
     this.intencity = (typeof intencity === 'undefined') ? 1 : intencity;

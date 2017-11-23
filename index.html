@@ -46,6 +46,17 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		var url_param = window.location.href.split('?').pop();
+		var THEMES = ['lotr'];
+		var THEME = (THEMES.indexOf(url_param)<0) ? false : url_param;
+		if(THEME){
+			var images = document.getElementsByTagName('img');
+			for(var i = 0; i < images.length; i++){
+				images[i].src = images[i].src.replace(/\.png$/, '_' + THEME + '.png');
+			}
+		}
+	</script>
 	<script src="js/firenice.js?v=11102017"></script>
 </body>
 </html>
