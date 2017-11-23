@@ -22,6 +22,9 @@ Destroy all the fires on the level by colliding them with blocks of ice
 Work in progress, demo:
 ## [Online demo Here](https://eugenioenko.github.io/fire-n-ice/)
 
+#### A LOTR FAN? 
+>[Visit the Mines of Moria as Gandalf](https://eugenioenko.github.io/fire-n-ice/?lotr)
+
 ### Credits
 - Game development: Eugene Enko
 - Music composition: Margaret Nelson
