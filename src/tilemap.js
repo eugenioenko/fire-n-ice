@@ -7,8 +7,10 @@ class TileMap {
 
     constructor(engine, map) {
         this.ctx = engine.ctx;
-        let a = Tile.getImage(OBJECT_BACKGROUND);
-        this.background = this.ctx.createPattern(Tile.getImage(OBJECT_BACKGROUND), 'repeat');
+        this.background = this.ctx.createPattern(
+            engine.resources.get(Tile.getImage(OBJECT_BACKGROUND)),
+            'repeat'
+        );
         this.map = map;
         this.engine = engine;
         this.tileWidth = TILE_WIDTH;
@@ -37,11 +39,8 @@ class TileMap {
     draw() {
         let state = TILE_MIDDLE;
         this.ctx.save();
-        //this.ctx.fillStyle =  this.background;
-        //this.ctx.fillRect(0,0,this.engine.cwidth,this.engine.cheight);
         for (let i = 0; i <= this.width; ++i) {
             for (let j = 0; j <= this.height; ++j) {
-            // if (this.map[j][i] && Tile.getImage(this.map[j][i])) {
                 if (this.map[j][i] == 1) {
                     if (!this.getTile(i-1, j) && !this.getTile(i+1, j)) {
                         state = TILE_BOTH;
@@ -55,8 +54,7 @@ class TileMap {
                 } else {
                     state = 0;
                 }
-                this.ctx.drawImage(Tile.getImage(this.map[j][i]), state, 0, this.tileWidth, this.tileHeight, i*this.tileWidth, j*this.tileHeight, this.tileWidth, this.tileHeight);
-            //}
+                this.ctx.drawImage(this.engine.resources.get(Tile.getImage(this.map[j][i])), state, 0, this.tileWidth, this.tileHeight, i*this.tileWidth, j*this.tileHeight, this.tileWidth, this.tileHeight);
             }
         }
         this.ctx.restore();

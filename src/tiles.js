@@ -1,33 +1,33 @@
 const Tile = {
    tiles: {
         [OBJECT_BACKGROUND]: {
-            image: 'img_bg',
+            resource: 'background',
             solid: false
         },
         [OBJECT_OUT]: {
-            image: false,
+            resource: false,
             solid: true
         },
         [OBJECT_PLAYER]: {
-            image: false,
+            resource: false,
             solid: true
         },
         [OBJECT_ICE]: {
-            image: false,
+            resource: false,
             solid: true
         },
         [OBJECT_WALL]: {
-            image: 'img_tile',
+            resource: 'tile',
             solid: true
         },
         [OBJECT_FIRE]: {
-            image: false,
+            resource: false,
             solid: false
         }
     },
+
     isSolid: function(id) {
-        if (typeof this.tiles[id] == "undefined") {
-            console.log('UNDEFINED ON tiles');
+        if (typeof this.tiles[id] === "undefined") {
             throw new Error('UNDEFINED ON isSolid');
         } else {
             return this.tiles[id].solid;
@@ -39,7 +39,8 @@ const Tile = {
             console.log('UNDEFINED ON tiles get Image');
             throw new Error('UNDEFINED ON tiles get Image');
         } else {
-            return document.getElementById(this.tiles[id].image);
+            return this.tiles[id].resource;
         }
     }
 };
+Object.freeze(Tile);

@@ -3,10 +3,11 @@
  */
 class Engine {
 
-    constructor(canvas) {
+    constructor(canvas, resources) {
         this.canvas = canvas;
         this.cwidth = canvas.width;
         this.cheight = canvas.height;
+        this.resources = resources;
         this.ctx = this.canvas.getContext('2d');
         this.sprites = [];
         this.sfxs = [];

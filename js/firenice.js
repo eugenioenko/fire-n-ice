@@ -88,6 +88,22 @@ function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+class Resources {
+
+    constructor() {
+        this.resources = {};
+    }
+
+    add(name, resource) {
+        this.resources[name] = resource;
+    }
+
+    get(name) {
+        return this.resources[name];
+    }
+
+}
+
 
 
 /**
@@ -182,33 +198,33 @@ function Sound() {
 const Tile = {
    tiles: {
         [OBJECT_BACKGROUND]: {
-            image: 'img_bg',
+            resource: 'background',
             solid: false
         },
         [OBJECT_OUT]: {
-            image: false,
+            resource: false,
             solid: true
         },
         [OBJECT_PLAYER]: {
-            image: false,
+            resource: false,
             solid: true
         },
         [OBJECT_ICE]: {
-            image: false,
+            resource: false,
             solid: true
         },
         [OBJECT_WALL]: {
-            image: 'img_tile',
+            resource: 'tile',
             solid: true
         },
         [OBJECT_FIRE]: {
-            image: false,
+            resource: false,
             solid: false
         }
     },
+
     isSolid: function(id) {
-        if (typeof this.tiles[id] == "undefined") {
-            console.log('UNDEFINED ON tiles');
+        if (typeof this.tiles[id] === "undefined") {
             throw new Error('UNDEFINED ON isSolid');
         } else {
             return this.tiles[id].solid;
@@ -220,10 +236,11 @@ const Tile = {
             console.log('UNDEFINED ON tiles get Image');
             throw new Error('UNDEFINED ON tiles get Image');
         } else {
-            return document.getElementById(this.tiles[id].image);
+            return this.tiles[id].resource;
         }
     }
 };
+Object.freeze(Tile);
 
 class TileMap {
     /**
@@ -234,8 +251,10 @@ class TileMap {
 
     constructor(engine, map) {
         this.ctx = engine.ctx;
-        let a = Tile.getImage(OBJECT_BACKGROUND);
-        this.background = this.ctx.createPattern(Tile.getImage(OBJECT_BACKGROUND), 'repeat');
+        this.background = this.ctx.createPattern(
+            engine.resources.get(Tile.getImage(OBJECT_BACKGROUND)),
+            'repeat'
+        );
         this.map = map;
         this.engine = engine;
         this.tileWidth = TILE_WIDTH;
@@ -264,11 +283,8 @@ class TileMap {
     draw() {
         let state = TILE_MIDDLE;
         this.ctx.save();
-        //this.ctx.fillStyle =  this.background;
-        //this.ctx.fillRect(0,0,this.engine.cwidth,this.engine.cheight);
         for (let i = 0; i <= this.width; ++i) {
             for (let j = 0; j <= this.height; ++j) {
-            // if (this.map[j][i] && Tile.getImage(this.map[j][i])) {
                 if (this.map[j][i] == 1) {
                     if (!this.getTile(i-1, j) && !this.getTile(i+1, j)) {
                         state = TILE_BOTH;
@@ -282,8 +298,7 @@ class TileMap {
                 } else {
                     state = 0;
                 }
-                this.ctx.drawImage(Tile.getImage(this.map[j][i]), state, 0, this.tileWidth, this.tileHeight, i*this.tileWidth, j*this.tileHeight, this.tileWidth, this.tileHeight);
-            //}
+                this.ctx.drawImage(this.engine.resources.get(Tile.getImage(this.map[j][i])), state, 0, this.tileWidth, this.tileHeight, i*this.tileWidth, j*this.tileHeight, this.tileWidth, this.tileHeight);
             }
         }
         this.ctx.restore();
@@ -1347,10 +1362,11 @@ let levels = [
  */
 class Engine {
 
-    constructor(canvas) {
+    constructor(canvas, resources) {
         this.canvas = canvas;
         this.cwidth = canvas.width;
         this.cheight = canvas.height;
+        this.resources = resources;
         this.ctx = this.canvas.getContext('2d');
         this.sprites = [];
         this.sfxs = [];
@@ -1609,15 +1625,15 @@ class Engine {
  * Game Loop
  */
 class Game {
-
-    constructor(canvavs) {
-        this.gameloop = this.gameloop_.bind(this); // jshint ignore:line
-        this.engine = new Engine(canvas);
-        this.intro = new AnimSprite(null, this.engine, 'img_intro', 0, 0, 544, 416, 0, 0, 0, 0, false);
-        this.start = new AnimSprite(null, this.engine, 'img_start', 7, 11, 140, 26, -10, 0, 0, 1, true);
-        this.start.animDelay = ANIM_STANDARD_DELAY * 20;
+    /**
+     * @param {*} canvavs   The canvas element
+     * @param {*} resources  Game resources
+     */
+    constructor(canvas, resources) {
         this.state = STATE_START;
-        this.canvas = canvas;
+        this.engine = new Engine(canvas, resources);
+        this.createIntro();
+        this.gameloop = this.gameloop_.bind(this); // jshint ignore:line
         this.gameloop();
     }
 
@@ -1634,13 +1650,18 @@ class Game {
         window.requestAnimationFrame(this.gameloop);
     }
 
+    createIntro() {
+        this.intro = new AnimSprite(null, this.engine, 'img_intro', 0, 0, 544, 416, 0, 0, 0, 0, false);
+        this.start = new AnimSprite(null, this.engine, 'img_start', 7, 11, 140, 26, -10, 0, 0, 1, true);
+        this.start.animDelay = ANIM_STANDARD_DELAY * 20;
+    }
+
     doIntro() {
         this.intro.draw();
         this.start.draw();
 
         if (this.engine.keyboard.enter) {
             this.state = STATE_PLAY;
-            this.canvas.style.opacity = 1;
         }
     }
 }

@@ -50,8 +50,16 @@
 	</div>
 	<script>
 		window.addEventListener('load', () => {
+			const resources = new Resources();
+			resources.add('tile', document.getElementById('img_tile'));
+			resources.add('background', document.getElementById('img_bg'));
+			resources.add('img_ice', document.getElementById('img_ice'));
+			resources.add('img_fire', document.getElementById('img_fire'));
+			resources.add('img_dona', document.getElementById('img_dona'));
+			resources.add('img_intro', document.getElementById('img_intro'));
+			resources.add('img_start', document.getElementById('img_start'));
 			const canvas = document.getElementById('canvas');
-			const game = new Game(canvas);
+			const game = new Game(canvas, resources);
 			window.game = game;
 		});
 	</script>
