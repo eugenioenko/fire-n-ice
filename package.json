@@ -25,11 +25,13 @@
   "homepage": "https://github.com/eugenioenko/fire-n-ice#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-append-prepend": "^1.0.4",
+    "gulp-append-prepend": "^1.0.8",
     "gulp-concat": "^2.6.1",
-    "gulp-jshint": "^2.0.4",
-    "jshint": "^2.9.5",
+    "gulp-jshint": "^2.1.0",
+    "jshint": "^2.10.2",
     "jshint-stylish": "^2.2.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "natives": "^1.1.6"
+  }
 }

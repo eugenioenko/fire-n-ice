@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title>Fire 'n Ice</title>
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<script src="js/firenice.js?v=1123"></script>
 </head>
 <body>
-
 	<div class="vertical-center">
 		<div class="vertical-centered">
 			<div class="wrapper">
@@ -19,6 +20,8 @@
 					<img src="images/ice.png" id="img_ice">
 					<img src="images/fire.png" id="img_fire">
 					<img src="images/dona.png" id="img_dona">
+					<img src="images/intro.png" id="img_intro">
+					<img src="images/start.png" id="img_start">
 					<audio id="sfx-ice-push"  src="sounds/sfx-ice-push.wav"></audio>
 					<audio id="sfx-fire-off" src="sounds/sfx-fire-off.wav"></audio>
 					<audio id="sfx-falling" src="sounds/sfx-falling.wav"></audio>
@@ -30,7 +33,6 @@
 					<audio id="sfx-ice-remove" src="sounds/sfx-ice-remove.wav"></audio>
 					<audio id="sfx-state-leave" src="sounds/sfx-state-leave.wav"></audio>
 				</div>
-
 			</canvas>
 			<div class="wrapper">
 				<audio  id="music" src="music/sparks.mp3" loop autoplay controls style="margin-left: -15px"></audio>
@@ -47,17 +49,12 @@
 		</div>
 	</div>
 	<script>
-		var url_param = window.location.href.split('?').pop();
-		var THEMES = ['lotr'];
-		var THEME = (THEMES.indexOf(url_param)<0) ? false : url_param;
-		if(THEME){
-			var images = document.getElementsByTagName('img');
-			for(var i = 0; i < images.length; i++){
-				images[i].src = images[i].src.replace(/\.png$/, '_' + THEME + '.png');
-			}
-			document.getElementById('music').src = 'music/' + THEME + '.mp3';
-		}
+		window.addEventListener('load', () => {
+			const canvas = document.getElementById('canvas');
+			const game = new Game(canvas);
+			window.game = game;
+		});
 	</script>
-	<script src="js/firenice.js?v=11102017"></script>
+
 </body>
 </html>

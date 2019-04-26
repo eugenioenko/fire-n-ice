@@ -2,8 +2,6 @@ const jshint = require('gulp-jshint');
 const gulp   = require('gulp');
 const gutil  = require('gulp-util');
 const concat = require('gulp-concat');
-var gap = require('gulp-append-prepend');
-
 
 gulp.task('default', function() {
   return gutil.log('Gulp started')
@@ -12,16 +10,8 @@ gulp.task('default', function() {
 
 gulp.task('lint', function() {
   return gulp.src('./src/*.js')
-    .pipe(jshint())
+    .pipe(jshint({esnext:true}))
     .pipe(jshint.reporter('jshint-stylish'));
-});
-
-
-gulp.task('wrap', function(){
-    gulp.src('js/firenice.js')
-    .pipe(gap.prependText('(function(){ \n "use strict";'))
-    .pipe(gap.appendText('})();'))
-    .pipe(gulp.dest('js/'));
 });
 
 gulp.task('combine', function() {
@@ -31,4 +21,3 @@ gulp.task('combine', function() {
 });
 
 gulp.watch('src/*.js', ['lint', 'combine']);
-gulp.watch('js/firenice.js', ['wrap']);

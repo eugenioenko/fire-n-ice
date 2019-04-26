@@ -1,31 +1,25 @@
-
-/**
-* Inheritance Mechanism
-* @param  {class} Parent  The parrent class
-*/
-Function.prototype.inherits = function(Parent){
-    this.prototype = Object.create(Parent.prototype);
-    this.prototype.constructor = this;
-};
-
 /**
 * Stores position of the corners and vertices
 */
-var Position = function(){
-    this.u = 0;
-    this.d = 0;
-    this.l = 0;
-    this.r = 0;
-    this.ul = 0;
-    this.ur = 0;
-    this.dl = 0;
-    this.dr = 0;
-};
+class Position {
+    constructor() {
+        this.u = 0;
+        this.d = 0;
+        this.l = 0;
+        this.r = 0;
+        this.ul = 0;
+        this.ur = 0;
+        this.dl = 0;
+        this.dr = 0;
+    }
+}
 
-var Coor = function(tx,ty){
-    this.xtile = tx;
-    this.ytile = ty;
-};
+class Coor {
+    constructor (tx, ty) {
+        this.xtile = tx;
+        this.ytile = ty;
+    }
+}
 
 function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
