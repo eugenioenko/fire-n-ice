@@ -118,7 +118,7 @@ class Engine {
     }
 
     addIceBlock(tx, ty, frozen) {
-        let foundIceBlocks = [];
+        let foundIceBlocks = [ ];
         frozen = (typeof length === 'undefined') ? false : frozen;
         for (let i = 0; i < this.sprites.length; i++) {
             if (this.sprites[i] instanceof Ice && this.sprites[i].ytile == ty) {
