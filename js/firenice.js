@@ -118,15 +118,19 @@ class Keyboard {
         this.right = false;
         this.keydown = this.keydown_.bind(this);
         this.keyup = this.keyup_.bind(this);
-        this.mouse = this.mouse_.bind(this);
+
         window.addEventListener('click', this.mouse);
         window.addEventListener('keydown', this.keydown, false);
         window.addEventListener('keyup', this.keyup, false);
+
+        document.getElementById('btn_action').addEventListener('pointerdown', () => this.down = true);
+        document.getElementById('btn_action').addEventListener('pointerup', () => this.down = false);
+        document.getElementById('btn_left').addEventListener('pointerdown', () => this.left = true);
+        document.getElementById('btn_left').addEventListener('pointerup', () => this.left = false);
+        document.getElementById('btn_right').addEventListener('pointerdown', () => this.right = true);
+        document.getElementById('btn_right').addEventListener('pointerup', () => this.right = false);
     }
 
-    mouse_(e) {
-        this.enter = true;
-    }
 
     keydown_(e) {
         switch (e.keyCode) {
@@ -1868,7 +1872,7 @@ class Game {
         this.intro.draw();
         this.start.draw();
 
-        if (this.engine.keyboard.enter) {
+        if (this.engine.keyboard.enter || this.engine.keyboard.down) {
             this.state = STATE_PLAY;
             this.engine.sound.soundrack();
         }

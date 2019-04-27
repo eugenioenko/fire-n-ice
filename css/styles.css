@@ -31,7 +31,7 @@ p{
 h1{
 	color: #ffa7ff;
 }
-div.wrapper{
+.wrapper {
 	margin-left: auto;
 	margin-right: auto;
 	width: 100%;
@@ -39,7 +39,16 @@ div.wrapper{
 	padding: 0 15px;
 	box-sizing: border-box;
 }
+.wrapper:after {
+	content: " ";
+	clear: both;
+	display: table;
+}
 
+.wrapper:before {
+	content: " ";
+	display: table;
+}
 a{
 	color: #ffe17f;
 }
@@ -47,4 +56,22 @@ ul#controls>li{
 	font-size: 17px;
 	line-height: 21px;
 
+}
+
+.text-right {
+	text-align: right;
+}
+.p-20 {
+	padding-top: 20px;
+}
+.col-50 {
+	width: 50%;
+	float: left;
+	background-color: rgba(.0, .0, .0, .3);
+}
+
+.fa {
+	font-size: 32px;
+	padding: 10px;
+	margin: 10px;
 }

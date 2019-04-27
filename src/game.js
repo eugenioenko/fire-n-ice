@@ -37,7 +37,7 @@ class Game {
         this.intro.draw();
         this.start.draw();
 
-        if (this.engine.keyboard.enter) {
+        if (this.engine.keyboard.enter || this.engine.keyboard.down) {
             this.state = STATE_PLAY;
             this.engine.sound.soundrack();
         }
