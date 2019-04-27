@@ -17,8 +17,7 @@
 	<div class="wrapper">
 		<canvas id="canvas" height="416" width="544">
 			<div style="display: none;">
-				<img src="images/tile.png" id="img_tile">
-				<img src="images/bg.png" id="img_bg">
+				<img src="images/tilemap.png" id="img_tilemap">
 				<img src="images/ice.png" id="img_ice">
 				<img src="images/fire.png" id="img_fire">
 				<img src="images/dona.png" id="img_dona">
@@ -62,8 +61,7 @@
 	<script>
 		window.addEventListener('load', () => {
 			const resources = new Resources();
-			resources.add('tile', document.getElementById('img_tile'));
-			resources.add('background', document.getElementById('img_bg'));
+			resources.add('tilemap', document.getElementById('img_tilemap'));
 			resources.add('img_ice', document.getElementById('img_ice'));
 			resources.add('img_fire', document.getElementById('img_fire'));
 			resources.add('img_dona', document.getElementById('img_dona'));

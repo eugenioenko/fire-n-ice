@@ -44,12 +44,11 @@ const ANIM_RIP_END = 24;
 const ANIM_SLEEP_START = 25;
 const ANIM_SLEEP_END = 26;
 
-const TILE_MIDDLE = 0;
-const TILE_LEFT = 32;
-const TILE_RIGHT = 64;
-const TILE_BOTH = 96;
-const TILE_TOP = 128;
-const TILE_BOTTOM = 160;
+const TILE_BACKGROUND = 0;
+const TILE_BOTH = 32;
+const TILE_LEFT = 64;
+const TILE_MIDDLE = 96;
+const TILE_RIGHT = 128;
 
 const OBJECT_BACKGROUND = 0;
 const OBJECT_WALL = 1;

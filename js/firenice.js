@@ -44,12 +44,11 @@ const ANIM_RIP_END = 24;
 const ANIM_SLEEP_START = 25;
 const ANIM_SLEEP_END = 26;
 
-const TILE_MIDDLE = 0;
-const TILE_LEFT = 32;
-const TILE_RIGHT = 64;
-const TILE_BOTH = 96;
-const TILE_TOP = 128;
-const TILE_BOTTOM = 160;
+const TILE_BACKGROUND = 0;
+const TILE_BOTH = 32;
+const TILE_LEFT = 64;
+const TILE_MIDDLE = 96;
+const TILE_RIGHT = 128;
 
 const OBJECT_BACKGROUND = 0;
 const OBJECT_WALL = 1;
@@ -225,48 +224,33 @@ class Sound {
 const Tile = {
    tiles: {
         [OBJECT_BACKGROUND]: {
-            resource: 'background',
             solid: false
         },
         [OBJECT_OUT]: {
-            resource: false,
             solid: true
         },
         [OBJECT_PLAYER]: {
-            resource: false,
             solid: true
         },
         [OBJECT_ICE]: {
-            resource: false,
             solid: true
         },
         [OBJECT_METAL]: {
-            resource: false,
             solid: true
         },
         [OBJECT_WALL]: {
-            resource: 'tile',
             solid: true
         },
         [OBJECT_FIRE]: {
-            resource: false,
             solid: false
         }
     },
 
     isSolid: function(id) {
-        if (typeof this.tiles[id] === "undefined") {
+        if (typeof this.tiles[id] === 'undefined') {
             throw new Error('UNDEFINED ON isSolid');
         } else {
             return this.tiles[id].solid;
-        }
-    },
-
-    getImage: function(id) {
-        if (typeof this.tiles[id] === "undefined") {
-            throw new Error('UNDEFINED ON tiles get Image');
-        } else {
-            return this.tiles[id].resource;
         }
     }
 };
@@ -279,18 +263,16 @@ class TileMap {
      * @param {object} map  Matrix of the map
      */
 
-    constructor(engine, map) {
+    constructor(engine, map, theme) {
         this.ctx = engine.ctx;
-        this.background = this.ctx.createPattern(
-            engine.resources.get(Tile.getImage(OBJECT_BACKGROUND)),
-            'repeat'
-        );
-        this.map = map;
         this.engine = engine;
+        this.map = map;
+        this.theme = theme;
         this.tileWidth = TILE_WIDTH;
         this.tileHeight = TILE_WIDTH;
         this.height = this.map.length - 1;
         this.width = this.map[0].length - 1;
+        this.tilesImage = this.engine.resources.get('tilemap');
     }
     /**
      * Returns the content of the tile inside the matrix
@@ -311,24 +293,33 @@ class TileMap {
      * @return {none}
      */
     draw() {
-        let state = TILE_MIDDLE;
+
         this.ctx.save();
         for (let i = 0; i <= this.width; ++i) {
             for (let j = 0; j <= this.height; ++j) {
+                let tileType = TILE_BACKGROUND;
                 if (this.map[j][i] === 1) {
                     if (!this.getTile(i-1, j) && !this.getTile(i+1, j)) {
-                        state = TILE_BOTH;
+                        tileType = TILE_BOTH;
                     } else if (!this.getTile(i-1, j)) {
-                        state = TILE_LEFT;
+                        tileType = TILE_LEFT;
                     } else if (!this.getTile(i+1, j)) {
-                        state = TILE_RIGHT;
+                        tileType = TILE_RIGHT;
                     } else {
-                        state = TILE_MIDDLE;
+                        tileType = TILE_MIDDLE;
                     }
-                } else {
-                    state = 0;
                 }
-                this.ctx.drawImage(this.engine.resources.get(Tile.getImage(this.map[j][i])), state, 0, this.tileWidth, this.tileHeight, i*this.tileWidth, j*this.tileHeight, this.tileWidth, this.tileHeight);
+                this.ctx.drawImage(
+                    this.tilesImage,
+                    tileType,
+                    this.theme * this.tileHeight,
+                    this.tileWidth,
+                    this.tileHeight,
+                    i * this.tileWidth,
+                    j * this.tileHeight,
+                    this.tileWidth,
+                    this.tileHeight
+                );
             }
         }
         this.ctx.restore();
@@ -1322,7 +1313,8 @@ const levels = [
             {id :OBJECT_FIRE  , x: 7, y: 8, l: 1},
             {id :OBJECT_FIRE  , x: 7, y: 7, l: 1},
             {id :OBJECT_FIRE  , x: 9, y: 10, l: 1}
-        ]
+        ],
+        theme: 0
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -1351,7 +1343,8 @@ const levels = [
             {id :OBJECT_ICE   , x: 10, y: 7, l: 1},
             {id :OBJECT_ICE   , x: 10, y: 6, l: 1},
             {id :OBJECT_ICE   , x: 9,  y: 5, l: 4}
-        ]
+        ],
+        theme: 1
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -1377,7 +1370,8 @@ const levels = [
             {id :OBJECT_ICE   , x: 11, y: 6, l: 1},
             {id :OBJECT_ICE   , x: 11, y: 5, l: 1},
             {id :OBJECT_ICE   , x: 8, y: 6, l: 1}
-        ]
+        ],
+        theme: 2
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -1409,7 +1403,8 @@ const levels = [
             {id :OBJECT_FIRE  , x: 5, y: 9, l: 1},
             {id :OBJECT_FIRE  , x: 4, y: 8, l: 1},
             {id :OBJECT_FIRE  , x: 3, y: 7, l: 1}
-        ]
+        ],
+        theme: 3
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -1436,7 +1431,8 @@ const levels = [
             {id :OBJECT_ICE   , x: 9, y: 7, l: 1},
             {id :OBJECT_FIRE  , x: 3, y: 10, l: 1},
             {id :OBJECT_ICE   , x: 3, y: 4, l: 1}
-        ]
+        ],
+        theme: 4
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -1457,7 +1453,8 @@ const levels = [
             {id :OBJECT_PLAYER, x: 3, y: 6, l: 1},
             {id :OBJECT_FIRE  , x: 13, y: 10, l: 1},
             {id :OBJECT_ICE   , x: 5, y: 6, l: 4}
-        ]
+        ],
+        theme: 5
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -1480,7 +1477,8 @@ const levels = [
             {id :OBJECT_ICE   , x: 8, y: 5, l: 1},
             {id :OBJECT_ICE   , x: 8, y: 4, l: 1},
             {id :OBJECT_FIRE  , x: 11, y: 8, l: 1}
-        ]
+        ],
+        theme: 6
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -1503,7 +1501,8 @@ const levels = [
             {id :OBJECT_ICE   , x: 3, y: 3, l: 1},
             {id :OBJECT_FIRE  , x: 14, y: 5, l: 1},
             {id :OBJECT_FIRE  , x: 12, y: 11, l: 1}
-        ]
+        ],
+        theme: 7
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -1539,7 +1538,8 @@ const levels = [
             {id :OBJECT_FIRE  , x: 6, y: 8, l: 1},
             {id :OBJECT_FIRE  , x: 8, y: 10, l: 1},
             {id :OBJECT_FIRE  , x: 7, y: 10, l: 1}
-        ]
+        ],
+        theme: 8
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -1560,7 +1560,8 @@ const levels = [
             {id :OBJECT_PLAYER, x: 3, y: 11, l: 1},
             {id :OBJECT_FIRE  , x: 8, y: 1, l: 1},
             {id :OBJECT_METAL,  x: 5, y: 3, l: 1}
-        ]
+        ],
+        theme: 1
     }
 ];
 class Scene {
@@ -1589,7 +1590,7 @@ class Scene {
     load(index) {
         const level = levels[index];
         this.engine.sprites = [];
-        this.engine.map = new TileMap(this.engine, level.map);
+        this.engine.map = new TileMap(this.engine, level.map, level.theme);
         for (const sprite of level.sprites) {
             switch(sprite.id) {
                 case OBJECT_PLAYER:
