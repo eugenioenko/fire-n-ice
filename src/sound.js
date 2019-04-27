@@ -11,7 +11,8 @@ class Sound {
 			"stage-enter" : document.getElementById('sfx-stage-enter'),
 			"danger" : document.getElementById('sfx-danger'),
 			"ice-remove" : document.getElementById('sfx-ice-remove'),
-			"state-leave" : document.getElementById('sfx-state-leave')
+			"state-leave" : document.getElementById('sfx-state-leave'),
+			"ice-disabled" : document.getElementById('sfx-disabled')
 		};
 	}
 
@@ -23,7 +24,11 @@ class Sound {
 
 	playOnce(sfx) {
 		if (!this.sfx[sfx].paused) return;
-		this.sfx[sfx].volume = this.sfxVolume;
+		if (sfx === 'ice-disabled') {
+			this.sfx[sfx].volume = 0.1;
+		} else {
+			this.sfx[sfx].volume = this.sfxVolume;
+		}
 		this.sfx[sfx].currentTime = 0;
 		this.sfx[sfx].play();
 	}

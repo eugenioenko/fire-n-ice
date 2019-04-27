@@ -22,6 +22,7 @@ class Scene {
     }
 
     load(index) {
+        this.engine.sound.playOnce('stage-enter');
         const level = levels[index];
         this.engine.sprites = [];
         this.engine.map = new TileMap(this.engine, level.map, level.theme);

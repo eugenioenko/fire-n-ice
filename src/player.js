@@ -128,6 +128,8 @@ class Player extends AnimSprite {
                     } else if (this.coorners.dr === OBJECT_ICE) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_RIGHT_ROW, 4);
                         this.setState(MOVE_ICE_REMOVE, true);
+                    } else {
+                        this.engine.sound.playOnce('ice-disabled');
                     }
                 } else {
                     if (!Tile.isSolid(this.coorners.dl) && (this.coorners.dl !== OBJECT_FIRE)) {
@@ -136,6 +138,8 @@ class Player extends AnimSprite {
                     } else if (this.coorners.dl === OBJECT_ICE) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_LEFT_ROW, 4);
                         this.setState(MOVE_ICE_REMOVE, true);
+                    } else {
+                        this.engine.sound.playOnce('ice-disabled');
                     }
                 }
             }

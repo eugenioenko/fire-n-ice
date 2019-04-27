@@ -191,7 +191,8 @@ class Sound {
 			"stage-enter" : document.getElementById('sfx-stage-enter'),
 			"danger" : document.getElementById('sfx-danger'),
 			"ice-remove" : document.getElementById('sfx-ice-remove'),
-			"state-leave" : document.getElementById('sfx-state-leave')
+			"state-leave" : document.getElementById('sfx-state-leave'),
+			"ice-disabled" : document.getElementById('sfx-disabled')
 		};
 	}
 
@@ -203,7 +204,11 @@ class Sound {
 
 	playOnce(sfx) {
 		if (!this.sfx[sfx].paused) return;
-		this.sfx[sfx].volume = this.sfxVolume;
+		if (sfx === 'ice-disabled') {
+			this.sfx[sfx].volume = 0.1;
+		} else {
+			this.sfx[sfx].volume = this.sfxVolume;
+		}
 		this.sfx[sfx].currentTime = 0;
 		this.sfx[sfx].play();
 	}
@@ -615,6 +620,8 @@ class Player extends AnimSprite {
                     } else if (this.coorners.dr === OBJECT_ICE) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_RIGHT_ROW, 4);
                         this.setState(MOVE_ICE_REMOVE, true);
+                    } else {
+                        this.engine.sound.playOnce('ice-disabled');
                     }
                 } else {
                     if (!Tile.isSolid(this.coorners.dl) && (this.coorners.dl !== OBJECT_FIRE)) {
@@ -623,6 +630,8 @@ class Player extends AnimSprite {
                     } else if (this.coorners.dl === OBJECT_ICE) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_LEFT_ROW, 4);
                         this.setState(MOVE_ICE_REMOVE, true);
+                    } else {
+                        this.engine.sound.playOnce('ice-disabled');
                     }
                 }
             }
@@ -1588,6 +1597,7 @@ class Scene {
     }
 
     load(index) {
+        this.engine.sound.playOnce('stage-enter');
         const level = levels[index];
         this.engine.sprites = [];
         this.engine.map = new TileMap(this.engine, level.map, level.theme);
