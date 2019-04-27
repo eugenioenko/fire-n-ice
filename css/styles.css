@@ -67,11 +67,16 @@ ul#controls>li{
 .col-50 {
 	width: 50%;
 	float: left;
+}
+.bg-dark {
 	background-color: rgba(.0, .0, .0, .3);
 }
-
 .fa {
-	font-size: 32px;
-	padding: 10px;
+	font-size: 28px;
+	padding: 5px;
 	margin: 10px;
+}
+
+.pull-right {
+	float: right;
 }

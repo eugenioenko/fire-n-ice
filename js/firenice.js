@@ -134,6 +134,7 @@ class Keyboard {
         document.getElementById('btn_left').addEventListener('pointerup', () => this.left = false);
         document.getElementById('btn_right').addEventListener('pointerdown', () => this.right = true);
         document.getElementById('btn_right').addEventListener('pointerup', () => this.right = false);
+        document.getElementById('btn_select').addEventListener('pointerup', () => this.enter = true);
     }
 
 
