@@ -27,7 +27,8 @@ const levels = [
             {id :OBJECT_FIRE  , x: 7, y: 8, l: 1},
             {id :OBJECT_FIRE  , x: 7, y: 7, l: 1},
             {id :OBJECT_FIRE  , x: 9, y: 10, l: 1}
-        ]
+        ],
+        theme: 0
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -56,7 +57,8 @@ const levels = [
             {id :OBJECT_ICE   , x: 10, y: 7, l: 1},
             {id :OBJECT_ICE   , x: 10, y: 6, l: 1},
             {id :OBJECT_ICE   , x: 9,  y: 5, l: 4}
-        ]
+        ],
+        theme: 0
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -82,7 +84,8 @@ const levels = [
             {id :OBJECT_ICE   , x: 11, y: 6, l: 1},
             {id :OBJECT_ICE   , x: 11, y: 5, l: 1},
             {id :OBJECT_ICE   , x: 8, y: 6, l: 1}
-        ]
+        ],
+        theme: 0
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -141,7 +144,8 @@ const levels = [
             {id :OBJECT_ICE   , x: 9, y: 7, l: 1},
             {id :OBJECT_FIRE  , x: 3, y: 10, l: 1},
             {id :OBJECT_ICE   , x: 3, y: 4, l: 1}
-        ]
+        ],
+        theme: 0
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -162,7 +166,8 @@ const levels = [
             {id :OBJECT_PLAYER, x: 3, y: 6, l: 1},
             {id :OBJECT_FIRE  , x: 13, y: 10, l: 1},
             {id :OBJECT_ICE   , x: 5, y: 6, l: 4}
-        ]
+        ],
+        theme: 0
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -185,7 +190,8 @@ const levels = [
             {id :OBJECT_ICE   , x: 8, y: 5, l: 1},
             {id :OBJECT_ICE   , x: 8, y: 4, l: 1},
             {id :OBJECT_FIRE  , x: 11, y: 8, l: 1}
-        ]
+        ],
+        theme: 0
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -208,7 +214,8 @@ const levels = [
             {id :OBJECT_ICE   , x: 3, y: 3, l: 1},
             {id :OBJECT_FIRE  , x: 14, y: 5, l: 1},
             {id :OBJECT_FIRE  , x: 12, y: 11, l: 1}
-        ]
+        ],
+        theme: 0
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -244,7 +251,8 @@ const levels = [
             {id :OBJECT_FIRE  , x: 6, y: 8, l: 1},
             {id :OBJECT_FIRE  , x: 8, y: 10, l: 1},
             {id :OBJECT_FIRE  , x: 7, y: 10, l: 1}
-        ]
+        ],
+        theme: 0
     }, {
         map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -265,6 +273,7 @@ const levels = [
             {id :OBJECT_PLAYER, x: 3, y: 11, l: 1},
             {id :OBJECT_FIRE  , x: 8, y: 1, l: 1},
             {id :OBJECT_METAL,  x: 5, y: 3, l: 1}
-        ]
+        ],
+        theme: 0
     }
 ];

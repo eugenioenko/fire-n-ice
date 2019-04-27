@@ -24,7 +24,7 @@ class Scene {
     load(index) {
         const level = levels[index];
         this.engine.sprites = [];
-        this.engine.map = new TileMap(this.engine, level.map);
+        this.engine.map = new TileMap(this.engine, level.map, level.theme);
         for (const sprite of level.sprites) {
             switch(sprite.id) {
                 case OBJECT_PLAYER:
