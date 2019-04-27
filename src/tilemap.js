@@ -9,7 +9,7 @@ class TileMap {
         this.ctx = engine.ctx;
         this.engine = engine;
         this.map = map;
-        this.theme = 7;
+        this.theme = theme;
         this.tileWidth = TILE_WIDTH;
         this.tileHeight = TILE_WIDTH;
         this.height = this.map.length - 1;
@@ -35,10 +35,11 @@ class TileMap {
      * @return {none}
      */
     draw() {
-        let tileType = TILE_MIDDLE;
+
         this.ctx.save();
         for (let i = 0; i <= this.width; ++i) {
             for (let j = 0; j <= this.height; ++j) {
+                let tileType = TILE_BACKGROUND;
                 if (this.map[j][i] === 1) {
                     if (!this.getTile(i-1, j) && !this.getTile(i+1, j)) {
                         tileType = TILE_BOTH;
@@ -49,12 +50,9 @@ class TileMap {
                     } else {
                         tileType = TILE_MIDDLE;
                     }
-                } else {
-                    tileType = TILE_BACKGROUND;
                 }
                 this.ctx.drawImage(
                     this.tilesImage,
-                    //this.engine.resources.get(Tile.getImage(this.map[j][i])),
                     tileType,
                     this.theme * this.tileHeight,
                     this.tileWidth,
