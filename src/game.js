@@ -39,6 +39,7 @@ class Game {
 
         if (this.engine.keyboard.enter) {
             this.state = STATE_PLAY;
+            this.engine.sound.soundrack();
         }
     }
 }
