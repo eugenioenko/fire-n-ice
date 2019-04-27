@@ -486,7 +486,6 @@ class Player extends AnimSprite {
     constructor(engine, tx, ty) {
         super(OBJECT_PLAYER, engine, 'img_dona', tx, ty, 48, 64, -10, -32, 2, 2, false);
         this.speed = 2;
-        this.maxSpeed = 4;
         this.dirrection = 1;
         this.state = 0; //standing top right down left
         this.moving = false;
@@ -496,7 +495,6 @@ class Player extends AnimSprite {
         this.counter = 0;
         this.fallCounter = 0;
         this.standCounter = 0;
-        return this;
     }
 
     left() {
@@ -534,6 +532,7 @@ class Player extends AnimSprite {
             }
         }
     }
+
     right() {
         if (!this.moving) {
             if (this.dirrection !== DIR_RIGHT) {
@@ -598,6 +597,7 @@ class Player extends AnimSprite {
             }
         }
     }
+
     ice() {
         if (!this.moving) {
             if (Tile.isSolid(this.coorners.d)) {
@@ -605,7 +605,7 @@ class Player extends AnimSprite {
                     if (!Tile.isSolid(this.coorners.dr) && this.coorners.dr !== OBJECT_FIRE) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_RIGHT_ROW, 4);
                         this.setState(MOVE_ICE_MAKE, true);
-                    }else if (this.coorners.dr === OBJECT_ICE) {
+                    } else if (this.coorners.dr === OBJECT_ICE) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_RIGHT_ROW, 4);
                         this.setState(MOVE_ICE_REMOVE, true);
                     }
@@ -613,7 +613,7 @@ class Player extends AnimSprite {
                     if (!Tile.isSolid(this.coorners.dl) && (this.coorners.dl !== OBJECT_FIRE)) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_LEFT_ROW, 4);
                         this.setState(MOVE_ICE_MAKE, true);
-                    }else if (this.coorners.dl === OBJECT_ICE) {
+                    } else if (this.coorners.dl === OBJECT_ICE) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_LEFT_ROW, 4);
                         this.setState(MOVE_ICE_REMOVE, true);
                     }
@@ -621,6 +621,7 @@ class Player extends AnimSprite {
             }
         }
     }
+
     jump() {
         if (!this.moving) {
             if (this.dirrection === DIR_RIGHT) {
@@ -645,6 +646,7 @@ class Player extends AnimSprite {
             this.setState(MOVE_STAND, false);
         }
     }
+
     doTurn() {
         this.counter++;
         if (this.counter >= ANIM_FRAME_COUNT) {
