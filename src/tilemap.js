@@ -41,14 +41,14 @@ class TileMap {
         this.ctx.save();
         for (let i = 0; i <= this.width; ++i) {
             for (let j = 0; j <= this.height; ++j) {
-                if (this.map[j][i] == 1) {
+                if (this.map[j][i] === 1) {
                     if (!this.getTile(i-1, j) && !this.getTile(i+1, j)) {
                         state = TILE_BOTH;
                     } else if (!this.getTile(i-1, j)) {
                         state = TILE_LEFT;
-                    }else if (!this.getTile(i+1, j)) {
+                    } else if (!this.getTile(i+1, j)) {
                         state = TILE_RIGHT;
-                    }else{
+                    } else {
                         state = TILE_MIDDLE;
                     }
                 } else {

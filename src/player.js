@@ -22,11 +22,11 @@ class Player extends AnimSprite {
     left() {
         if (!this.moving) {
             //if standing then turn
-            if (this.dirrection != DIR_LEFT) {
+            if (this.dirrection !== DIR_LEFT) {
                 //is not under a brick
                 if (!Tile.isSolid(this.coorners.u)) {
                     this.setAnim(ANIM_TURN_START, ANIM_TURN_END, false, ANIM_RIGHT_ROW, 4);
-                }else{
+                } else {
                     this.setAnim(ANIM_CROUCH_START,ANIM_CROUCH_START, false, ANIM_LEFT_ROW, 4);
                 }
                 this.setState(MOVE_TURN, true);
@@ -37,13 +37,13 @@ class Player extends AnimSprite {
                     //not under a brick
                     if (!Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ul)) {
                         this.setAnim(ANIM_RUN_START, ANIM_RUN_END, false, ANIM_LEFT_ROW);
-                    }else{
+                    } else {
                         this.setAnim(ANIM_CROUCH_START, ANIM_CROUCH_END, false, ANIM_LEFT_ROW);
                     }
                     this.setState(MOVE_LEFT, true);
                 }
                 //hit an ice
-                if (this.coorners.l == OBJECT_ICE) {
+                if (this.coorners.l === OBJECT_ICE || this.coorners.l === OBJECT_METAL) {
                     this.push();
                 }
                 //climb
@@ -56,10 +56,10 @@ class Player extends AnimSprite {
     }
     right() {
         if (!this.moving) {
-            if (this.dirrection != DIR_RIGHT) {
+            if (this.dirrection !== DIR_RIGHT) {
                 if (!Tile.isSolid(this.coorners.u)) {
                     this.setAnim(ANIM_TURN_START, ANIM_TURN_END, false, ANIM_LEFT_ROW, 4);
-                }else{
+                } else {
                     this.setAnim(ANIM_CROUCH_START,ANIM_CROUCH_START, false, ANIM_RIGHT_ROW, 4);
                 }
                 this.setState(MOVE_TURN, true);
@@ -68,12 +68,12 @@ class Player extends AnimSprite {
                 if (!Tile.isSolid(this.coorners.r) && Tile.isSolid(this.coorners.d)) {
                     if (!Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ur)) {
                         this.setAnim(ANIM_RUN_START, ANIM_RUN_END, false, ANIM_RIGHT_ROW);
-                    }else{
+                    } else {
                         this.setAnim(ANIM_CROUCH_START, ANIM_CROUCH_END, false, ANIM_RIGHT_ROW);
                     }
                     this.setState(MOVE_RIGHT, true);
                 }
-                if (this.coorners.r == OBJECT_ICE) {
+                if (this.coorners.r === OBJECT_ICE || this.coorners.r === OBJECT_METAL) {
                     this.push();
                 }
                 if (Tile.isSolid(this.coorners.r) && Tile.isSolid(this.coorners.d) && !Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ur) && !this.moving) {
@@ -85,7 +85,7 @@ class Player extends AnimSprite {
     }
 
     burn() {
-        if (this.state != MOVE_RIP) {
+        if (this.state !== MOVE_RIP) {
             this.engine.sound.playOnce('danger');
             this.setState(MOVE_RIP, true);
             this.setAnim(ANIM_RIP_START,ANIM_RIP_END, true, ANIM_RIGHT_ROW);
@@ -98,7 +98,7 @@ class Player extends AnimSprite {
 
     gravity() {
         if (!this.moving) {
-            if (typeof this.coorners.d == "undefined") {
+            if (typeof this.coorners.d === "undefined") {
                 console.eror('undefined coorner');
             }
             if (!Tile.isSolid(this.coorners.d)) {
@@ -121,19 +121,19 @@ class Player extends AnimSprite {
     ice() {
         if (!this.moving) {
             if (Tile.isSolid(this.coorners.d)) {
-                if (this.dirrection == DIR_RIGHT) {
-                    if (!Tile.isSolid(this.coorners.dr) && this.coorners.dr != OBJECT_FIRE) {
+                if (this.dirrection === DIR_RIGHT) {
+                    if (!Tile.isSolid(this.coorners.dr) && this.coorners.dr !== OBJECT_FIRE) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_RIGHT_ROW, 4);
                         this.setState(MOVE_ICE_MAKE, true);
-                    }else if (this.coorners.dr == OBJECT_ICE) {
+                    }else if (this.coorners.dr === OBJECT_ICE) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_RIGHT_ROW, 4);
                         this.setState(MOVE_ICE_REMOVE, true);
                     }
                 } else {
-                    if (!Tile.isSolid(this.coorners.dl) && (this.coorners.dl != OBJECT_FIRE)) {
+                    if (!Tile.isSolid(this.coorners.dl) && (this.coorners.dl !== OBJECT_FIRE)) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_LEFT_ROW, 4);
                         this.setState(MOVE_ICE_MAKE, true);
-                    }else if (this.coorners.dl == OBJECT_ICE) {
+                    }else if (this.coorners.dl === OBJECT_ICE) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_LEFT_ROW, 4);
                         this.setState(MOVE_ICE_REMOVE, true);
                     }
@@ -143,7 +143,7 @@ class Player extends AnimSprite {
     }
     jump() {
         if (!this.moving) {
-            if (this.dirrection == DIR_RIGHT) {
+            if (this.dirrection === DIR_RIGHT) {
                 if (Tile.isSolid(this.coorners.r) && !Tile.isSolid(this.coorners.ur) && !Tile.isSolid(this.coorners.u)) {
                     this.setAnim(ANIM_PUSH_START,ANIM_PUSH_START,false, ANIM_RIGHT_ROW);
                     this.setState(MOVE_UP, true);
@@ -185,12 +185,12 @@ class Player extends AnimSprite {
     doStand() {
         if (!Tile.isSolid(this.coorners.u)) {
             if (this.standCounter++ > 500) {
-                this.setAnim(ANIM_SLEEP_START,ANIM_SLEEP_END,true, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 48, true);
+                this.setAnim(ANIM_SLEEP_START,ANIM_SLEEP_END,true, this.dirrection !== 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 48, true);
             } else {
-                this.setAnim(ANIM_STAND_START,ANIM_STAND_END,true, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
+                this.setAnim(ANIM_STAND_START,ANIM_STAND_END,true, this.dirrection !== 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
             }
-        }else{
-            this.setAnim(ANIM_CROUCH_START,ANIM_CROUCH_START, false, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
+        } else {
+            this.setAnim(ANIM_CROUCH_START,ANIM_CROUCH_START, false, this.dirrection !== 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
         }
     }
 
@@ -199,25 +199,25 @@ class Player extends AnimSprite {
             switch (this.counter) {
                 case 3:
                     this.engine.sound.play('climb');
-                    this.setAnim(ANIM_PUSH_END, ANIM_PUSH_END, false, this.dirrection == DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
+                    this.setAnim(ANIM_PUSH_END, ANIM_PUSH_END, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
                     break;
                 case 6:
-                    this.setAnim(ANIM_JUMP_START, ANIM_JUMP_START, false, this.dirrection == DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
+                    this.setAnim(ANIM_JUMP_START, ANIM_JUMP_START, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
                     this.x += 8 * this.dirrection;
                     this.y -= 8;
                     break;
                 case 9:
-                    this.setAnim(ANIM_JUMP_END, ANIM_JUMP_END, false, this.dirrection == DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
+                    this.setAnim(ANIM_JUMP_END, ANIM_JUMP_END, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
                     this.x += 8 * this.dirrection;
                     this.y -= 8;
                     break;
                 case 12:
-                    this.setAnim(2, 2, false, this.dirrection == DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
+                    this.setAnim(2, 2, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
                     this.x += 8 * this.dirrection;
                     this.y -= 8;
                     break;
                 case 18:
-                    this.setAnim(ANIM_STAND, ANIM_STAND, false, this.dirrection == DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
+                    this.setAnim(ANIM_STAND, ANIM_STAND, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
                     this.x += 8 * this.dirrection;
                     this.y -= 8;
                 break;
@@ -239,7 +239,7 @@ class Player extends AnimSprite {
     push() {
         let ice =  this.engine.iceAt(this.xtile+this.dirrection, this.ytile);
         if (ice && ice.canGlide(this.dirrection)) {
-            this.setAnim(ANIM_PUSH_START, ANIM_PUSH_END, false, this.dirrection == DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW, 3);
+            this.setAnim(ANIM_PUSH_START, ANIM_PUSH_END, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW, 3);
             this.setState(MOVE_PUSH, true);
         }
     }
@@ -256,8 +256,8 @@ class Player extends AnimSprite {
         }
     }
     doIce() {
-        if (this.counter == 8) {
-            if (this.state == MOVE_ICE_MAKE) {
+        if (this.counter === 8) {
+            if (this.state === MOVE_ICE_MAKE) {
                 this.makeIce();
             } else{
                 this.removeIceBlock();
@@ -275,7 +275,7 @@ class Player extends AnimSprite {
     move () {
         Sprite.prototype.move.call(this);
         this.gravity();
-        if (this.state != MOVE_STAND) {
+        if (this.state !== MOVE_STAND) {
             this.standCounter = 0;
         }
         switch (this.state) {

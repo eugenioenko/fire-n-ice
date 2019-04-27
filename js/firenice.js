@@ -57,6 +57,7 @@ const OBJECT_FIRE = 6;
 const OBJECT_ICE = 3;
 const OBJECT_OUT = -2;
 const OBJECT_PLAYER = 7;
+const OBJECT_METAL = 4;
 
 const STATE_PLAY = 1;
 const STATE_START = 2;
@@ -213,6 +214,10 @@ const Tile = {
             resource: false,
             solid: true
         },
+        [OBJECT_METAL]: {
+            resource: false,
+            solid: true
+        },
         [OBJECT_WALL]: {
             resource: 'tile',
             solid: true
@@ -232,8 +237,7 @@ const Tile = {
     },
 
     getImage: function(id) {
-        if (typeof this.tiles[id] == "undefined") {
-            console.log('UNDEFINED ON tiles get Image');
+        if (typeof this.tiles[id] === "undefined") {
             throw new Error('UNDEFINED ON tiles get Image');
         } else {
             return this.tiles[id].resource;
@@ -285,14 +289,14 @@ class TileMap {
         this.ctx.save();
         for (let i = 0; i <= this.width; ++i) {
             for (let j = 0; j <= this.height; ++j) {
-                if (this.map[j][i] == 1) {
+                if (this.map[j][i] === 1) {
                     if (!this.getTile(i-1, j) && !this.getTile(i+1, j)) {
                         state = TILE_BOTH;
                     } else if (!this.getTile(i-1, j)) {
                         state = TILE_LEFT;
-                    }else if (!this.getTile(i+1, j)) {
+                    } else if (!this.getTile(i+1, j)) {
                         state = TILE_RIGHT;
-                    }else{
+                    } else {
                         state = TILE_MIDDLE;
                     }
                 } else {
@@ -352,24 +356,24 @@ class Sprite {
     }
 
     isSpriteAt (tx, ty) {
-        return this.xtile == tx && this.ytile == ty;
+        return this.xtile === tx && this.ytile === ty;
     }
 
-    spriteAt(tx, ty) {
-        return this.engine.spriteAt(tx, ty);
+    spriteTypeAt(tx, ty) {
+        return this.engine.spriteTypeAt(tx, ty);
     }
 
     move () {}
 
     engineMove() {
-        this.coorners.u = this.spriteAt(this.xtile, this.ytile-1);
-        this.coorners.d = this.spriteAt(this.xtile, this.ytile+1);
-        this.coorners.l = this.spriteAt(this.xtile-1, this.ytile);
-        this.coorners.r = this.spriteAt(this.xtile+1, this.ytile);
-        this.coorners.ul = this.spriteAt(this.xtile-1, this.ytile-1);
-        this.coorners.ur = this.spriteAt(this.xtile+1, this.ytile-1);
-        this.coorners.dl = this.spriteAt(this.xtile-1, this.ytile+1);
-        this.coorners.dr = this.spriteAt(this.xtile+1, this.ytile+1);
+        this.coorners.u = this.spriteTypeAt(this.xtile, this.ytile-1);
+        this.coorners.d = this.spriteTypeAt(this.xtile, this.ytile+1);
+        this.coorners.l = this.spriteTypeAt(this.xtile-1, this.ytile);
+        this.coorners.r = this.spriteTypeAt(this.xtile+1, this.ytile);
+        this.coorners.ul = this.spriteTypeAt(this.xtile-1, this.ytile-1);
+        this.coorners.ur = this.spriteTypeAt(this.xtile+1, this.ytile-1);
+        this.coorners.dl = this.spriteTypeAt(this.xtile-1, this.ytile+1);
+        this.coorners.dr = this.spriteTypeAt(this.xtile+1, this.ytile+1);
 
         this.move();
 
@@ -396,7 +400,7 @@ class AnimSprite extends Sprite {
      */
     constructor (id, engine, image, tx, ty, width, height, offsetX, offsetY, start, end, loop) {
         super(id, engine, tx, ty, width, height);
-        this.image = document.getElementById(image);
+        this.image = this.engine.resources.get(image);
         this.animLoop = loop;
         this.animStart = start;
         this.animEnd = end;
@@ -429,8 +433,8 @@ class AnimSprite extends Sprite {
             this.animDelay = _delay;
             this.animRow = _row;
         } else {
-            if (this.animStart != start || this.animEnd != end ||
-                this.animLoop != loop || this.animRow != _row)
+            if (this.animStart !== start || this.animEnd !== end ||
+                this.animLoop !== loop || this.animRow !== _row)
             {
                 this.animStart = start;
                 this.animEnd = end;
@@ -454,7 +458,7 @@ class AnimSprite extends Sprite {
             if (++this.animCount > this.animEnd) {
                 if (this.animLoop) {
                     this.animCount = this.animStart;
-                }else{
+                } else {
                     this.animCount = this.animEnd;
                 }
             }
@@ -488,11 +492,11 @@ class Player extends AnimSprite {
     left() {
         if (!this.moving) {
             //if standing then turn
-            if (this.dirrection != DIR_LEFT) {
+            if (this.dirrection !== DIR_LEFT) {
                 //is not under a brick
                 if (!Tile.isSolid(this.coorners.u)) {
                     this.setAnim(ANIM_TURN_START, ANIM_TURN_END, false, ANIM_RIGHT_ROW, 4);
-                }else{
+                } else {
                     this.setAnim(ANIM_CROUCH_START,ANIM_CROUCH_START, false, ANIM_LEFT_ROW, 4);
                 }
                 this.setState(MOVE_TURN, true);
@@ -503,13 +507,13 @@ class Player extends AnimSprite {
                     //not under a brick
                     if (!Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ul)) {
                         this.setAnim(ANIM_RUN_START, ANIM_RUN_END, false, ANIM_LEFT_ROW);
-                    }else{
+                    } else {
                         this.setAnim(ANIM_CROUCH_START, ANIM_CROUCH_END, false, ANIM_LEFT_ROW);
                     }
                     this.setState(MOVE_LEFT, true);
                 }
                 //hit an ice
-                if (this.coorners.l == OBJECT_ICE) {
+                if (this.coorners.l === OBJECT_ICE || this.coorners.l === OBJECT_METAL) {
                     this.push();
                 }
                 //climb
@@ -522,10 +526,10 @@ class Player extends AnimSprite {
     }
     right() {
         if (!this.moving) {
-            if (this.dirrection != DIR_RIGHT) {
+            if (this.dirrection !== DIR_RIGHT) {
                 if (!Tile.isSolid(this.coorners.u)) {
                     this.setAnim(ANIM_TURN_START, ANIM_TURN_END, false, ANIM_LEFT_ROW, 4);
-                }else{
+                } else {
                     this.setAnim(ANIM_CROUCH_START,ANIM_CROUCH_START, false, ANIM_RIGHT_ROW, 4);
                 }
                 this.setState(MOVE_TURN, true);
@@ -534,12 +538,12 @@ class Player extends AnimSprite {
                 if (!Tile.isSolid(this.coorners.r) && Tile.isSolid(this.coorners.d)) {
                     if (!Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ur)) {
                         this.setAnim(ANIM_RUN_START, ANIM_RUN_END, false, ANIM_RIGHT_ROW);
-                    }else{
+                    } else {
                         this.setAnim(ANIM_CROUCH_START, ANIM_CROUCH_END, false, ANIM_RIGHT_ROW);
                     }
                     this.setState(MOVE_RIGHT, true);
                 }
-                if (this.coorners.r == OBJECT_ICE) {
+                if (this.coorners.r === OBJECT_ICE || this.coorners.r === OBJECT_METAL) {
                     this.push();
                 }
                 if (Tile.isSolid(this.coorners.r) && Tile.isSolid(this.coorners.d) && !Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ur) && !this.moving) {
@@ -551,7 +555,7 @@ class Player extends AnimSprite {
     }
 
     burn() {
-        if (this.state != MOVE_RIP) {
+        if (this.state !== MOVE_RIP) {
             this.engine.sound.playOnce('danger');
             this.setState(MOVE_RIP, true);
             this.setAnim(ANIM_RIP_START,ANIM_RIP_END, true, ANIM_RIGHT_ROW);
@@ -564,7 +568,7 @@ class Player extends AnimSprite {
 
     gravity() {
         if (!this.moving) {
-            if (typeof this.coorners.d == "undefined") {
+            if (typeof this.coorners.d === "undefined") {
                 console.eror('undefined coorner');
             }
             if (!Tile.isSolid(this.coorners.d)) {
@@ -587,19 +591,19 @@ class Player extends AnimSprite {
     ice() {
         if (!this.moving) {
             if (Tile.isSolid(this.coorners.d)) {
-                if (this.dirrection == DIR_RIGHT) {
-                    if (!Tile.isSolid(this.coorners.dr) && this.coorners.dr != OBJECT_FIRE) {
+                if (this.dirrection === DIR_RIGHT) {
+                    if (!Tile.isSolid(this.coorners.dr) && this.coorners.dr !== OBJECT_FIRE) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_RIGHT_ROW, 4);
                         this.setState(MOVE_ICE_MAKE, true);
-                    }else if (this.coorners.dr == OBJECT_ICE) {
+                    }else if (this.coorners.dr === OBJECT_ICE) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_RIGHT_ROW, 4);
                         this.setState(MOVE_ICE_REMOVE, true);
                     }
                 } else {
-                    if (!Tile.isSolid(this.coorners.dl) && (this.coorners.dl != OBJECT_FIRE)) {
+                    if (!Tile.isSolid(this.coorners.dl) && (this.coorners.dl !== OBJECT_FIRE)) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_LEFT_ROW, 4);
                         this.setState(MOVE_ICE_MAKE, true);
-                    }else if (this.coorners.dl == OBJECT_ICE) {
+                    }else if (this.coorners.dl === OBJECT_ICE) {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_LEFT_ROW, 4);
                         this.setState(MOVE_ICE_REMOVE, true);
                     }
@@ -609,7 +613,7 @@ class Player extends AnimSprite {
     }
     jump() {
         if (!this.moving) {
-            if (this.dirrection == DIR_RIGHT) {
+            if (this.dirrection === DIR_RIGHT) {
                 if (Tile.isSolid(this.coorners.r) && !Tile.isSolid(this.coorners.ur) && !Tile.isSolid(this.coorners.u)) {
                     this.setAnim(ANIM_PUSH_START,ANIM_PUSH_START,false, ANIM_RIGHT_ROW);
                     this.setState(MOVE_UP, true);
@@ -651,12 +655,12 @@ class Player extends AnimSprite {
     doStand() {
         if (!Tile.isSolid(this.coorners.u)) {
             if (this.standCounter++ > 500) {
-                this.setAnim(ANIM_SLEEP_START,ANIM_SLEEP_END,true, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 48, true);
+                this.setAnim(ANIM_SLEEP_START,ANIM_SLEEP_END,true, this.dirrection !== 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 48, true);
             } else {
-                this.setAnim(ANIM_STAND_START,ANIM_STAND_END,true, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
+                this.setAnim(ANIM_STAND_START,ANIM_STAND_END,true, this.dirrection !== 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
             }
-        }else{
-            this.setAnim(ANIM_CROUCH_START,ANIM_CROUCH_START, false, this.dirrection != 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
+        } else {
+            this.setAnim(ANIM_CROUCH_START,ANIM_CROUCH_START, false, this.dirrection !== 1 ? ANIM_LEFT_ROW : ANIM_RIGHT_ROW, 8, true);
         }
     }
 
@@ -665,25 +669,25 @@ class Player extends AnimSprite {
             switch (this.counter) {
                 case 3:
                     this.engine.sound.play('climb');
-                    this.setAnim(ANIM_PUSH_END, ANIM_PUSH_END, false, this.dirrection == DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
+                    this.setAnim(ANIM_PUSH_END, ANIM_PUSH_END, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
                     break;
                 case 6:
-                    this.setAnim(ANIM_JUMP_START, ANIM_JUMP_START, false, this.dirrection == DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
+                    this.setAnim(ANIM_JUMP_START, ANIM_JUMP_START, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
                     this.x += 8 * this.dirrection;
                     this.y -= 8;
                     break;
                 case 9:
-                    this.setAnim(ANIM_JUMP_END, ANIM_JUMP_END, false, this.dirrection == DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
+                    this.setAnim(ANIM_JUMP_END, ANIM_JUMP_END, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
                     this.x += 8 * this.dirrection;
                     this.y -= 8;
                     break;
                 case 12:
-                    this.setAnim(2, 2, false, this.dirrection == DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
+                    this.setAnim(2, 2, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
                     this.x += 8 * this.dirrection;
                     this.y -= 8;
                     break;
                 case 18:
-                    this.setAnim(ANIM_STAND, ANIM_STAND, false, this.dirrection == DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
+                    this.setAnim(ANIM_STAND, ANIM_STAND, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
                     this.x += 8 * this.dirrection;
                     this.y -= 8;
                 break;
@@ -705,7 +709,7 @@ class Player extends AnimSprite {
     push() {
         let ice =  this.engine.iceAt(this.xtile+this.dirrection, this.ytile);
         if (ice && ice.canGlide(this.dirrection)) {
-            this.setAnim(ANIM_PUSH_START, ANIM_PUSH_END, false, this.dirrection == DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW, 3);
+            this.setAnim(ANIM_PUSH_START, ANIM_PUSH_END, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW, 3);
             this.setState(MOVE_PUSH, true);
         }
     }
@@ -722,8 +726,8 @@ class Player extends AnimSprite {
         }
     }
     doIce() {
-        if (this.counter == 8) {
-            if (this.state == MOVE_ICE_MAKE) {
+        if (this.counter === 8) {
+            if (this.state === MOVE_ICE_MAKE) {
                 this.makeIce();
             } else{
                 this.removeIceBlock();
@@ -741,7 +745,7 @@ class Player extends AnimSprite {
     move () {
         Sprite.prototype.move.call(this);
         this.gravity();
-        if (this.state != MOVE_STAND) {
+        if (this.state !== MOVE_STAND) {
             this.standCounter = 0;
         }
         switch (this.state) {
@@ -813,7 +817,7 @@ class Fire extends AnimSprite {
 
     draw() {
         AnimSprite.prototype.draw.call(this);
-        if (this.spriteAt(this.xtile, this.ytile+1) == OBJECT_ICE) {
+        if (this.spriteTypeAt(this.xtile, this.ytile+1) === OBJECT_ICE) {
             this.ctx.strokeStyle = "red";
             this.ctx.strokeRect(this.xtile*32, this.ytile*32,32,32);
         }
@@ -832,24 +836,18 @@ class Ice extends AnimSprite {
         this.animEnd = 1;
         this.animDelay = 9;
         this.animRow = 0;
-        this.old_tx = 0;
-        this.old_ty = 0;
         this.dirrection = 0;
         this.falling = false;
-
-        if ((this.getTile(this.xtile-1, this.ytile) == OBJECT_WALL) ||
-            (this.getTile(this.xtile+this.length, this.ytile) == OBJECT_WALL))
-        {
-            this.frozen = true;
-        } else{
-            this.frozen = false;
-        }
+        this.checkFreeze();
     }
 
     addBlock(tx) {
-        if ((tx > this.xtile && this.getTile(tx+1, this.ytile) == OBJECT_WALL) ||
-            (tx < this.xtile && this.getTile(tx-1, this.ytile) == OBJECT_WALL))
-        {
+        if (
+            (tx > this.xtile && this.getTile(tx+1, this.ytile) === OBJECT_WALL) ||
+            (tx < this.xtile && this.getTile(tx-1, this.ytile) === OBJECT_WALL) ||
+            (this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_METAL) ||
+            (this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_METAL)
+        ){
             this.frozen = true;
         }
         this.xtile = tx < this.xtile ? tx : this.xtile;
@@ -858,7 +856,7 @@ class Ice extends AnimSprite {
     }
 
     isSpriteAt(tx, ty) {
-        if (this.ytile == ty) {
+        if (this.ytile === ty) {
             if (tx >= this.xtile && tx < (this.xtile + this.length)) {
                 return true;
             } else {
@@ -871,13 +869,13 @@ class Ice extends AnimSprite {
     }
 
     removeBlock(tx) {
-        if (tx == this.xtile) {
+        if (tx === this.xtile) {
             this.xtile += 1;
             this.x += TILE_WIDTH;
             this.length--;
-        }else if (tx == this.xtile+this.length-1) {
+        } else if (tx === this.xtile+this.length-1) {
             this.length--;
-        }else{
+        } else {
             this.engine.addSprite(
                 new Ice(this.engine, tx+1, this.ytile, this.xtile+this.length-tx-1));
             this.length = tx - this.xtile;
@@ -886,13 +884,13 @@ class Ice extends AnimSprite {
     }
 
     canGlide(dir) {
-        if (this.length != 1 || this.frozen) {
+        if (this.length !== 1 || this.frozen) {
             return false;
         }
-        if (dir == DIR_LEFT  && Tile.isSolid(this.coorners.l)) {
+        if (dir === DIR_LEFT  && Tile.isSolid(this.coorners.l)) {
             return false;
         }
-        if (dir == DIR_RIGHT && Tile.isSolid(this.coorners.r)) {
+        if (dir === DIR_RIGHT && Tile.isSolid(this.coorners.r)) {
             return false;
         }
         return true;
@@ -926,21 +924,19 @@ class Ice extends AnimSprite {
 
     move() {
         for (let i = 0; i < this.length; i++) {
-            let tile_down = this.spriteAt(this.xtile+i, this.ytile+1);
-            if (tile_down && tile_down != OBJECT_FIRE) {
+            let tile_down = this.spriteTypeAt(this.xtile+i, this.ytile+1);
+            if (tile_down && tile_down !== OBJECT_FIRE) {
                 this.coorners.d = tile_down;
             }
 
         }
-        if (this.coorners.d == OBJECT_FIRE) {
+        if (this.coorners.d === OBJECT_FIRE) {
             this.coorners.d = OBJECT_BACKGROUND;
         }
-        this.coorners.r = this.spriteAt(this.xtile+this.length, this.ytile);
+        this.coorners.r = this.spriteTypeAt(this.xtile+this.length, this.ytile);
 
         if (this.frozen) {
-            if (this.getTile(this.xtile-1, this.ytile) != OBJECT_WALL && this.getTile(this.xtile+this.length, this.ytile) != OBJECT_WALL) {
-                this.frozen = false;
-            }
+            this.checkUnfreeze();
         }
         if (!this.moving) {
             this.gravity();
@@ -962,11 +958,11 @@ class Ice extends AnimSprite {
         this.ctx.save();
         if (this.animDelayCount++ > this.animDelay) {
             this.animDelayCount = 0;
-            this.animRow = this.animRow == 0 ? 1 : 0;
+            this.animRow = this.animRow === 0 ? 1 : 0;
         }
-        if (this.length == 1) {
+        if (this.length === 1) {
             this.ctx.drawImage(this.image, 0, TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
-        } else if (this.length == 2) {
+        } else if (this.length === 2) {
             this.ctx.drawImage(this.image, 1*TILE_WIDTH, TILE_WIDTH*this.animRow,
                 this.width, this.height,  this.x, this.y, this.width, this.height);
             this.ctx.drawImage(this.image, 3*TILE_WIDTH, TILE_WIDTH*this.animRow,
@@ -982,14 +978,26 @@ class Ice extends AnimSprite {
             }
         }
         if (this.frozen) {
-            this.ctx.fillStyle = "rgba(255,255,255,0.95)";
-            if (this.getTile(this.xtile-1, this.ytile) == OBJECT_WALL) {
-                this.ctx.fillRect((this.xtile*this.width)-7, 3+this.ytile*this.height, 18,this.height-6);
+            if (
+                this.getTile(this.xtile-1, this.ytile) === OBJECT_WALL ||
+                this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_METAL
+            ) {
+                this.ctx.drawImage(
+                    this.engine.resources.get('frost'),
+                    (this.xtile*this.width)-7,
+                    this.ytile*this.height
+                );
             }
-            if (this.getTile(this.xtile+this.length, this.ytile) == OBJECT_WALL) {
-                this.ctx.fillRect((this.xtile+this.length)*this.width-7, 3+this.ytile*this.height, 18, this.height-6);
+            if (
+                this.getTile(this.xtile+this.length, this.ytile) === OBJECT_WALL ||
+                this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_METAL
+            ) {
+                this.ctx.drawImage(
+                    this.engine.resources.get('frost'),
+                    (this.xtile+this.length)*this.width-7,
+                    this.ytile*this.height
+                );
             }
-
         }
 
         this.ctx.restore();
@@ -1018,7 +1026,171 @@ class Ice extends AnimSprite {
         if (!this.collision()) {
             this.moving = true;
             this.setState(MOVE_ICE_MOVING, true);
-        }else{
+        } else {
+            this.setState(MOVE_STAND, false);
+        }
+    }
+
+    checkUnfreeze() {
+        if (
+            this.getTile(this.xtile-1, this.ytile) !== OBJECT_WALL &&
+            this.getTile(this.xtile+this.length, this.ytile) !== OBJECT_WALL &&
+            this.engine.spriteTypeAt(this.xtile-1, this.ytile) !== OBJECT_METAL &&
+            this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) !== OBJECT_METAL
+        ) {
+            this.frozen = false;
+        }
+    }
+
+    checkFreeze() {
+        if (
+            (this.getTile(this.xtile-1, this.ytile) === OBJECT_WALL) ||
+            (this.getTile(this.xtile+this.length, this.ytile) === OBJECT_WALL) ||
+            (this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_METAL) ||
+            (this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_METAL)
+        ) {
+            this.frozen = true;
+        } else {
+            this.frozen = false;
+        }
+    }
+}
+
+class Metal extends AnimSprite {
+
+    constructor(engine, tx, ty, length) {
+        super(OBJECT_METAL, engine, 'img_metal',
+            tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 1, true);
+        this.xtile = tx;
+        this.ytile = ty;
+        this.length = length;
+        this.animEnd = 1;
+        this.animDelay = 9;
+        this.animRow = 0;
+        this.dirrection = 0;
+        this.falling = false;
+    }
+
+    canGlide(dir) {
+        if (dir === DIR_LEFT  && Tile.isSolid(this.coorners.l)) {
+            return false;
+        }
+        if (dir === DIR_RIGHT && Tile.isSolid(this.coorners.r)) {
+            return false;
+        }
+        return true;
+    }
+
+    gravity() {
+        if (!this.coorners.d) {
+            this.falling = true;
+            this.setState(MOVE_DOWN, true);
+            return true;
+        }
+        if (this.falling) {
+            this.falling = false;
+            this.engine.sound.play('ice-collision');
+        }
+        return false;
+    }
+
+    collision() {
+        if (!this.canGlide(this.dirrection)) {
+            this.dirrection = 0;
+            this.engine.sound.play('ice-collision');
+            this.setState(MOVE_STAND, false);
+            return true;
+        }
+        if (this.gravity()) {
+            return true;
+        }
+        return false;
+    }
+
+    move() {
+        for (let i = 0; i < this.length; i++) {
+            let tile_down = this.spriteTypeAt(this.xtile+i, this.ytile+1);
+            if (tile_down && tile_down !== OBJECT_FIRE) {
+                this.coorners.d = tile_down;
+            }
+
+        }
+        if (this.coorners.d === OBJECT_FIRE) {
+            this.coorners.d = OBJECT_BACKGROUND;
+        }
+        this.coorners.r = this.spriteTypeAt(this.xtile+this.length, this.ytile);
+
+        if (!this.moving) {
+            this.gravity();
+        }
+        switch (this.state) {
+            case MOVE_ICE_MOVING:
+                this.glide();
+                break;
+            case MOVE_ICE_CHECK:
+                this.push();
+                break;
+            case MOVE_DOWN:
+                this.doDown();
+                break;
+        }
+    }
+
+    draw() {
+        this.ctx.save();
+        if (this.animDelayCount++ > this.animDelay) {
+            this.animDelayCount = 0;
+            this.animRow = this.animRow === 0 ? 1 : 0;
+        }
+        this.ctx.drawImage(this.image, 0, TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
+
+        if (
+            this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_ICE &&
+            this.engine.spriteAt(this.xtile-1, this.ytile).frozen
+        ) {
+            this.ctx.drawImage(
+                this.engine.resources.get('frost'),
+                (this.xtile*this.width)-7,
+                this.ytile*this.height
+            );
+        }
+        if (
+            this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_ICE &&
+            this.engine.spriteAt(this.xtile+this.length, this.ytile).frozen
+        ) {
+            this.ctx.drawImage(
+                this.engine.resources.get('frost'),
+                (this.xtile+this.length)*this.width-7,
+                this.ytile*this.height
+            );
+        }
+        this.ctx.restore();
+    }
+
+    glide() {
+        this.counter += 4;
+        if (this.counter <= TILE_WIDTH) {
+            this.x += 4 * this.dirrection;
+        } else {
+            this.setState(MOVE_STAND, false);
+        }
+    }
+
+    doDown() {
+        this.counter += 4;
+        if (this.counter <= TILE_WIDTH) {
+            this.y += 4;
+        } else {
+            this.setState(MOVE_STAND, false);
+        }
+    }
+
+    push(dir) {
+        this.dirrection = (typeof dir === 'undefined') ? this.dirrection : dir;
+        if (!this.collision()) {
+            this.moving = true;
+            this.setState(MOVE_ICE_MOVING, true);
+        } else {
             this.setState(MOVE_STAND, false);
         }
     }
@@ -1343,17 +1515,13 @@ let levels = [
             [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
             [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
             [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
-            [1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1],
-            [1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1],
+            [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+            [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
         ],"sprites":[
-            {"id":OBJECT_PLAYER,"x":"5","y":"11","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"8","y":"9","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"8","y":"8","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"4","y":"7","l":"9"},
-            {"id":OBJECT_ICE   ,"x":"8","y":"6","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"8","y":"5","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"8","y":"1","l":"1"}
+            {"id":OBJECT_PLAYER,"x":"3","y":"11","l":"1"},
+            {"id":OBJECT_FIRE  ,"x":"8","y":"1","l":"1"},
+            {"id":OBJECT_METAL, "x": "5", "y": "11", "l": "1"}
         ],"image":"base64","category":"0","world":"0","name":"","theme":"0"
     }
 ];
@@ -1398,8 +1566,8 @@ class Engine {
                 fires = true;
                 let fire = this.sprites[i];
                 // player collisions
-                if (fire.xtile == this.player.xtile &&
-                    fire.ytile == this.player.ytile)
+                if (fire.xtile === this.player.xtile &&
+                    fire.ytile === this.player.ytile)
                 {
                     this.player.burn();
                     return true;
@@ -1410,7 +1578,7 @@ class Engine {
                         let ice = this.sprites[j];
                         if (fire.xtile >= ice.xtile &&
                             fire.xtile < ice.xtile+ice.length  &&
-                            fire.ytile  == ice.ytile)
+                            fire.ytile  === ice.ytile)
                         {
                             this.sound.play('fire-off');
                             this.removeFire(fire.xtile, fire.ytile);
@@ -1481,16 +1649,16 @@ class Engine {
         let foundIceBlocks = [ ];
         frozen = (typeof length === 'undefined') ? false : frozen;
         for (let i = 0; i < this.sprites.length; i++) {
-            if (this.sprites[i] instanceof Ice && this.sprites[i].ytile == ty) {
+            if (this.sprites[i] instanceof Ice && this.sprites[i].ytile === ty) {
                 let ice = this.sprites[i];
-                if (ice.xtile - 1 == tx || ice.xtile + ice.length == tx) {
+                if (ice.xtile - 1 === tx || ice.xtile + ice.length === tx) {
                     foundIceBlocks.push(ice);
                 }
             }
         }
-        if (foundIceBlocks.length == 0) {
+        if (foundIceBlocks.length === 0) {
             this.sprites.push(new Ice(this, tx, ty, 1, frozen));
-        } else if (foundIceBlocks.length == 1) {
+        } else if (foundIceBlocks.length === 1) {
             foundIceBlocks[0].addBlock(tx);
         } else {
             this.joinIceBlocks(foundIceBlocks[0], foundIceBlocks[1]);
@@ -1509,7 +1677,7 @@ class Engine {
     removeIceBlock(tx, ty) {
         for (let i = 0; i < this.sprites.length; i++) {
             if (this.sprites[i] instanceof Ice &&
-                this.sprites[i].ytile == ty &&
+                this.sprites[i].ytile === ty &&
                 tx >= this.sprites[i].xtile &&
                 tx < this.sprites[i].xtile + this.sprites[i].length)
             {
@@ -1523,7 +1691,7 @@ class Engine {
 
     removeFire(tx, ty) {
         for (let i = 0; i < this.sprites.length; i++) {
-            if ((this.sprites[i].ytile == ty) && (tx == this.sprites[i].xtile) && (this.sprites[i] instanceof Fire)) {
+            if ((this.sprites[i].ytile === ty) && (tx === this.sprites[i].xtile) && (this.sprites[i] instanceof Fire)) {
                 this.sprites.splice(i,1);
                 return;
             }
@@ -1536,7 +1704,7 @@ class Engine {
 
     removeSprite(sprite) {
         for (let i = 0; i < this.sprites.length; i++) {
-            if (this.sprites[i] == sprite) {
+            if (this.sprites[i] === sprite) {
                 this.sprites.splice(i,1);
                 return true;
             }
@@ -1550,7 +1718,7 @@ class Engine {
 
     removeSfx(sprite) {
         for (let i = 0; i < this.sfxs.length; i++) {
-            if (this.sfxs[i] == sprite) {
+            if (this.sfxs[i] === sprite) {
                 this.sfxs.splice(i,1);
                 return true;
             }
@@ -1558,7 +1726,7 @@ class Engine {
         return false;
     }
 
-    spriteAt(tx, ty) {
+    spriteTypeAt(tx, ty) {
         if (tx < 0 || ty < 0 || tx > this.map.width || ty > this.map.height) {
             return OBJECT_OUT;
         }
@@ -1574,13 +1742,24 @@ class Engine {
         return OBJECT_BACKGROUND;
     }
 
+    spriteAt(tx, ty) {
+        if (!this.map.map[ty][tx]) {
+            for (let i = 0; i < this.sprites.length; i++) {
+                if (this.sprites[i].isSpriteAt(tx, ty)) {
+                    return this.sprites[i];
+                }
+            }
+        }
+        return null;
+    }
+
     save(name, theme, category, world) {
         let data = {};
         data.map = this.map.map;
         data.sprites = [];
         for (let i = 0; i < this.sprites.length; i++) {
             let sprite = this.sprites[i];
-            sprite.length = (typeof sprite.length == "undefined") ? 1 : sprite.length;
+            sprite.length = (typeof sprite.length === "undefined") ? 1 : sprite.length;
             data.sprites.push({
                 "id": sprite.id,
                 "x": sprite.xtile,
@@ -1589,10 +1768,10 @@ class Engine {
             });
         }
         data.image = this.canvas.toDataURL('image/png').slice(22);
-        data.category = (typeof category == "undefined") ? 0 : category;
-        data.world = (typeof world == "undefined") ? 0 : world;
-        data.name = (typeof name == "undefined") ? '' : name;
-        data.theme = (typeof theme == "undefined") ? 0 : theme;
+        data.category = (typeof category === "undefined") ? 0 : category;
+        data.world = (typeof world === "undefined") ? 0 : world;
+        data.name = (typeof name === "undefined") ? '' : name;
+        data.theme = (typeof theme === "undefined") ? 0 : theme;
         return data;
     }
 
@@ -1610,8 +1789,11 @@ class Engine {
                     this.addSprite(this.player);
                     break;
                 case OBJECT_ICE:
-                    sprite.l = typeof sprite.l == "undefined" ? 1 : sprite.l;
+                    sprite.l = typeof sprite.l === "undefined" ? 1 : sprite.l;
                     this.addSprite(new Ice(this, sprite.x, sprite.y, parseInt(sprite.l)));
+                    break;
+                case OBJECT_METAL:
+                    this.addSprite(new Metal(this, sprite.x, sprite.y, 1));
                     break;
                 case OBJECT_FIRE:
                     this.addSprite(new Fire(this, sprite.x, sprite.y));

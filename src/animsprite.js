@@ -16,7 +16,7 @@ class AnimSprite extends Sprite {
      */
     constructor (id, engine, image, tx, ty, width, height, offsetX, offsetY, start, end, loop) {
         super(id, engine, tx, ty, width, height);
-        this.image = document.getElementById(image);
+        this.image = this.engine.resources.get(image);
         this.animLoop = loop;
         this.animStart = start;
         this.animEnd = end;
@@ -49,8 +49,8 @@ class AnimSprite extends Sprite {
             this.animDelay = _delay;
             this.animRow = _row;
         } else {
-            if (this.animStart != start || this.animEnd != end ||
-                this.animLoop != loop || this.animRow != _row)
+            if (this.animStart !== start || this.animEnd !== end ||
+                this.animLoop !== loop || this.animRow !== _row)
             {
                 this.animStart = start;
                 this.animEnd = end;
@@ -74,7 +74,7 @@ class AnimSprite extends Sprite {
             if (++this.animCount > this.animEnd) {
                 if (this.animLoop) {
                     this.animCount = this.animStart;
-                }else{
+                } else {
                     this.animCount = this.animEnd;
                 }
             }

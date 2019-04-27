@@ -10,24 +10,18 @@ class Ice extends AnimSprite {
         this.animEnd = 1;
         this.animDelay = 9;
         this.animRow = 0;
-        this.old_tx = 0;
-        this.old_ty = 0;
         this.dirrection = 0;
         this.falling = false;
-
-        if ((this.getTile(this.xtile-1, this.ytile) == OBJECT_WALL) ||
-            (this.getTile(this.xtile+this.length, this.ytile) == OBJECT_WALL))
-        {
-            this.frozen = true;
-        } else{
-            this.frozen = false;
-        }
+        this.checkFreeze();
     }
 
     addBlock(tx) {
-        if ((tx > this.xtile && this.getTile(tx+1, this.ytile) == OBJECT_WALL) ||
-            (tx < this.xtile && this.getTile(tx-1, this.ytile) == OBJECT_WALL))
-        {
+        if (
+            (tx > this.xtile && this.getTile(tx+1, this.ytile) === OBJECT_WALL) ||
+            (tx < this.xtile && this.getTile(tx-1, this.ytile) === OBJECT_WALL) ||
+            (this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_METAL) ||
+            (this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_METAL)
+        ){
             this.frozen = true;
         }
         this.xtile = tx < this.xtile ? tx : this.xtile;
@@ -36,7 +30,7 @@ class Ice extends AnimSprite {
     }
 
     isSpriteAt(tx, ty) {
-        if (this.ytile == ty) {
+        if (this.ytile === ty) {
             if (tx >= this.xtile && tx < (this.xtile + this.length)) {
                 return true;
             } else {
@@ -49,13 +43,13 @@ class Ice extends AnimSprite {
     }
 
     removeBlock(tx) {
-        if (tx == this.xtile) {
+        if (tx === this.xtile) {
             this.xtile += 1;
             this.x += TILE_WIDTH;
             this.length--;
-        }else if (tx == this.xtile+this.length-1) {
+        } else if (tx === this.xtile+this.length-1) {
             this.length--;
-        }else{
+        } else {
             this.engine.addSprite(
                 new Ice(this.engine, tx+1, this.ytile, this.xtile+this.length-tx-1));
             this.length = tx - this.xtile;
@@ -64,13 +58,13 @@ class Ice extends AnimSprite {
     }
 
     canGlide(dir) {
-        if (this.length != 1 || this.frozen) {
+        if (this.length !== 1 || this.frozen) {
             return false;
         }
-        if (dir == DIR_LEFT  && Tile.isSolid(this.coorners.l)) {
+        if (dir === DIR_LEFT  && Tile.isSolid(this.coorners.l)) {
             return false;
         }
-        if (dir == DIR_RIGHT && Tile.isSolid(this.coorners.r)) {
+        if (dir === DIR_RIGHT && Tile.isSolid(this.coorners.r)) {
             return false;
         }
         return true;
@@ -104,21 +98,19 @@ class Ice extends AnimSprite {
 
     move() {
         for (let i = 0; i < this.length; i++) {
-            let tile_down = this.spriteAt(this.xtile+i, this.ytile+1);
-            if (tile_down && tile_down != OBJECT_FIRE) {
+            let tile_down = this.spriteTypeAt(this.xtile+i, this.ytile+1);
+            if (tile_down && tile_down !== OBJECT_FIRE) {
                 this.coorners.d = tile_down;
             }
 
         }
-        if (this.coorners.d == OBJECT_FIRE) {
+        if (this.coorners.d === OBJECT_FIRE) {
             this.coorners.d = OBJECT_BACKGROUND;
         }
-        this.coorners.r = this.spriteAt(this.xtile+this.length, this.ytile);
+        this.coorners.r = this.spriteTypeAt(this.xtile+this.length, this.ytile);
 
         if (this.frozen) {
-            if (this.getTile(this.xtile-1, this.ytile) != OBJECT_WALL && this.getTile(this.xtile+this.length, this.ytile) != OBJECT_WALL) {
-                this.frozen = false;
-            }
+            this.checkUnfreeze();
         }
         if (!this.moving) {
             this.gravity();
@@ -140,11 +132,11 @@ class Ice extends AnimSprite {
         this.ctx.save();
         if (this.animDelayCount++ > this.animDelay) {
             this.animDelayCount = 0;
-            this.animRow = this.animRow == 0 ? 1 : 0;
+            this.animRow = this.animRow === 0 ? 1 : 0;
         }
-        if (this.length == 1) {
+        if (this.length === 1) {
             this.ctx.drawImage(this.image, 0, TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
-        } else if (this.length == 2) {
+        } else if (this.length === 2) {
             this.ctx.drawImage(this.image, 1*TILE_WIDTH, TILE_WIDTH*this.animRow,
                 this.width, this.height,  this.x, this.y, this.width, this.height);
             this.ctx.drawImage(this.image, 3*TILE_WIDTH, TILE_WIDTH*this.animRow,
@@ -160,14 +152,26 @@ class Ice extends AnimSprite {
             }
         }
         if (this.frozen) {
-            this.ctx.fillStyle = "rgba(255,255,255,0.95)";
-            if (this.getTile(this.xtile-1, this.ytile) == OBJECT_WALL) {
-                this.ctx.fillRect((this.xtile*this.width)-7, 3+this.ytile*this.height, 18,this.height-6);
+            if (
+                this.getTile(this.xtile-1, this.ytile) === OBJECT_WALL ||
+                this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_METAL
+            ) {
+                this.ctx.drawImage(
+                    this.engine.resources.get('frost'),
+                    (this.xtile*this.width)-7,
+                    this.ytile*this.height
+                );
             }
-            if (this.getTile(this.xtile+this.length, this.ytile) == OBJECT_WALL) {
-                this.ctx.fillRect((this.xtile+this.length)*this.width-7, 3+this.ytile*this.height, 18, this.height-6);
+            if (
+                this.getTile(this.xtile+this.length, this.ytile) === OBJECT_WALL ||
+                this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_METAL
+            ) {
+                this.ctx.drawImage(
+                    this.engine.resources.get('frost'),
+                    (this.xtile+this.length)*this.width-7,
+                    this.ytile*this.height
+                );
             }
-
         }
 
         this.ctx.restore();
@@ -196,8 +200,32 @@ class Ice extends AnimSprite {
         if (!this.collision()) {
             this.moving = true;
             this.setState(MOVE_ICE_MOVING, true);
-        }else{
+        } else {
             this.setState(MOVE_STAND, false);
+        }
+    }
+
+    checkUnfreeze() {
+        if (
+            this.getTile(this.xtile-1, this.ytile) !== OBJECT_WALL &&
+            this.getTile(this.xtile+this.length, this.ytile) !== OBJECT_WALL &&
+            this.engine.spriteTypeAt(this.xtile-1, this.ytile) !== OBJECT_METAL &&
+            this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) !== OBJECT_METAL
+        ) {
+            this.frozen = false;
+        }
+    }
+
+    checkFreeze() {
+        if (
+            (this.getTile(this.xtile-1, this.ytile) === OBJECT_WALL) ||
+            (this.getTile(this.xtile+this.length, this.ytile) === OBJECT_WALL) ||
+            (this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_METAL) ||
+            (this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_METAL)
+        ) {
+            this.frozen = true;
+        } else {
+            this.frozen = false;
         }
     }
 }

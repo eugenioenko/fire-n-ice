@@ -41,24 +41,24 @@ class Sprite {
     }
 
     isSpriteAt (tx, ty) {
-        return this.xtile == tx && this.ytile == ty;
+        return this.xtile === tx && this.ytile === ty;
     }
 
-    spriteAt(tx, ty) {
-        return this.engine.spriteAt(tx, ty);
+    spriteTypeAt(tx, ty) {
+        return this.engine.spriteTypeAt(tx, ty);
     }
 
     move () {}
 
     engineMove() {
-        this.coorners.u = this.spriteAt(this.xtile, this.ytile-1);
-        this.coorners.d = this.spriteAt(this.xtile, this.ytile+1);
-        this.coorners.l = this.spriteAt(this.xtile-1, this.ytile);
-        this.coorners.r = this.spriteAt(this.xtile+1, this.ytile);
-        this.coorners.ul = this.spriteAt(this.xtile-1, this.ytile-1);
-        this.coorners.ur = this.spriteAt(this.xtile+1, this.ytile-1);
-        this.coorners.dl = this.spriteAt(this.xtile-1, this.ytile+1);
-        this.coorners.dr = this.spriteAt(this.xtile+1, this.ytile+1);
+        this.coorners.u = this.spriteTypeAt(this.xtile, this.ytile-1);
+        this.coorners.d = this.spriteTypeAt(this.xtile, this.ytile+1);
+        this.coorners.l = this.spriteTypeAt(this.xtile-1, this.ytile);
+        this.coorners.r = this.spriteTypeAt(this.xtile+1, this.ytile);
+        this.coorners.ul = this.spriteTypeAt(this.xtile-1, this.ytile-1);
+        this.coorners.ur = this.spriteTypeAt(this.xtile+1, this.ytile-1);
+        this.coorners.dl = this.spriteTypeAt(this.xtile-1, this.ytile+1);
+        this.coorners.dr = this.spriteTypeAt(this.xtile+1, this.ytile+1);
 
         this.move();
 

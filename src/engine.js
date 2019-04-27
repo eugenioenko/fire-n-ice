@@ -39,8 +39,8 @@ class Engine {
                 fires = true;
                 let fire = this.sprites[i];
                 // player collisions
-                if (fire.xtile == this.player.xtile &&
-                    fire.ytile == this.player.ytile)
+                if (fire.xtile === this.player.xtile &&
+                    fire.ytile === this.player.ytile)
                 {
                     this.player.burn();
                     return true;
@@ -51,7 +51,7 @@ class Engine {
                         let ice = this.sprites[j];
                         if (fire.xtile >= ice.xtile &&
                             fire.xtile < ice.xtile+ice.length  &&
-                            fire.ytile  == ice.ytile)
+                            fire.ytile  === ice.ytile)
                         {
                             this.sound.play('fire-off');
                             this.removeFire(fire.xtile, fire.ytile);
@@ -122,16 +122,16 @@ class Engine {
         let foundIceBlocks = [ ];
         frozen = (typeof length === 'undefined') ? false : frozen;
         for (let i = 0; i < this.sprites.length; i++) {
-            if (this.sprites[i] instanceof Ice && this.sprites[i].ytile == ty) {
+            if (this.sprites[i] instanceof Ice && this.sprites[i].ytile === ty) {
                 let ice = this.sprites[i];
-                if (ice.xtile - 1 == tx || ice.xtile + ice.length == tx) {
+                if (ice.xtile - 1 === tx || ice.xtile + ice.length === tx) {
                     foundIceBlocks.push(ice);
                 }
             }
         }
-        if (foundIceBlocks.length == 0) {
+        if (foundIceBlocks.length === 0) {
             this.sprites.push(new Ice(this, tx, ty, 1, frozen));
-        } else if (foundIceBlocks.length == 1) {
+        } else if (foundIceBlocks.length === 1) {
             foundIceBlocks[0].addBlock(tx);
         } else {
             this.joinIceBlocks(foundIceBlocks[0], foundIceBlocks[1]);
@@ -150,7 +150,7 @@ class Engine {
     removeIceBlock(tx, ty) {
         for (let i = 0; i < this.sprites.length; i++) {
             if (this.sprites[i] instanceof Ice &&
-                this.sprites[i].ytile == ty &&
+                this.sprites[i].ytile === ty &&
                 tx >= this.sprites[i].xtile &&
                 tx < this.sprites[i].xtile + this.sprites[i].length)
             {
@@ -164,7 +164,7 @@ class Engine {
 
     removeFire(tx, ty) {
         for (let i = 0; i < this.sprites.length; i++) {
-            if ((this.sprites[i].ytile == ty) && (tx == this.sprites[i].xtile) && (this.sprites[i] instanceof Fire)) {
+            if ((this.sprites[i].ytile === ty) && (tx === this.sprites[i].xtile) && (this.sprites[i] instanceof Fire)) {
                 this.sprites.splice(i,1);
                 return;
             }
@@ -177,7 +177,7 @@ class Engine {
 
     removeSprite(sprite) {
         for (let i = 0; i < this.sprites.length; i++) {
-            if (this.sprites[i] == sprite) {
+            if (this.sprites[i] === sprite) {
                 this.sprites.splice(i,1);
                 return true;
             }
@@ -191,7 +191,7 @@ class Engine {
 
     removeSfx(sprite) {
         for (let i = 0; i < this.sfxs.length; i++) {
-            if (this.sfxs[i] == sprite) {
+            if (this.sfxs[i] === sprite) {
                 this.sfxs.splice(i,1);
                 return true;
             }
@@ -199,7 +199,7 @@ class Engine {
         return false;
     }
 
-    spriteAt(tx, ty) {
+    spriteTypeAt(tx, ty) {
         if (tx < 0 || ty < 0 || tx > this.map.width || ty > this.map.height) {
             return OBJECT_OUT;
         }
@@ -215,13 +215,24 @@ class Engine {
         return OBJECT_BACKGROUND;
     }
 
+    spriteAt(tx, ty) {
+        if (!this.map.map[ty][tx]) {
+            for (let i = 0; i < this.sprites.length; i++) {
+                if (this.sprites[i].isSpriteAt(tx, ty)) {
+                    return this.sprites[i];
+                }
+            }
+        }
+        return null;
+    }
+
     save(name, theme, category, world) {
         let data = {};
         data.map = this.map.map;
         data.sprites = [];
         for (let i = 0; i < this.sprites.length; i++) {
             let sprite = this.sprites[i];
-            sprite.length = (typeof sprite.length == "undefined") ? 1 : sprite.length;
+            sprite.length = (typeof sprite.length === "undefined") ? 1 : sprite.length;
             data.sprites.push({
                 "id": sprite.id,
                 "x": sprite.xtile,
@@ -230,10 +241,10 @@ class Engine {
             });
         }
         data.image = this.canvas.toDataURL('image/png').slice(22);
-        data.category = (typeof category == "undefined") ? 0 : category;
-        data.world = (typeof world == "undefined") ? 0 : world;
-        data.name = (typeof name == "undefined") ? '' : name;
-        data.theme = (typeof theme == "undefined") ? 0 : theme;
+        data.category = (typeof category === "undefined") ? 0 : category;
+        data.world = (typeof world === "undefined") ? 0 : world;
+        data.name = (typeof name === "undefined") ? '' : name;
+        data.theme = (typeof theme === "undefined") ? 0 : theme;
         return data;
     }
 
@@ -251,8 +262,11 @@ class Engine {
                     this.addSprite(this.player);
                     break;
                 case OBJECT_ICE:
-                    sprite.l = typeof sprite.l == "undefined" ? 1 : sprite.l;
+                    sprite.l = typeof sprite.l === "undefined" ? 1 : sprite.l;
                     this.addSprite(new Ice(this, sprite.x, sprite.y, parseInt(sprite.l)));
+                    break;
+                case OBJECT_METAL:
+                    this.addSprite(new Metal(this, sprite.x, sprite.y, 1));
                     break;
                 case OBJECT_FIRE:
                     this.addSprite(new Fire(this, sprite.x, sprite.y));

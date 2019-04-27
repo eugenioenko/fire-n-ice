@@ -16,6 +16,10 @@ const Tile = {
             resource: false,
             solid: true
         },
+        [OBJECT_METAL]: {
+            resource: false,
+            solid: true
+        },
         [OBJECT_WALL]: {
             resource: 'tile',
             solid: true
@@ -35,8 +39,7 @@ const Tile = {
     },
 
     getImage: function(id) {
-        if (typeof this.tiles[id] == "undefined") {
-            console.log('UNDEFINED ON tiles get Image');
+        if (typeof this.tiles[id] === "undefined") {
             throw new Error('UNDEFINED ON tiles get Image');
         } else {
             return this.tiles[id].resource;

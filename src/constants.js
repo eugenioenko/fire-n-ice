@@ -57,6 +57,7 @@ const OBJECT_FIRE = 6;
 const OBJECT_ICE = 3;
 const OBJECT_OUT = -2;
 const OBJECT_PLAYER = 7;
+const OBJECT_METAL = 4;
 
 const STATE_PLAY = 1;
 const STATE_START = 2;
