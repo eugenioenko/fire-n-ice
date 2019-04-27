@@ -9,15 +9,15 @@ class Engine {
         this.cheight = canvas.height;
         this.resources = resources;
         this.ctx = this.canvas.getContext('2d');
+        this.state = STATE_START;
         this.sprites = [];
         this.sfxs = [];
         this.player = {};
         this.level = 0;
-        this.levels = levels;
         this.keyboard = new Keyboard();
         this.sound = new Sound();
-        this.state = STATE_START;
-        this.load(levels[this.level]);
+        this.scene = new Scene(this);
+        this.scene.load(this.level);
     }
 
     draw() {
@@ -69,7 +69,7 @@ class Engine {
         }
         if (!fires) {
             this.level++;
-            this.load(levels[this.level]);
+            this.scene.load(this.level);
             this.addSfx(new Sparks(this, this.player.xtile,
                 this.player.ytile, '255,255,255', 200));
         }
@@ -102,7 +102,7 @@ class Engine {
                 this.player.right();
             }
             if (this.keyboard.enter) {
-               this.load(levels[this.level]);
+               this.scene.load(this.level);
                this.keyboard.enter = false;
             }
         }
@@ -224,54 +224,5 @@ class Engine {
             }
         }
         return null;
-    }
-
-    save(name, theme, category, world) {
-        let data = {};
-        data.map = this.map.map;
-        data.sprites = [];
-        for (let i = 0; i < this.sprites.length; i++) {
-            let sprite = this.sprites[i];
-            sprite.length = (typeof sprite.length === "undefined") ? 1 : sprite.length;
-            data.sprites.push({
-                "id": sprite.id,
-                "x": sprite.xtile,
-                "y": sprite.ytile,
-                "l": sprite.length
-            });
-        }
-        data.image = this.canvas.toDataURL('image/png').slice(22);
-        data.category = (typeof category === "undefined") ? 0 : category;
-        data.world = (typeof world === "undefined") ? 0 : world;
-        data.name = (typeof name === "undefined") ? '' : name;
-        data.theme = (typeof theme === "undefined") ? 0 : theme;
-        return data;
-    }
-
-    load(data) {
-        this.sprites = [];
-        this.data = data;
-        this.map = new TileMap(this, data.map);
-        for (let i = 0; i < data.sprites.length; ++i) {
-            let sprite = data.sprites[i];
-            sprite.x = parseInt(sprite.x);
-            sprite.y = parseInt(sprite.y);
-            switch(sprite.id) {
-                case OBJECT_PLAYER:
-                    this.player = new Player(this, sprite.x, sprite.y);
-                    this.addSprite(this.player);
-                    break;
-                case OBJECT_ICE:
-                    sprite.l = typeof sprite.l === "undefined" ? 1 : sprite.l;
-                    this.addSprite(new Ice(this, sprite.x, sprite.y, parseInt(sprite.l)));
-                    break;
-                case OBJECT_METAL:
-                    this.addSprite(new Metal(this, sprite.x, sprite.y, 1));
-                    break;
-                case OBJECT_FIRE:
-                    this.addSprite(new Fire(this, sprite.x, sprite.y));
-                    break;
-            }
-        }
     }
 }

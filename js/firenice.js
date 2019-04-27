@@ -1265,9 +1265,9 @@ class Sparks extends Sprite {
     }
 }
 
-let levels = [
+const levels = [
     {
-        "map":[
+        map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -1281,21 +1281,22 @@ let levels = [
             [1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        ],"sprites":[
-            {"id":OBJECT_PLAYER,"x":"11","y":"4","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"5","y":"9","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"5","y":"8","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"5","y":"7","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"5","y":"6","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"6","y":"4","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"8","y":"4","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"7","y":"9","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"7","y":"8","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"7","y":"7","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"9","y":"10","l":"1"}
-        ],"image":"base64","category":"0","world":"0","name":"","theme":"0"
-    },{
-        "map":[
+        ],
+        sprites: [
+            {id :OBJECT_PLAYER, x: 11, y: 4, l: 1},
+            {id :OBJECT_ICE   , x: 5, y: 9, l: 1},
+            {id :OBJECT_ICE   , x: 5, y: 8, l: 1},
+            {id :OBJECT_ICE   , x: 5, y: 7, l: 1},
+            {id :OBJECT_ICE   , x: 5, y: 6, l: 1},
+            {id :OBJECT_FIRE  , x: 6, y: 4, l: 1},
+            {id :OBJECT_ICE   , x: 8, y: 4, l: 1},
+            {id :OBJECT_FIRE  , x: 7, y: 9, l: 1},
+            {id :OBJECT_FIRE  , x: 7, y: 8, l: 1},
+            {id :OBJECT_FIRE  , x: 7, y: 7, l: 1},
+            {id :OBJECT_FIRE  , x: 9, y: 10, l: 1}
+        ]
+    }, {
+        map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -1309,21 +1310,22 @@ let levels = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        ],"sprites":[
-            {"id":OBJECT_PLAYER,"x":"3","y":"7","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"6","y":"7","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"12","y":"8","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"11","y":"8","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"11","y":"7","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"11","y":"6","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"4","y":"7","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"10","y":"8","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"10","y":"7","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"10","y":"6","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"9","y":"5","l":"4"}
-        ],"image":"base64","category":"0","world":"0","name":"","theme":"0"
-    },{
-        "map":[
+        ],
+        sprites:  [
+            {id :OBJECT_PLAYER, x: 3,  y: 7, l: 1},
+            {id :OBJECT_FIRE  , x: 6,  y: 7, l: 1},
+            {id :OBJECT_FIRE  , x: 12, y: 8, l: 1},
+            {id :OBJECT_FIRE  , x: 11, y: 8, l: 1},
+            {id :OBJECT_FIRE  , x: 11, y: 7, l: 1},
+            {id :OBJECT_FIRE  , x: 11, y: 6, l: 1},
+            {id :OBJECT_ICE   , x: 4,  y: 7, l: 1},
+            {id :OBJECT_ICE   , x: 10, y: 8, l: 1},
+            {id :OBJECT_ICE   , x: 10, y: 7, l: 1},
+            {id :OBJECT_ICE   , x: 10, y: 6, l: 1},
+            {id :OBJECT_ICE   , x: 9,  y: 5, l: 4}
+        ]
+    }, {
+        map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -1337,18 +1339,19 @@ let levels = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        ],"sprites":[
-            {"id":OBJECT_PLAYER,"x":"14","y":"6","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"10","y":"9","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"5","y":"4","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"9","y":"6","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"9","y":"5","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"11","y":"6","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"11","y":"5","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"8","y":"6","l":"1"}
-        ],"image":"base64","category":"0","world":"0","name":"","theme":"0"
-    },{
-        "map":[
+        ],
+        sprites: [
+            {id :OBJECT_PLAYER, x: 14, y: 6, l: 1},
+            {id :OBJECT_FIRE  , x: 10, y: 9, l: 1},
+            {id :OBJECT_ICE   , x: 5, y: 4, l: 1},
+            {id :OBJECT_FIRE  , x: 9, y: 6, l: 1},
+            {id :OBJECT_FIRE  , x: 9, y: 5, l: 1},
+            {id :OBJECT_ICE   , x: 11, y: 6, l: 1},
+            {id :OBJECT_ICE   , x: 11, y: 5, l: 1},
+            {id :OBJECT_ICE   , x: 8, y: 6, l: 1}
+        ]
+    }, {
+        map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -1362,24 +1365,25 @@ let levels = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        ],"sprites":[
-            {"id":OBJECT_PLAYER,"x":"8","y":"9","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"12","y":"8","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"13","y":"7","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"11","y":"9","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"6","y":"8","l":"5"},
-            {"id":OBJECT_ICE   ,"x":"10","y":"9","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"10","y":"7","l":"3"},
-            {"id":OBJECT_ICE   ,"x":"12","y":"6","l":"2"},
-            {"id":OBJECT_ICE   ,"x":"6","y":"9","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"4","y":"7","l":"3"},
-            {"id":OBJECT_ICE   ,"x":"3","y":"6","l":"2"},
-            {"id":OBJECT_FIRE  ,"x":"5","y":"9","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"4","y":"8","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"3","y":"7","l":"1"}
-        ],"image":"base64","category":"0","world":"0","name":"","theme":"0"
-    },{
-        "map":[
+        ],
+        sprites: [
+            {id :OBJECT_PLAYER, x: 8, y: 9, l: 1},
+            {id :OBJECT_FIRE  , x: 12, y: 8, l: 1},
+            {id :OBJECT_FIRE  , x: 13, y: 7, l: 1},
+            {id :OBJECT_FIRE  , x: 11, y: 9, l: 1},
+            {id :OBJECT_ICE   , x: 6, y: 8, l: 5},
+            {id :OBJECT_ICE   , x: 10, y: 9, l: 1},
+            {id :OBJECT_ICE   , x: 10, y: 7, l: 3},
+            {id :OBJECT_ICE   , x: 12, y: 6, l: 2},
+            {id :OBJECT_ICE   , x: 6, y: 9, l: 1},
+            {id :OBJECT_ICE   , x: 4, y: 7, l: 3},
+            {id :OBJECT_ICE   , x: 3, y: 6, l: 2},
+            {id :OBJECT_FIRE  , x: 5, y: 9, l: 1},
+            {id :OBJECT_FIRE  , x: 4, y: 8, l: 1},
+            {id :OBJECT_FIRE  , x: 3, y: 7, l: 1}
+        ]
+    }, {
+        map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1],
@@ -1393,19 +1397,20 @@ let levels = [
             [1,1,1,0,1,1,1,1,1,1,0,0,0,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        ],"sprites":[
-            {"id":OBJECT_PLAYER,"x":"13","y":"7","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"10","y":"10","l":"3"},
-            {"id":OBJECT_ICE   ,"x":"10","y":"9","l":"3"},
-            {"id":OBJECT_ICE   ,"x":"7","y":"7","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"10","y":"8","l":"3"},
-            {"id":OBJECT_ICE   ,"x":"3","y":"5","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"9","y":"7","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"3","y":"10","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"3","y":"4","l":"1"}
-        ],"image":"base64","category":"0","world":"0","name":"","theme":"0"
-    },{
-        "map":[
+        ],
+        sprites: [
+            {id :OBJECT_PLAYER, x: 13, y: 7, l: 1},
+            {id :OBJECT_ICE   , x: 10, y: 10, l: 3},
+            {id :OBJECT_ICE   , x: 10, y: 9, l: 3},
+            {id :OBJECT_ICE   , x: 7, y: 7, l: 1},
+            {id :OBJECT_ICE   , x: 10, y: 8, l: 3},
+            {id :OBJECT_ICE   , x: 3, y: 5, l: 1},
+            {id :OBJECT_ICE   , x: 9, y: 7, l: 1},
+            {id :OBJECT_FIRE  , x: 3, y: 10, l: 1},
+            {id :OBJECT_ICE   , x: 3, y: 4, l: 1}
+        ]
+    }, {
+        map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
@@ -1419,13 +1424,14 @@ let levels = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        ],"sprites":[
-            {"id":OBJECT_PLAYER,"x":"3","y":"6","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"13","y":"10","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"5","y":"6","l":"4"}
-        ],"image":"base64","category":"0","world":"0","name":"","theme":"0"
-    },{
-        "map":[
+        ],
+        sprites: [
+            {id :OBJECT_PLAYER, x: 3, y: 6, l: 1},
+            {id :OBJECT_FIRE  , x: 13, y: 10, l: 1},
+            {id :OBJECT_ICE   , x: 5, y: 6, l: 4}
+        ]
+    }, {
+        map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
@@ -1439,15 +1445,16 @@ let levels = [
             [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        ],"sprites":[
-            {"id":OBJECT_PLAYER,"x":"5","y":"4","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"5","y":"8","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"8","y":"5","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"8","y":"4","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"11","y":"8","l":"1"}
-        ],"image":"base64","category":"0","world":"0","name":"","theme":"0"
-    },{
-        "map":[
+        ],
+        sprites: [
+            {id :OBJECT_PLAYER, x: 5, y: 4, l: 1},
+            {id :OBJECT_FIRE  , x: 5, y: 8, l: 1},
+            {id :OBJECT_ICE   , x: 8, y: 5, l: 1},
+            {id :OBJECT_ICE   , x: 8, y: 4, l: 1},
+            {id :OBJECT_FIRE  , x: 11, y: 8, l: 1}
+        ]
+    }, {
+        map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1],
@@ -1461,15 +1468,16 @@ let levels = [
             [1,1,0,1,1,0,1,1,0,0,0,0,0,0,1,1,1],
             [1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        ],"sprites":[
-            {"id":OBJECT_PLAYER,"x":"5","y":"10","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"2","y":"10","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"3","y":"3","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"14","y":"5","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"12","y":"11","l":"1"}
-        ],"image":"base64","category":"0","world":"0","name":"","theme":"0"
-    },{
-        "map":[
+        ],
+        sprites: [
+            {id :OBJECT_PLAYER, x: 5, y: 10, l: 1},
+            {id :OBJECT_FIRE  , x: 2, y: 10, l: 1},
+            {id :OBJECT_ICE   , x: 3, y: 3, l: 1},
+            {id :OBJECT_FIRE  , x: 14, y: 5, l: 1},
+            {id :OBJECT_FIRE  , x: 12, y: 11, l: 1}
+        ]
+    }, {
+        map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1],
@@ -1483,28 +1491,29 @@ let levels = [
             [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        ],"sprites":[
-            {"id":OBJECT_PLAYER,"x":"13","y":"2","l":"1"},
-            {"id":OBJECT_ICE   ,"x":"4","y":"4","l":"8"},
-            {"id":OBJECT_ICE   ,"x":"11","y":"3","l":"4"},
-            {"id":OBJECT_FIRE  ,"x":"3","y":"5","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"4","y":"6","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"5","y":"7","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"10","y":"6","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"11","y":"5","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"14","y":"10","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"14","y":"9","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"2","y":"10","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"9","y":"8","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"2","y":"9","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"8","y":"8","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"7","y":"8","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"6","y":"8","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"8","y":"10","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"7","y":"10","l":"1"}
-        ],"image":"base64","category":"0","world":"0","name":"","theme":"0"
-    },{
-        "map":[
+        ],
+        sprites: [
+            {id :OBJECT_PLAYER, x: 13, y: 2, l: 1},
+            {id :OBJECT_ICE   , x: 4, y: 4, l: 8},
+            {id :OBJECT_ICE   , x: 11, y: 3, l: 4},
+            {id :OBJECT_FIRE  , x: 3, y: 5, l: 1},
+            {id :OBJECT_FIRE  , x: 4, y: 6, l: 1},
+            {id :OBJECT_FIRE  , x: 5, y: 7, l: 1},
+            {id :OBJECT_FIRE  , x: 10, y: 6, l: 1},
+            {id :OBJECT_FIRE  , x: 11, y: 5, l: 1},
+            {id :OBJECT_FIRE  , x: 14, y: 10, l: 1},
+            {id :OBJECT_FIRE  , x: 14, y: 9, l: 1},
+            {id :OBJECT_FIRE  , x: 2, y: 10, l: 1},
+            {id :OBJECT_FIRE  , x: 9, y: 8, l: 1},
+            {id :OBJECT_FIRE  , x: 2, y: 9, l: 1},
+            {id :OBJECT_FIRE  , x: 8, y: 8, l: 1},
+            {id :OBJECT_FIRE  , x: 7, y: 8, l: 1},
+            {id :OBJECT_FIRE  , x: 6, y: 8, l: 1},
+            {id :OBJECT_FIRE  , x: 8, y: 10, l: 1},
+            {id :OBJECT_FIRE  , x: 7, y: 10, l: 1}
+        ]
+    }, {
+        map: [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,1],
             [1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1],
@@ -1518,13 +1527,61 @@ let levels = [
             [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
             [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        ],"sprites":[
-            {"id":OBJECT_PLAYER,"x":"3","y":"11","l":"1"},
-            {"id":OBJECT_FIRE  ,"x":"8","y":"1","l":"1"},
-            {"id":OBJECT_METAL, "x": "5", "y": "11", "l": "1"}
-        ],"image":"base64","category":"0","world":"0","name":"","theme":"0"
+        ],
+        sprites: [
+            {id :OBJECT_PLAYER, x: 3, y: 11, l: 1},
+            {id :OBJECT_FIRE  , x: 8, y: 1, l: 1},
+            {id :OBJECT_METAL,  x: 5, y: 3, l: 1}
+        ]
     }
 ];
+class Scene {
+
+    constructor(engine) {
+        this.engine = engine;
+    }
+
+    save(name, theme, category, world) {
+        let data = {};
+        data.map = this.engine.map.map;
+        data.sprites = [];
+        for (const sprite of this.engine.sprites) {
+            sprite.length = (typeof sprite.length === "undefined") ? 1 : sprite.length;
+            data.sprites.push({
+                "id": sprite.id,
+                "x": sprite.xtile,
+                "y": sprite.ytile,
+                "l": sprite.length
+            });
+        }
+        // data.image = this.engine.canvas.toDataURL('image/png').slice(22);
+        return data;
+    }
+
+    load(index) {
+        const level = levels[index];
+        this.engine.sprites = [];
+        this.engine.map = new TileMap(this.engine, level.map);
+        for (const sprite of level.sprites) {
+            switch(sprite.id) {
+                case OBJECT_PLAYER:
+                    this.engine.player = new Player(this.engine, sprite.x, sprite.y);
+                    this.engine.addSprite(this.engine.player);
+                    break;
+                case OBJECT_ICE:
+                    sprite.l = typeof sprite.l === "undefined" ? 1 : sprite.l;
+                    this.engine.addSprite(new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.l)));
+                    break;
+                case OBJECT_METAL:
+                    this.engine.addSprite(new Metal(this.engine, sprite.x, sprite.y, 1));
+                    break;
+                case OBJECT_FIRE:
+                    this.engine.addSprite(new Fire(this.engine, sprite.x, sprite.y));
+                    break;
+            }
+        }
+    }
+}
 /**
  * Engine Loop
  */
@@ -1536,15 +1593,15 @@ class Engine {
         this.cheight = canvas.height;
         this.resources = resources;
         this.ctx = this.canvas.getContext('2d');
+        this.state = STATE_START;
         this.sprites = [];
         this.sfxs = [];
         this.player = {};
         this.level = 0;
-        this.levels = levels;
         this.keyboard = new Keyboard();
         this.sound = new Sound();
-        this.state = STATE_START;
-        this.load(levels[this.level]);
+        this.scene = new Scene(this);
+        this.scene.load(this.level);
     }
 
     draw() {
@@ -1596,7 +1653,7 @@ class Engine {
         }
         if (!fires) {
             this.level++;
-            this.load(levels[this.level]);
+            this.scene.load(this.level);
             this.addSfx(new Sparks(this, this.player.xtile,
                 this.player.ytile, '255,255,255', 200));
         }
@@ -1629,7 +1686,7 @@ class Engine {
                 this.player.right();
             }
             if (this.keyboard.enter) {
-               this.load(levels[this.level]);
+               this.scene.load(this.level);
                this.keyboard.enter = false;
             }
         }
@@ -1751,55 +1808,6 @@ class Engine {
             }
         }
         return null;
-    }
-
-    save(name, theme, category, world) {
-        let data = {};
-        data.map = this.map.map;
-        data.sprites = [];
-        for (let i = 0; i < this.sprites.length; i++) {
-            let sprite = this.sprites[i];
-            sprite.length = (typeof sprite.length === "undefined") ? 1 : sprite.length;
-            data.sprites.push({
-                "id": sprite.id,
-                "x": sprite.xtile,
-                "y": sprite.ytile,
-                "l": sprite.length
-            });
-        }
-        data.image = this.canvas.toDataURL('image/png').slice(22);
-        data.category = (typeof category === "undefined") ? 0 : category;
-        data.world = (typeof world === "undefined") ? 0 : world;
-        data.name = (typeof name === "undefined") ? '' : name;
-        data.theme = (typeof theme === "undefined") ? 0 : theme;
-        return data;
-    }
-
-    load(data) {
-        this.sprites = [];
-        this.data = data;
-        this.map = new TileMap(this, data.map);
-        for (let i = 0; i < data.sprites.length; ++i) {
-            let sprite = data.sprites[i];
-            sprite.x = parseInt(sprite.x);
-            sprite.y = parseInt(sprite.y);
-            switch(sprite.id) {
-                case OBJECT_PLAYER:
-                    this.player = new Player(this, sprite.x, sprite.y);
-                    this.addSprite(this.player);
-                    break;
-                case OBJECT_ICE:
-                    sprite.l = typeof sprite.l === "undefined" ? 1 : sprite.l;
-                    this.addSprite(new Ice(this, sprite.x, sprite.y, parseInt(sprite.l)));
-                    break;
-                case OBJECT_METAL:
-                    this.addSprite(new Metal(this, sprite.x, sprite.y, 1));
-                    break;
-                case OBJECT_FIRE:
-                    this.addSprite(new Fire(this, sprite.x, sprite.y));
-                    break;
-            }
-        }
     }
 }
 
