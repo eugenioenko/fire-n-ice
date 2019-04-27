@@ -11,11 +11,16 @@ class Keyboard {
         this.right = false;
         this.keydown = this.keydown_.bind(this);
         this.keyup = this.keyup_.bind(this);
+        this.intro = true;
 
-        window.addEventListener('click', this.mouse);
         window.addEventListener('keydown', this.keydown, false);
         window.addEventListener('keyup', this.keyup, false);
-
+        document.getElementById('canvas').addEventListener('click', () => {
+            if (this.intro) {
+                this.enter = true;
+            }
+            this.intro = false;
+        });
         document.getElementById('btn_action').addEventListener('pointerdown', () => this.down = true);
         document.getElementById('btn_action').addEventListener('pointerup', () => this.down = false);
         document.getElementById('btn_left').addEventListener('pointerdown', () => this.left = true);
