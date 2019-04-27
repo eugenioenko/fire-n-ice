@@ -7,7 +7,7 @@ class Game {
      * @param {*} resources  Game resources
      */
     constructor(canvas, resources) {
-        this.state = STATE_START;
+        this.state = GAME_STATE_PLAY;
         this.engine = new Engine(canvas, resources);
         this.createIntro();
         this.gameloop = this.gameloop_.bind(this); // jshint ignore:line
@@ -16,10 +16,10 @@ class Game {
 
     gameloop_() {
         switch (this.state) {
-            case STATE_START:
+            case GAME_STATE_INTRO:
                 this.doIntro();
                 break;
-            case STATE_PLAY:
+            case GAME_STATE_PLAY:
                 this.engine.draw();
                 this.engine.move();
                 break;
@@ -38,7 +38,7 @@ class Game {
         this.start.draw();
 
         if (this.engine.keyboard.enter) {
-            this.state = STATE_PLAY;
+            this.state = GAME_STATE_PLAY;
             this.engine.sound.soundrack();
         }
     }

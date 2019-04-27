@@ -51,16 +51,17 @@ const TILE_LEFT = 64;
 const TILE_MIDDLE = 96;
 const TILE_RIGHT = 128;
 
+const OBJECT_OUT = -1;
 const OBJECT_BACKGROUND = 0;
 const OBJECT_WALL = 1;
-const OBJECT_FIRE = 6;
 const OBJECT_ICE = 3;
-const OBJECT_OUT = -2;
-const OBJECT_PLAYER = 7;
 const OBJECT_METAL = 4;
+const OBJECT_JAR = 5;
+const OBJECT_FIRE = 6;
+const OBJECT_PLAYER = 7;
 
-const STATE_PLAY = 1;
-const STATE_START = 2;
+const GAME_STATE_PLAY = 1;
+const GAME_STATE_INTRO = 2;
 
 /**
 * Stores position of the corners and vertices
@@ -220,31 +221,42 @@ class Sound {
 		this.music.muted = false;
 		this.music.volume = 0.2;
 		this.music.loop = true;
-		this.music.play();
+		// this.music.play();
 	}
 }
 const Tile = {
    tiles: {
         [OBJECT_BACKGROUND]: {
-            solid: false
+            solid: false,
+            joint: false
         },
         [OBJECT_OUT]: {
-            solid: true
+            solid: true,
+            joint: false
         },
         [OBJECT_PLAYER]: {
-            solid: true
+            solid: true,
+            joint: false
         },
         [OBJECT_ICE]: {
-            solid: true
+            solid: true,
+            joint: false
         },
         [OBJECT_METAL]: {
-            solid: true
+            solid: true,
+            joint: true
         },
         [OBJECT_WALL]: {
-            solid: true
+            solid: true,
+            joint: true
         },
         [OBJECT_FIRE]: {
-            solid: false
+            solid: false,
+            joint: false
+        },
+        [OBJECT_JAR]: {
+            solid: true,
+            joint: true
         }
     },
 
@@ -861,13 +873,68 @@ class Fire extends AnimSprite {
             this.setState(MOVE_STAND, false);
         }
     }
+}
+
+class Jar extends AnimSprite {
+
+    constructor(engine, tx, ty) {
+        super(OBJECT_JAR, engine, 'img_jar',
+            tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 3, true);
+        this.animDelay = ANIM_STANDARD_DELAY * 2;
+    }
+
+    move() {
+        if (!this.moving) {
+            this.gravity();
+        }
+        switch (this.state) {
+            case MOVE_DOWN:
+                this.doDown();
+                break;
+        }
+    }
+
+    gravity() {
+        if (!this.coorners.d) {
+            this.setState(MOVE_DOWN, true);
+            return true;
+        }
+        return false;
+    }
+
+    doDown() {
+        this.counter += 4;
+        if (this.counter <= TILE_WIDTH) {
+            this.y += 4;
+        } else {
+            this.setState(MOVE_STAND, false);
+        }
+    }
 
     draw() {
-        AnimSprite.prototype.draw.call(this);
-        if (this.spriteTypeAt(this.xtile, this.ytile+1) === OBJECT_ICE) {
-            this.ctx.strokeStyle = "red";
-            this.ctx.strokeRect(this.xtile*32, this.ytile*32,32,32);
+        this.ctx.save();
+        super.draw();
+        if (
+            this.engine.spriteTypeAt(this.xtile - 1, this.ytile) === OBJECT_ICE &&
+            this.engine.spriteAt(this.xtile - 1, this.ytile).frozen
+        ) {
+            this.ctx.drawImage(
+                this.engine.resources.get('frost'),
+                (this.xtile * this.width)-7,
+                this.ytile * this.height
+            );
         }
+        if (
+            this.engine.spriteTypeAt(this.xtile + 1, this.ytile) === OBJECT_ICE &&
+            this.engine.spriteAt(this.xtile + 1, this.ytile).frozen
+        ) {
+            this.ctx.drawImage(
+                this.engine.resources.get('frost'),
+                (this.xtile + 1) * this.width-7,
+                this.ytile * this.height
+            );
+        }
+        this.ctx.restore();
     }
 }
 
@@ -889,12 +956,16 @@ class Ice extends AnimSprite {
     }
 
     addBlock(tx) {
+        const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(this.xtile-1, this.ytile);
+        const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile+this.length, this.ytile);
         if (
             (tx > this.xtile && this.getTile(tx+1, this.ytile) === OBJECT_WALL) ||
             (tx < this.xtile && this.getTile(tx-1, this.ytile) === OBJECT_WALL) ||
-            (this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_METAL) ||
-            (this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_METAL)
-        ){
+            (spriteTypeAtLeftCorner === OBJECT_METAL) ||
+            (spriteTypeAtLeftCorner === OBJECT_JAR) ||
+            (spriteTypeAtRightCorner === OBJECT_METAL) ||
+            (spriteTypeAtRightCorner === OBJECT_JAR)
+        ) {
             this.frozen = true;
         }
         this.xtile = tx < this.xtile ? tx : this.xtile;
@@ -1002,6 +1073,8 @@ class Ice extends AnimSprite {
     }
 
     draw() {
+        const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(this.xtile-1, this.ytile);
+        const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile+this.length, this.ytile);
         this.ctx.save();
         if (this.animDelayCount++ > this.animDelay) {
             this.animDelayCount = 0;
@@ -1027,7 +1100,8 @@ class Ice extends AnimSprite {
         if (this.frozen) {
             if (
                 this.getTile(this.xtile-1, this.ytile) === OBJECT_WALL ||
-                this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_METAL
+                spriteTypeAtLeftCorner === OBJECT_METAL ||
+                spriteTypeAtLeftCorner === OBJECT_JAR
             ) {
                 this.ctx.drawImage(
                     this.engine.resources.get('frost'),
@@ -1037,7 +1111,8 @@ class Ice extends AnimSprite {
             }
             if (
                 this.getTile(this.xtile+this.length, this.ytile) === OBJECT_WALL ||
-                this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_METAL
+                spriteTypeAtRightCorner === OBJECT_METAL ||
+                spriteTypeAtRightCorner === OBJECT_JAR
             ) {
                 this.ctx.drawImage(
                     this.engine.resources.get('frost'),
@@ -1079,22 +1154,30 @@ class Ice extends AnimSprite {
     }
 
     checkUnfreeze() {
+        const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(this.xtile-1, this.ytile);
+        const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile+this.length, this.ytile);
         if (
             this.getTile(this.xtile-1, this.ytile) !== OBJECT_WALL &&
             this.getTile(this.xtile+this.length, this.ytile) !== OBJECT_WALL &&
-            this.engine.spriteTypeAt(this.xtile-1, this.ytile) !== OBJECT_METAL &&
-            this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) !== OBJECT_METAL
+            spriteTypeAtLeftCorner !== OBJECT_METAL &&
+            spriteTypeAtLeftCorner !== OBJECT_JAR &&
+            spriteTypeAtRightCorner !== OBJECT_METAL &&
+            spriteTypeAtRightCorner !== OBJECT_JAR
         ) {
             this.frozen = false;
         }
     }
 
     checkFreeze() {
+        const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(this.xtile-1, this.ytile);
+        const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile+this.length, this.ytile);
         if (
             (this.getTile(this.xtile-1, this.ytile) === OBJECT_WALL) ||
             (this.getTile(this.xtile+this.length, this.ytile) === OBJECT_WALL) ||
-            (this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_METAL) ||
-            (this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_METAL)
+            (spriteTypeAtLeftCorner === OBJECT_METAL) ||
+            (spriteTypeAtLeftCorner === OBJECT_JAR) ||
+            (spriteTypeAtRightCorner === OBJECT_METAL) ||
+            (spriteTypeAtRightCorner === OBJECT_JAR)
         ) {
             this.frozen = true;
         } else {
@@ -1320,8 +1403,8 @@ const levels = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
             [1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
-            [1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1],
-            [1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1],
+            [1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1],
+            [1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1],
             [1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
             [1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
             [1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
@@ -1331,6 +1414,7 @@ const levels = [
         ],
         sprites: [
             {id :OBJECT_PLAYER, x: 11, y: 4, l: 1},
+            {id :OBJECT_JAR   , x: 10, y: 5, l: 1},
             {id :OBJECT_ICE   , x: 5, y: 9, l: 1},
             {id :OBJECT_ICE   , x: 5, y: 8, l: 1},
             {id :OBJECT_ICE   , x: 5, y: 7, l: 1},
@@ -1636,6 +1720,9 @@ class Scene {
                 case OBJECT_FIRE:
                     this.engine.addSprite(new Fire(this.engine, sprite.x, sprite.y));
                     break;
+                case OBJECT_JAR:
+                    this.engine.addSprite(new Jar(this.engine, sprite.x, sprite.y));
+                    break;
             }
         }
     }
@@ -1651,7 +1738,7 @@ class Engine {
         this.cheight = canvas.height;
         this.resources = resources;
         this.ctx = this.canvas.getContext('2d');
-        this.state = STATE_START;
+        this.state = GAME_STATE_INTRO;
         this.sprites = [];
         this.sfxs = [];
         this.player = {};
@@ -1878,7 +1965,7 @@ class Game {
      * @param {*} resources  Game resources
      */
     constructor(canvas, resources) {
-        this.state = STATE_START;
+        this.state = GAME_STATE_PLAY;
         this.engine = new Engine(canvas, resources);
         this.createIntro();
         this.gameloop = this.gameloop_.bind(this); // jshint ignore:line
@@ -1887,10 +1974,10 @@ class Game {
 
     gameloop_() {
         switch (this.state) {
-            case STATE_START:
+            case GAME_STATE_INTRO:
                 this.doIntro();
                 break;
-            case STATE_PLAY:
+            case GAME_STATE_PLAY:
                 this.engine.draw();
                 this.engine.move();
                 break;
@@ -1909,7 +1996,7 @@ class Game {
         this.start.draw();
 
         if (this.engine.keyboard.enter) {
-            this.state = STATE_PLAY;
+            this.state = GAME_STATE_PLAY;
             this.engine.sound.soundrack();
         }
     }
