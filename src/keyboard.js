@@ -11,8 +11,14 @@ class Keyboard {
         this.right = false;
         this.keydown = this.keydown_.bind(this);
         this.keyup = this.keyup_.bind(this);
+        this.mouse = this.mouse_.bind(this);
+        window.addEventListener('click', this.mouse);
         window.addEventListener('keydown', this.keydown, false);
         window.addEventListener('keyup', this.keyup, false);
+    }
+
+    mouse_(e) {
+        this.enter = true;
     }
 
     keydown_(e) {
