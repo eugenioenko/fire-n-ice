@@ -1,6 +1,9 @@
 # Fire 'n Ice
 > Fire n Ice, a remake in progress of the game from NES with the same name
 
+Try it out!
+## [Online demo Here](https://eugenioenko.github.io/fire-n-ice/)
+
 ## Objective
 Destroy all the fires on the level by colliding them with blocks of ice
 
@@ -19,11 +22,6 @@ Destroy all the fires on the level by colliding them with blocks of ice
  - **Down**: Create or destroy block of ice
  - **Enter**: Reloads current level
 
-Work in progress, demo:
-## [Online demo Here](https://eugenioenko.github.io/fire-n-ice/)
-
-#### A LOTR FAN? 
->[Visit the Mines of Moria as Gandalf](https://eugenioenko.github.io/fire-n-ice/?lotr)
 
 ### Credits
 - Game development: Eugene Enko
