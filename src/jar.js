@@ -4,6 +4,8 @@ class Jar extends AnimSprite {
         super(OBJECT_JAR, engine, 'img_jar',
             tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 3, true);
         this.animDelay = ANIM_STANDARD_DELAY * 2;
+        this.onFire = false;
+        this.animRow = 1;
     }
 
     move() {
