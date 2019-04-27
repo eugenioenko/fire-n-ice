@@ -31,7 +31,7 @@ class Particle {
 
 class Sparks extends Sprite {
 
-    constructor (engine, tx,ty,color, length, intencity) {
+    constructor (engine, tx, ty, color, length, intencity) {
         super(null, engine, tx, ty, 32, 32);
         this.color = (typeof color === 'undefined') ? '255,255,255' : color;
         this.length = (typeof length === 'undefined') ? 10 : length;

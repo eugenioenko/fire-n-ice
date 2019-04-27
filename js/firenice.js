@@ -12,6 +12,7 @@ const MOVE_ICE_MOVING = 8;
 const MOVE_ICE_CHECK = 9;
 const MOVE_RIP = 10;
 const MOVE_PUSH = 8;
+const MOVE_ICE_FAIL = 11;
 
 const DIR_LEFT = -1;
 const DIR_RIGHT = 1;
@@ -204,11 +205,7 @@ class Sound {
 
 	playOnce(sfx) {
 		if (!this.sfx[sfx].paused) return;
-		if (sfx === 'ice-disabled') {
-			this.sfx[sfx].volume = 0.1;
-		} else {
-			this.sfx[sfx].volume = this.sfxVolume;
-		}
+		this.sfx[sfx].volume = this.sfxVolume;
 		this.sfx[sfx].currentTime = 0;
 		this.sfx[sfx].play();
 	}
@@ -621,7 +618,8 @@ class Player extends AnimSprite {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_RIGHT_ROW, 4);
                         this.setState(MOVE_ICE_REMOVE, true);
                     } else {
-                        this.engine.sound.playOnce('ice-disabled');
+                        this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_RIGHT_ROW, 4);
+                        this.setState(MOVE_ICE_FAIL, true);
                     }
                 } else {
                     if (!Tile.isSolid(this.coorners.dl) && (this.coorners.dl !== OBJECT_FIRE)) {
@@ -631,7 +629,8 @@ class Player extends AnimSprite {
                         this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_LEFT_ROW, 4);
                         this.setState(MOVE_ICE_REMOVE, true);
                     } else {
-                        this.engine.sound.playOnce('ice-disabled');
+                        this.setAnim(ANIM_ICE_START,ANIM_ICE_END,false, ANIM_LEFT_ROW, 4);
+                        this.setState(MOVE_ICE_FAIL, true);
                     }
                 }
             }
@@ -724,16 +723,19 @@ class Player extends AnimSprite {
             this.setState(MOVE_STAND, false);
         }
     }
+
     makeIce() {
         this.engine.sound.play('new-ice');
         this.engine.addIceBlock(this.xtile + this.dirrection, this.ytile+1);
         this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1));
     }
+
     removeIceBlock() {
         this.engine.sound.play('ice-remove');
         this.engine.removeIceBlock(this.xtile + this.dirrection, this.ytile+1);
         this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1));
     }
+
     push() {
         let ice =  this.engine.iceAt(this.xtile+this.dirrection, this.ytile);
         if (ice && ice.canGlide(this.dirrection)) {
@@ -753,6 +755,7 @@ class Player extends AnimSprite {
             this.setState(MOVE_STAND, false);
         }
     }
+
     doIce() {
         if (this.counter === 8) {
             if (this.state === MOVE_ICE_MAKE) {
@@ -767,6 +770,19 @@ class Player extends AnimSprite {
             this.setState(MOVE_STAND, false);
         }
     }
+
+    doFailIce() {
+        if (this.counter === 8) {
+            this.engine.sound.play('ice-disabled');
+            this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1, '88,66,66'));
+        }
+        this.counter += 1;
+        if (this.counter >= ANIM_FRAME_COUNT) {
+            this.counter = 0;
+            this.setState(MOVE_STAND, false);
+        }
+    }
+
     draw() {
         AnimSprite.prototype.draw.call(this);
     }
@@ -795,6 +811,9 @@ class Player extends AnimSprite {
             case MOVE_ICE_MAKE:
             case MOVE_ICE_REMOVE:
                 this.doIce();
+                break;
+            case MOVE_ICE_FAIL:
+                this.doFailIce();
                 break;
             case MOVE_STAND:
                 this.doStand();
@@ -1257,7 +1276,7 @@ class Particle {
 
 class Sparks extends Sprite {
 
-    constructor (engine, tx,ty,color, length, intencity) {
+    constructor (engine, tx, ty, color, length, intencity) {
         super(null, engine, tx, ty, 32, 32);
         this.color = (typeof color === 'undefined') ? '255,255,255' : color;
         this.length = (typeof length === 'undefined') ? 10 : length;

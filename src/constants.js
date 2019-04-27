@@ -12,6 +12,7 @@ const MOVE_ICE_MOVING = 8;
 const MOVE_ICE_CHECK = 9;
 const MOVE_RIP = 10;
 const MOVE_PUSH = 8;
+const MOVE_ICE_FAIL = 11;
 
 const DIR_LEFT = -1;
 const DIR_RIGHT = 1;

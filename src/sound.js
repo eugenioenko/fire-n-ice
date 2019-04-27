@@ -24,11 +24,7 @@ class Sound {
 
 	playOnce(sfx) {
 		if (!this.sfx[sfx].paused) return;
-		if (sfx === 'ice-disabled') {
-			this.sfx[sfx].volume = 0.1;
-		} else {
-			this.sfx[sfx].volume = this.sfxVolume;
-		}
+		this.sfx[sfx].volume = this.sfxVolume;
 		this.sfx[sfx].currentTime = 0;
 		this.sfx[sfx].play();
 	}
