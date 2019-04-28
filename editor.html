@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Fire 'n Ice</title>
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+	<script src="js/firenice.js?v=11231"></script>
+	<script>
+		var tool = 1;
+		function toolSelect(e) {
+			tool = e;
+		}
+	</script>
+</head>
+<body>
+	<div class="wrapper" style="padding-bottom: 15px">
+		<h1>Fire 'n Ice Level Editor</h1>
+	</div>
+	<div class="wrapper">
+		<div class="bg-dark">
+			<span onclick="toolSelect(0)" class="far fa-square"></span>
+			<span onclick="toolSelect(1)" class="fab fa-delicious"></span>
+			<span onclick="toolSelect(6)" class="fa fa-fire"></span>
+			<span onclick="toolSelect(3)" class="fa fa-cube"></span>
+			<span onclick="toolSelect(5)" class="fa fa-hourglass"></span>
+			<span onclick="toolSelect(7)" class="fa fa-user"></span>
+			<select id="theme-selector">
+				<option value="0">Theme 0</option>
+				<option value="1">Theme 1</option>
+				<option value="2">Theme 2</option>
+				<option value="3">Theme 3</option>
+				<option value="4">Theme 4</option>
+				<option value="5">Theme 5</option>
+				<option value="6">Theme 6</option>
+				<option value="7">Theme 7</option>
+				<option value="8">Theme 8</option>
+				<option value="9">Theme 9</option>
+			</select>
+		</div>
+	</div>
+	<div class="wrapper">
+		<canvas id="canvas" height="416" width="544">
+			<div style="display: none;">
+				<img src="images/tilemap.png" id="img_tilemap">
+				<img src="images/ice.png" id="img_ice">
+				<img src="images/fire.png" id="img_fire">
+				<img src="images/dona.png" id="img_dona">
+				<img src="images/intro.png" id="img_intro">
+				<img src="images/start.png" id="img_start">
+				<img src="images/metal.png" id="img_metal">
+				<img src="images/frozen.png" id="img_frozen">
+				<img src="images/jar.png" id="img_jar">
+				<audio id="sfx-ice-push"  src="sounds/sfx-ice-push.wav"></audio>
+				<audio id="sfx-fire-off" src="sounds/sfx-fire-off.wav"></audio>
+				<audio id="sfx-falling" src="sounds/sfx-falling.wav"></audio>
+				<audio id="sfx-new-ice" src="sounds/sfx-new-ice.wav"></audio>
+				<audio id="sfx-climb" src="sounds/sfx-climb.wav"></audio>
+				<audio id="sfx-ice-collision" src="sounds/sfx-ice-collision.wav"></audio>
+				<audio id="sfx-stage-enter" src="sounds/sfx-stage-enter.wav"></audio>
+				<audio id="sfx-danger" src="sounds/sfx-danger.wav"></audio>
+				<audio id="sfx-ice-remove" src="sounds/sfx-ice-remove.wav"></audio>
+				<audio id="sfx-state-leave" src="sounds/sfx-state-leave.wav"></audio>
+				<audio id="sfx-disabled" src="sounds/sfx-disabled.wav"></audio>
+				<audio id="sfx-music-sparks" src="music/sparks.mp3"></audio>
+			</div>
+		</canvas>
+	</div>
+
+	<div class="wrapper" style="display: none">
+		<div class="col-50 bg-dark">
+			<span class="fa fa-arrow-circle-left" id="btn_left"></span>
+			<span class="fa fa-arrow-circle-right" id="btn_right"></span>
+		</div>
+		<div class="col-50 bg-dark">
+			<span class="fa fa-cog" id="btn_select"></span>
+			<span class="fa fa-dot-circle pull-right" id="btn_action"></span>
+		</div>
+	</div>
+	<div class="wrapper">
+		<div class="bg-dark">
+			<textarea id="txt-level"></textarea>
+			<button id="btn-save">Save</button>
+		</div>
+	</div>
+	<script>
+		window.addEventListener('load', () => {
+			const resources = new Resources();
+			resources.add('tilemap', document.getElementById('img_tilemap'));
+			resources.add('img_ice', document.getElementById('img_ice'));
+			resources.add('img_jar', document.getElementById('img_jar'));
+			resources.add('img_fire', document.getElementById('img_fire'));
+			resources.add('img_dona', document.getElementById('img_dona'));
+			resources.add('img_intro', document.getElementById('img_intro'));
+			resources.add('img_start', document.getElementById('img_start'));
+			resources.add('img_metal', document.getElementById('img_metal'));
+			resources.add('frost', document.getElementById('img_frozen'));
+
+			const canvas = document.getElementById('canvas');
+			const game = new Game(canvas, resources);
+			game.engine.sound.musicOn = false;
+			game.engine.sound.soundOn = false;
+			window.game = game;
+			game.state = GAME_STATE_PLAY;
+			game.engine.editor = true;
+
+			canvas.addEventListener('click', (e) => {
+				const xtile = Math.floor(e.offsetX / 32);
+				const ytile = Math.floor(e.offsetY / 32);
+				if (tool < 2) {
+					game.engine.map.map[ytile][xtile] = tool;
+				} else {
+					switch (tool) {
+						case OBJECT_PLAYER:
+							game.engine.player.x = xtile * 32;
+							game.engine.player.y = ytile * 32;
+							break;
+						case OBJECT_ICE:
+							game.engine.addIceBlock(xtile, ytile);
+							break;
+						case OBJECT_METAL:
+							game.engine.addSprite(new Metal(game.engine, xtile, ytile, 1));
+							break;
+						case OBJECT_FIRE:
+							game.engine.addSprite(new Fire(game.engine, xtile, ytile));
+							break;
+						case OBJECT_JAR:
+							game.engine.addSprite(new Jar(game.engine, xtile, ytile));
+							break;
+					}
+				}
+			});
+
+			document.getElementById('theme-selector').addEventListener('change', (e) => {
+				game.engine.map.theme = e.target.value;
+			});
+
+			document.getElementById('btn-save').addEventListener('click', () => {
+				document.getElementById('txt-level').value = JSON.stringify(game.engine.scene.save());
+			});
+		});
+	</script>
+
+</body>
+</html>

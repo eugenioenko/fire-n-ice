@@ -1,5 +1,8 @@
 class Sound {
 	constructor() {
+		this.musicOn = true;
+		this.soundOn = true;
+
 		this.sfxVolume = 0.3;
 		this.sfx = {
 			"fire-off" : document.getElementById('sfx-fire-off'),
@@ -17,6 +20,7 @@ class Sound {
 	}
 
 	play(sfx) {
+		if (!this.soundOn) return;
 		this.sfx[sfx].volume = this.sfxVolume;
 		this.sfx[sfx].currentTime = 0;
 		this.sfx[sfx].play();
@@ -24,6 +28,7 @@ class Sound {
 
 	playOnce(sfx) {
 		if (!this.sfx[sfx].paused) return;
+		if (!this.soundOn) return;
 		this.sfx[sfx].volume = this.sfxVolume;
 		this.sfx[sfx].currentTime = 0;
 		this.sfx[sfx].play();
@@ -35,6 +40,7 @@ class Sound {
 	}
 
 	soundrack() {
+		if (!this.musicOn) return;
 		this.music = document.getElementById('sfx-music-sparks');
 		this.music.muted = false;
 		this.music.volume = 0.2;
