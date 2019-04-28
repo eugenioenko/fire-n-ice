@@ -380,6 +380,9 @@ class Player extends AnimSprite {
         if (this.state !== MOVE_STAND) {
             this.standCounter = 0;
         }
+        if (this.state !== MOVE_DOWN) {
+            this.fallCounter = 0;
+        }
         switch (this.state) {
             case MOVE_RIGHT:
                 this.doRun();
