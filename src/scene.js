@@ -26,6 +26,7 @@ class Scene {
         if (typeof levels[index] === 'undefined') {
             index = 0;
         }
+        this.engine.level = index;
         const level = levels[index];
         this.engine.sprites = [];
         this.engine.map = new TileMap(this.engine, level.map, level.theme);

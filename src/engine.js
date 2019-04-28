@@ -39,7 +39,7 @@ class Engine {
 
     collision() {
         const fires = this.sprites.filter(sprite => sprite.id === OBJECT_FIRE);
-        if (!fires.length && !this.editor) {
+        if (!fires.length && !this.editor && this.player.state !== MOVE_OUTRO) {
             this.player.outro();
         }
     }

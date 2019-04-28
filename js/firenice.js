@@ -546,7 +546,7 @@ class Player extends AnimSprite {
                     this.setState(MOVE_LEFT, true);
                 }
                 //hit an ice
-                if (this.coorners.l === OBJECT_ICE || this.coorners.l === OBJECT_METAL) {
+                if (Tile.isSolid(this.coorners.d) && (this.coorners.l === OBJECT_ICE || this.coorners.l === OBJECT_METAL)) {
                     this.push();
                 }
                 //climb
@@ -577,7 +577,7 @@ class Player extends AnimSprite {
                     }
                     this.setState(MOVE_RIGHT, true);
                 }
-                if (this.coorners.r === OBJECT_ICE || this.coorners.r === OBJECT_METAL) {
+                if (Tile.isSolid(this.coorners.d) && (this.coorners.r === OBJECT_ICE || this.coorners.r === OBJECT_METAL)) {
                     this.push();
                 }
                 if (Tile.isSolid(this.coorners.r) && Tile.isSolid(this.coorners.d) && !Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ur) && !this.moving) {
@@ -597,9 +597,9 @@ class Player extends AnimSprite {
     }
 
     intro() {
-        this.setAnim(ANIM_FALL_START,ANIM_BIG_FALL_END, true, ANIM_RIGHT_ROW, 4);
+        this.setAnim(ANIM_BIG_FALL_START,ANIM_BIG_FALL_END, true, ANIM_RIGHT_ROW, 4);
         this.setState(MOVE_INTRO, true);
-        this.innerCounter = 0;
+        this.y -= 32;
     }
 
     outro() {
@@ -628,8 +628,16 @@ class Player extends AnimSprite {
                     this.setAnim(ANIM_FALL_START,ANIM_BIG_FALL_END, true, ANIM_RIGHT_ROW);
                 }
             } else {
-                this.fallCounter = 0;
+
                 this.engine.sound.stop("falling");
+                if (this.state === MOVE_DOWN) {
+                    this.engine.sound.play('ice-push');
+                    if (this.fallCounter >= 2) {
+                        this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile + 1, '255, 135, 124', 5, 0.75));
+                        this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile + 1, '122, 211, 255', 10,  1));
+                    }
+                }
+                this.fallCounter = 0;
                 this.setState(MOVE_STAND, false);
                 if (this.coorners.d === OBJECT_JAR) {
                     const jar = this.engine.spriteAt(this.xtile, this.ytile + 1);
@@ -705,11 +713,18 @@ class Player extends AnimSprite {
 
     doOutro() {
         this.counter += 1;
-        if (this.counter >= 10) {
+        if (this.counter % 10 === 0) {
             this.innerCounter += 1;
-            this.counter = 0;
-            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255,255,255', 10));
-            if (this.innerCounter % 2 === 0 && this.innerCounter < 10) {
+            if (this.innerCounter === 1) {
+                this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '124, 238, 66', 20,  0.5));
+            }
+            if (this.innerCounter === 3) {
+                this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255, 135, 124', 15, 1));
+            }
+            if (this.innerCounter === 5) {
+                this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '122, 211, 255', 10,  1.5));
+            }
+            if (this.innerCounter % 2 === 0 && this.innerCounter < 6) {
                 this.engine.sound.play('ice-push');
             }
         }
@@ -718,11 +733,26 @@ class Player extends AnimSprite {
         } else {
             this.y -= 1;
         }
-        if (this.innerCounter >= 10) {
+        if (this.innerCounter >= 6) {
             this.engine.sound.play('state-leave');
-            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '44,133,233', 50));
             this.setState(MOVE_STAND, false);
             this.engine.nextLevel();
+        }
+    }
+
+    doIntro() {
+        this.counter += 1;
+        if (this.counter === 4) {
+            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '124, 238, 66', 20,  0.5));
+            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255, 135, 124', 15, 1));
+            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '122, 211, 255', 10,  1.5));
+            this.engine.sound.play('stage-enter');
+        }
+        if (this.counter <= 16) {
+            this.y += 2;
+        } else {
+            this.engine.sound.stop("falling");
+            this.setState(MOVE_STAND, false);
         }
     }
 
@@ -755,6 +785,8 @@ class Player extends AnimSprite {
             switch (this.counter) {
                 case 3:
                     this.engine.sound.play('climb');
+                    this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '124, 238, 66', 10,  0.75));
+                    this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255, 135, 124', 5, 1.25));
                     this.setAnim(ANIM_PUSH_END, ANIM_PUSH_END, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
                     break;
                 case 6:
@@ -827,7 +859,6 @@ class Player extends AnimSprite {
         }
         this.counter += 1;
         if (this.counter >= ANIM_FRAME_COUNT) {
-            this.counter = 0;
             this.setState(MOVE_STAND, false);
         }
     }
@@ -839,7 +870,6 @@ class Player extends AnimSprite {
         }
         this.counter += 1;
         if (this.counter >= ANIM_FRAME_COUNT) {
-            this.counter = 0;
             this.setState(MOVE_STAND, false);
         }
     }
@@ -889,8 +919,10 @@ class Player extends AnimSprite {
                 this.doRip();
                 break;
             case MOVE_OUTRO:
-            case MOVE_INTRO:
                 this.doOutro();
+                break;
+            case MOVE_INTRO:
+                this.doIntro();
                 break;
         }
     }
@@ -919,8 +951,8 @@ class Fire extends AnimSprite {
             this.engine.sound.play('fire-off');
             this.engine.removeFire(this.xtile, this.ytile);
             this.engine.removeIceBlock(this.xtile, this.ytile);
-            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255, 87, 34', 20));
-            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255, 122, 88', 20));
+            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255, 126, 198', 15, 0.5));
+            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '124, 212, 255', 15));
         }
 
     }
@@ -1638,6 +1670,7 @@ class Scene {
         if (typeof levels[index] === 'undefined') {
             index = 0;
         }
+        this.engine.level = index;
         const level = levels[index];
         this.engine.sprites = [];
         this.engine.map = new TileMap(this.engine, level.map, level.theme);
@@ -1705,7 +1738,7 @@ class Engine {
 
     collision() {
         const fires = this.sprites.filter(sprite => sprite.id === OBJECT_FIRE);
-        if (!fires.length && !this.editor) {
+        if (!fires.length && !this.editor && this.player.state !== MOVE_OUTRO) {
             this.player.outro();
         }
     }
