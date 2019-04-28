@@ -10,6 +10,7 @@ body {
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 	font-weight: 300;
 	color: #ffb6a9;
+	padding-bottom: 10px;
 }
 canvas {
 	display: block;
@@ -79,4 +80,10 @@ ul#controls>li{
 
 .pull-right {
 	float: right;
+}
+
+@media (max-width: 767px) {
+	.wrapper-explanation {
+		padding-top: 50px;
+	}
 }
