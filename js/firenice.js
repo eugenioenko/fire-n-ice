@@ -182,6 +182,9 @@ class Keyboard {
 
 class Sound {
 	constructor() {
+		this.musicOn = true;
+		this.soundOn = true;
+
 		this.sfxVolume = 0.3;
 		this.sfx = {
 			"fire-off" : document.getElementById('sfx-fire-off'),
@@ -199,6 +202,7 @@ class Sound {
 	}
 
 	play(sfx) {
+		if (!this.soundOn) return;
 		this.sfx[sfx].volume = this.sfxVolume;
 		this.sfx[sfx].currentTime = 0;
 		this.sfx[sfx].play();
@@ -206,6 +210,7 @@ class Sound {
 
 	playOnce(sfx) {
 		if (!this.sfx[sfx].paused) return;
+		if (!this.soundOn) return;
 		this.sfx[sfx].volume = this.sfxVolume;
 		this.sfx[sfx].currentTime = 0;
 		this.sfx[sfx].play();
@@ -217,6 +222,7 @@ class Sound {
 	}
 
 	soundrack() {
+		if (!this.musicOn) return;
 		this.music = document.getElementById('sfx-music-sparks');
 		this.music.muted = false;
 		this.music.volume = 0.2;
@@ -227,36 +233,28 @@ class Sound {
 const Tile = {
    tiles: {
         [OBJECT_BACKGROUND]: {
-            solid: false,
-            joint: false
+            solid: false
         },
         [OBJECT_OUT]: {
-            solid: true,
-            joint: false
+            solid: true
         },
         [OBJECT_PLAYER]: {
-            solid: true,
-            joint: false
+            solid: true
         },
         [OBJECT_ICE]: {
-            solid: true,
-            joint: false
+            solid: true
         },
         [OBJECT_METAL]: {
-            solid: true,
-            joint: true
+            solid: true
         },
         [OBJECT_WALL]: {
-            solid: true,
-            joint: true
+            solid: true
         },
         [OBJECT_FIRE]: {
-            solid: false,
-            joint: false
+            solid: false
         },
         [OBJECT_JAR]: {
-            solid: true,
-            joint: true
+            solid: true
         }
     },
 
@@ -1689,15 +1687,18 @@ const levels = [
         theme: 1
     }
 ];
+
+
 class Scene {
 
     constructor(engine) {
         this.engine = engine;
     }
 
-    save(name, theme, category, world) {
+    save() {
         let data = {};
         data.map = this.engine.map.map;
+        data.theme = this.engine.map.theme;
         data.sprites = [];
         for (const sprite of this.engine.sprites) {
             sprite.length = (typeof sprite.length === "undefined") ? 1 : sprite.length;
@@ -1708,7 +1709,7 @@ class Scene {
                 "l": sprite.length
             });
         }
-        // data.image = this.engine.canvas.toDataURL('image/png').slice(22);
+
         return data;
     }
 
@@ -1760,6 +1761,7 @@ class Engine {
         this.sound = new Sound();
         this.scene = new Scene(this);
         this.scene.load(this.level);
+        this.editor = false;
     }
 
     draw() {
@@ -1802,14 +1804,13 @@ class Engine {
                                 '255, 87, 34', 20));
                             this.addSfx(new Sparks(this, fire.xtile, fire.ytile,
                                 '255, 122, 88', 20));
-                            //this.fires.splice(i,1);
                             return true;
                         }
                     }
                 }
             }
         }
-        if (!fires) {
+        if (!fires && !this.editor) {
             this.level++;
             this.scene.load(this.level);
             this.addSfx(new Sparks(this, this.player.xtile,

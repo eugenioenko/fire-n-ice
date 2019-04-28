@@ -4,9 +4,10 @@ class Scene {
         this.engine = engine;
     }
 
-    save(name, theme, category, world) {
+    save() {
         let data = {};
         data.map = this.engine.map.map;
+        data.theme = this.engine.map.theme;
         data.sprites = [];
         for (const sprite of this.engine.sprites) {
             sprite.length = (typeof sprite.length === "undefined") ? 1 : sprite.length;
@@ -17,7 +18,7 @@ class Scene {
                 "l": sprite.length
             });
         }
-        // data.image = this.engine.canvas.toDataURL('image/png').slice(22);
+
         return data;
     }
 

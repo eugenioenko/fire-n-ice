@@ -18,6 +18,7 @@ class Engine {
         this.sound = new Sound();
         this.scene = new Scene(this);
         this.scene.load(this.level);
+        this.editor = false;
     }
 
     draw() {
@@ -60,14 +61,13 @@ class Engine {
                                 '255, 87, 34', 20));
                             this.addSfx(new Sparks(this, fire.xtile, fire.ytile,
                                 '255, 122, 88', 20));
-                            //this.fires.splice(i,1);
                             return true;
                         }
                     }
                 }
             }
         }
-        if (!fires) {
+        if (!fires && !this.editor) {
             this.level++;
             this.scene.load(this.level);
             this.addSfx(new Sparks(this, this.player.xtile,
