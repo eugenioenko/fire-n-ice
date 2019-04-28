@@ -23,7 +23,7 @@ class Sound {
 		if (!this.soundOn) return;
 		this.sfx[sfx].volume = this.sfxVolume;
 		this.sfx[sfx].currentTime = 0;
-		this.sfx[sfx].play();
+		this.sfx[sfx].play().catch(()=>{});
 	}
 
 	playOnce(sfx) {
@@ -31,7 +31,7 @@ class Sound {
 		if (!this.soundOn) return;
 		this.sfx[sfx].volume = this.sfxVolume;
 		this.sfx[sfx].currentTime = 0;
-		this.sfx[sfx].play();
+		this.sfx[sfx].play().catch(()=>{});
 	}
 
 	stop(sfx) {
@@ -45,6 +45,6 @@ class Sound {
 		this.music.muted = false;
 		this.music.volume = 0.2;
 		this.music.loop = true;
-		this.music.play();
+		this.music.play().catch(()=>{});
 	}
 }

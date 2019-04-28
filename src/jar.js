@@ -9,20 +9,23 @@ class Jar extends AnimSprite {
     }
 
     move() {
-
         if (!this.moving) {
-            if (!this.onFire && this.coorners.u === OBJECT_FIRE) {
-                this.turnOnFire();
-            }
-            if (this.onFire && this.engine.spriteTypeAt(this.xtile, this.ytile - 1) === OBJECT_ICE) {
-                this.meltIce();
-            }
+            this.collisions();
             this.gravity();
         }
         switch (this.state) {
             case MOVE_DOWN:
                 this.doDown();
                 break;
+        }
+    }
+
+    collisions() {
+        if (!this.onFire && this.coorners.u === OBJECT_FIRE) {
+            this.turnOnFire();
+        }
+        if (this.onFire && this.engine.spriteTypeAt(this.xtile, this.ytile - 1) === OBJECT_ICE) {
+            this.meltIce();
         }
     }
 

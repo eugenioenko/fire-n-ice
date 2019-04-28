@@ -17,8 +17,12 @@ class Engine {
         this.keyboard = new Keyboard();
         this.sound = new Sound();
         this.scene = new Scene(this);
-        this.scene.load(this.level);
         this.editor = false;
+        const level = localStorage.getItem('level');
+        if (level !== null) {
+            this.level = parseInt(level, 10);
+        }
+        this.scene.load(this.level);
     }
 
     draw() {
@@ -34,38 +38,12 @@ class Engine {
     }
 
     collision() {
-        let fires = false;
-        for (let i = 0; i < this.sprites.length; i++) {
-            if (this.sprites[i] instanceof Fire) {
-                fires = true;
-                let fire = this.sprites[i];
-
-                // ice collisions
-                for (let j = 0; j < this.sprites.length; j++) {
-                    if (this.sprites[j] instanceof Ice) {
-                        let ice = this.sprites[j];
-                        if (fire.xtile >= ice.xtile &&
-                            fire.xtile < ice.xtile+ice.length  &&
-                            fire.ytile  === ice.ytile)
-                        {
-                            this.sound.play('fire-off');
-                            this.removeFire(fire.xtile, fire.ytile);
-                            this.removeIceBlock(fire.xtile, fire.ytile);
-                            this.addSfx(new Sparks(this, fire.xtile, fire.ytile,
-                                '255, 87, 34', 20));
-                            this.addSfx(new Sparks(this, fire.xtile, fire.ytile,
-                                '255, 122, 88', 20));
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        if (!fires && !this.editor) {
+        const fires = this.sprites.filter(sprite => sprite.id === OBJECT_FIRE);
+        if (!fires.length && !this.editor) {
             this.level++;
+            localStorage.setItem('level', this.level);
             this.scene.load(this.level);
-            this.addSfx(new Sparks(this, this.player.xtile,
-                this.player.ytile, '255,255,255', 200));
+            this.addSfx(new Sparks(this, this.player.xtile, this.player.ytile, '255,255,255', 200));
         }
     }
 
@@ -86,7 +64,7 @@ class Engine {
             if (this.keyboard.up) {
                 //this.player.jump();
             }
-            if (this.keyboard.down) {
+            if (this.keyboard.down || this.keyboard.action) {
                 this.player.ice();
             }
             if (this.keyboard.left) {

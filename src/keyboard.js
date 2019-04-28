@@ -9,6 +9,7 @@ class Keyboard {
         this.down = false;
         this.left = false;
         this.right = false;
+        this.action = false;
         this.keydown = this.keydown_.bind(this);
         this.keyup = this.keyup_.bind(this);
         this.intro = true;
@@ -43,6 +44,8 @@ class Keyboard {
                 this.right = true;
                 break;
             case 40: // Down
+            case 32: // Space
+                this.action = true;
                 this.down = true;
                 break;
             case 13: //Enter
@@ -63,6 +66,8 @@ class Keyboard {
                 this.right = false;
                 break;
             case 40: // Down
+            case 32: // Space
+                this.action = false;
                 this.down = false;
                 break;
             case 13: //Enter

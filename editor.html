@@ -50,6 +50,11 @@
 				<option value="7">Level 7</option>
 				<option value="8">Level 8</option>
 				<option value="9">Level 9</option>
+				<option value="10">Level 10</option>
+				<option value="11">Level 11</option>
+				<option value="12">Level 12</option>
+				<option value="13">Level 13</option>
+				<option value="14">Level 14</option>
 			</select>
 		</div>
 	</div>
@@ -148,11 +153,13 @@
 
 			document.getElementById('theme-selector').addEventListener('change', (e) => {
 				game.engine.map.theme = parseInt(e.target.value, 10);
+				e.target.blur();
 			});
 
 			document.getElementById('level-selector').addEventListener('change', (e) => {
 				game.engine.level = parseInt(e.target.value, 10);
 				game.engine.scene.load(game.engine.level);
+				e.target.blur();
 			});
 
 			document.getElementById('btn-save').addEventListener('click', () => {

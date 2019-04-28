@@ -61,8 +61,8 @@ ul#controls>li{
 .text-right {
 	text-align: right;
 }
-.p-20 {
-	padding-top: 20px;
+.pt-5 {
+	padding-top: 10px;
 }
 .col-50 {
 	width: 50%;

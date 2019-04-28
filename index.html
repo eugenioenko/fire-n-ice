@@ -52,10 +52,34 @@
 		</div>
 	</div>
 	<div class="wrapper">
-		<h3>Controls</h3>
+		<div class="col-50">
+			<h3>Controls</h3>
+		</div>
+		<div class="col-50 text-right pt-5">
+			<label>Level Selector</label>
+			<select id="level-selector">
+				<option value="0">Level 0</option>
+				<option value="1">Level 1</option>
+				<option value="2">Level 2</option>
+				<option value="3">Level 3</option>
+				<option value="4">Level 4</option>
+				<option value="5">Level 5</option>
+				<option value="6">Level 6</option>
+				<option value="7">Level 7</option>
+				<option value="8">Level 8</option>
+				<option value="9">Level 9</option>
+				<option value="10">Level 10</option>
+				<option value="11">Level 11</option>
+				<option value="12">Level 12</option>
+				<option value="13">Level 13</option>
+				<option value="14">Level 14</option>
+			</select>
+		</div>
+	</div>
+	<div class="wrapper">
 		<ul id="controls">
 			<li><b>Left</b> and <b>Right</b> move player</li>
-			<li><b>Down / Circle</b> creates an ice block</li>
+			<li><b>Down / Space / Circle</b> creates an ice block</li>
 			<li><b>Enter / Cog</b> reloads current Level</li>
 		</ul>
 		<a href="https://github.com/eugenioenko/fire-n-ice">Return to project page</a>
@@ -76,6 +100,12 @@
 			const canvas = document.getElementById('canvas');
 			const game = new Game(canvas, resources);
 			window.game = game;
+
+			document.getElementById('level-selector').addEventListener('change', (e) => {
+				game.engine.level = parseInt(e.target.value, 10);
+				game.engine.scene.load(game.engine.level);
+				e.target.blur();
+			});
 
 		});
 	</script>

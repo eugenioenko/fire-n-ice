@@ -7,6 +7,7 @@ class Fire extends AnimSprite {
 
     move() {
         if (!this.moving) {
+            this.collisions();
             this.gravity();
         }
         switch (this.state) {
@@ -14,6 +15,17 @@ class Fire extends AnimSprite {
                 this.doDown();
                 break;
         }
+    }
+
+    collisions() {
+        if (this.engine.spriteTypeAt(this.xtile, this.ytile, OBJECT_FIRE) === OBJECT_ICE) {
+            this.engine.sound.play('fire-off');
+            this.engine.removeFire(this.xtile, this.ytile);
+            this.engine.removeIceBlock(this.xtile, this.ytile);
+            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255, 87, 34', 20));
+            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255, 122, 88', 20));
+        }
+
     }
 
     gravity() {
