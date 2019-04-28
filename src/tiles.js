@@ -1,36 +1,28 @@
 const Tile = {
    tiles: {
         [OBJECT_BACKGROUND]: {
-            solid: false,
-            joint: false
+            solid: false
         },
         [OBJECT_OUT]: {
-            solid: true,
-            joint: false
+            solid: true
         },
         [OBJECT_PLAYER]: {
-            solid: true,
-            joint: false
+            solid: true
         },
         [OBJECT_ICE]: {
-            solid: true,
-            joint: false
+            solid: true
         },
         [OBJECT_METAL]: {
-            solid: true,
-            joint: true
+            solid: true
         },
         [OBJECT_WALL]: {
-            solid: true,
-            joint: true
+            solid: true
         },
         [OBJECT_FIRE]: {
-            solid: false,
-            joint: false
+            solid: false
         },
         [OBJECT_JAR]: {
-            solid: true,
-            joint: true
+            solid: true
         }
     },
 
