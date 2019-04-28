@@ -39,6 +39,18 @@
 				<option value="8">Theme 8</option>
 				<option value="9">Theme 9</option>
 			</select>
+			<select id="level-selector">
+				<option value="0">Level 0</option>
+				<option value="1">Level 1</option>
+				<option value="2">Level 2</option>
+				<option value="3">Level 3</option>
+				<option value="4">Level 4</option>
+				<option value="5">Level 5</option>
+				<option value="6">Level 6</option>
+				<option value="7">Level 7</option>
+				<option value="8">Level 8</option>
+				<option value="9">Level 9</option>
+			</select>
 		</div>
 	</div>
 	<div class="wrapper">
@@ -134,7 +146,11 @@
 			});
 
 			document.getElementById('theme-selector').addEventListener('change', (e) => {
-				game.engine.map.theme = e.target.value;
+				game.engine.map.theme = parseInt(e.target.value, 10);
+			});
+
+			document.getElementById('level-selector').addEventListener('change', (e) => {
+				game.engine.scene.load(parseInt(e.target.value, 10));
 			});
 
 			document.getElementById('btn-save').addEventListener('click', () => {
