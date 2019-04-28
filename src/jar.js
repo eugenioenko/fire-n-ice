@@ -14,7 +14,9 @@ class Jar extends AnimSprite {
             if (!this.onFire && this.coorners.u === OBJECT_FIRE) {
                 this.turnOnFire();
             }
-
+            if (this.onFire && this.engine.spriteTypeAt(this.xtile, this.ytile - 1) === OBJECT_ICE) {
+                this.meltIce();
+            }
             this.gravity();
         }
         switch (this.state) {
@@ -46,6 +48,13 @@ class Jar extends AnimSprite {
         this.onFire = true;
         this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile - 1, '255, 88, 33', 30));
     }
+
+    meltIce() {
+        this.engine.removeIceBlock(this.xtile, this.ytile - 1);
+        this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile - 1, '255, 88, 33', 30));
+        this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile - 1, '33, 88, 255', 40));
+    }
+
     draw() {
         this.ctx.save();
         super.draw();
