@@ -39,13 +39,7 @@ class Engine {
             if (this.sprites[i] instanceof Fire) {
                 fires = true;
                 let fire = this.sprites[i];
-                // player collisions
-                if (fire.xtile === this.player.xtile &&
-                    fire.ytile === this.player.ytile)
-                {
-                    this.player.burn();
-                    return true;
-                }
+
                 // ice collisions
                 for (let j = 0; j < this.sprites.length; j++) {
                     if (this.sprites[j] instanceof Ice) {
@@ -200,13 +194,14 @@ class Engine {
         return false;
     }
 
-    spriteTypeAt(tx, ty) {
+    spriteTypeAt(tx, ty, excludeId) {
+        excludeId = (typeof excludeId === 'undefined') ? OBJECT_OUT : excludeId;
         if (tx < 0 || ty < 0 || tx > this.map.width || ty > this.map.height) {
             return OBJECT_OUT;
         }
         if (!this.map.map[ty][tx]) {
             for (let i = 0; i < this.sprites.length; i++) {
-                if (this.sprites[i].isSpriteAt(tx, ty)) {
+                if (this.sprites[i].isSpriteAt(tx, ty) && this.sprites[i].id !== excludeId) {
                     return this.sprites[i].id;
                 }
             }

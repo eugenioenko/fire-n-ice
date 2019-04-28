@@ -299,9 +299,15 @@ class Player extends AnimSprite {
         }
     }
 
+    collisions() {
+        if (this.engine.spriteTypeAt(this.xtile, this.ytile, OBJECT_PLAYER) === OBJECT_FIRE) {
+            this.burn();
+        }
+    }
+
     move () {
-        Sprite.prototype.move.call(this);
         this.gravity();
+        this.collisions();
         if (this.state !== MOVE_STAND) {
             this.standCounter = 0;
         }

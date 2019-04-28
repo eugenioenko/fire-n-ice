@@ -117,6 +117,7 @@
 			window.game = game;
 			game.state = GAME_STATE_PLAY;
 			game.engine.editor = true;
+			game.engine.keyboard.intro = false;
 
 			canvas.addEventListener('click', (e) => {
 				const xtile = Math.floor(e.offsetX / 32);
@@ -150,7 +151,8 @@
 			});
 
 			document.getElementById('level-selector').addEventListener('change', (e) => {
-				game.engine.scene.load(parseInt(e.target.value, 10));
+				game.engine.level = parseInt(e.target.value, 10);
+				game.engine.scene.load(game.engine.level);
 			});
 
 			document.getElementById('btn-save').addEventListener('click', () => {
