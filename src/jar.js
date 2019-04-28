@@ -5,11 +5,16 @@ class Jar extends AnimSprite {
             tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 3, true);
         this.animDelay = ANIM_STANDARD_DELAY * 2;
         this.onFire = false;
-        this.animRow = 1;
+        this.animRow = 0;
     }
 
     move() {
+
         if (!this.moving) {
+            if (!this.onFire && this.coorners.u === OBJECT_FIRE) {
+                this.turnOnFire();
+            }
+
             this.gravity();
         }
         switch (this.state) {
@@ -36,6 +41,11 @@ class Jar extends AnimSprite {
         }
     }
 
+    turnOnFire() {
+        this.animRow = 1;
+        this.onFire = true;
+        this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile - 1, '255, 88, 33', 30));
+    }
     draw() {
         this.ctx.save();
         super.draw();

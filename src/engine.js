@@ -102,8 +102,9 @@ class Engine {
                 this.player.right();
             }
             if (this.keyboard.enter) {
-               this.scene.load(this.level);
-               this.keyboard.enter = false;
+                this.sound.stop('danger');
+                this.scene.load(this.level);
+                this.keyboard.enter = false;
             }
         }
         this.collision();

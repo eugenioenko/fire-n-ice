@@ -39,6 +39,6 @@ class Sound {
 		this.music.muted = false;
 		this.music.volume = 0.2;
 		this.music.loop = true;
-		// this.music.play();
+		this.music.play();
 	}
 }

@@ -221,7 +221,7 @@ class Sound {
 		this.music.muted = false;
 		this.music.volume = 0.2;
 		this.music.loop = true;
-		// this.music.play();
+		this.music.play();
 	}
 }
 const Tile = {
@@ -499,9 +499,6 @@ class AnimSprite extends Sprite {
     }
 }
 
-
-
-
 class Player extends AnimSprite {
 
     constructor(engine, tx, ty) {
@@ -615,6 +612,12 @@ class Player extends AnimSprite {
                 this.fallCounter = 0;
                 this.engine.sound.stop("falling");
                 this.setState(MOVE_STAND, false);
+                if (this.coorners.d === OBJECT_JAR) {
+                    const jar = this.engine.spriteAt(this.xtile, this.ytile + 1);
+                    if (jar && jar.onFire) {
+                        this.burn();
+                    }
+                }
             }
         }
     }
@@ -691,6 +694,7 @@ class Player extends AnimSprite {
             this.fallCounter++;
         }
     }
+
     doStand() {
         if (!Tile.isSolid(this.coorners.u)) {
             if (this.standCounter++ > 500) {
@@ -755,6 +759,7 @@ class Player extends AnimSprite {
             this.setState(MOVE_PUSH, true);
         }
     }
+
     doPush() {
         this.counter += 2;
         if (this.counter <= ANIM_FRAME_COUNT) {
@@ -795,9 +800,6 @@ class Player extends AnimSprite {
         }
     }
 
-    draw() {
-        AnimSprite.prototype.draw.call(this);
-    }
     move () {
         Sprite.prototype.move.call(this);
         this.gravity();
@@ -882,11 +884,16 @@ class Jar extends AnimSprite {
             tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 3, true);
         this.animDelay = ANIM_STANDARD_DELAY * 2;
         this.onFire = false;
-        this.animRow = 1;
+        this.animRow = 0;
     }
 
     move() {
+
         if (!this.moving) {
+            if (!this.onFire && this.coorners.u === OBJECT_FIRE) {
+                this.turnOnFire();
+            }
+
             this.gravity();
         }
         switch (this.state) {
@@ -913,6 +920,11 @@ class Jar extends AnimSprite {
         }
     }
 
+    turnOnFire() {
+        this.animRow = 1;
+        this.onFire = true;
+        this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile - 1, '255, 88, 33', 30));
+    }
     draw() {
         this.ctx.save();
         super.draw();
@@ -1405,7 +1417,7 @@ const levels = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
             [1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
-            [1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1],
+            [1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1],
             [1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
             [1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
@@ -1416,7 +1428,6 @@ const levels = [
         ],
         sprites: [
             {id :OBJECT_PLAYER, x: 11, y: 4, l: 1},
-            {id :OBJECT_JAR   , x: 10, y: 5, l: 1},
             {id :OBJECT_ICE   , x: 5, y: 9, l: 1},
             {id :OBJECT_ICE   , x: 5, y: 8, l: 1},
             {id :OBJECT_ICE   , x: 5, y: 7, l: 1},
@@ -1833,8 +1844,9 @@ class Engine {
                 this.player.right();
             }
             if (this.keyboard.enter) {
-               this.scene.load(this.level);
-               this.keyboard.enter = false;
+                this.sound.stop('danger');
+                this.scene.load(this.level);
+                this.keyboard.enter = false;
             }
         }
         this.collision();
@@ -1967,7 +1979,7 @@ class Game {
      * @param {*} resources  Game resources
      */
     constructor(canvas, resources) {
-        this.state = GAME_STATE_PLAY;
+        this.state = GAME_STATE_INTRO;
         this.engine = new Engine(canvas, resources);
         this.createIntro();
         this.gameloop = this.gameloop_.bind(this); // jshint ignore:line

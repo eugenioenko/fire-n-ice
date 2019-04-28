@@ -1,6 +1,3 @@
-
-
-
 class Player extends AnimSprite {
 
     constructor(engine, tx, ty) {
@@ -114,6 +111,12 @@ class Player extends AnimSprite {
                 this.fallCounter = 0;
                 this.engine.sound.stop("falling");
                 this.setState(MOVE_STAND, false);
+                if (this.coorners.d === OBJECT_JAR) {
+                    const jar = this.engine.spriteAt(this.xtile, this.ytile + 1);
+                    if (jar && jar.onFire) {
+                        this.burn();
+                    }
+                }
             }
         }
     }
@@ -190,6 +193,7 @@ class Player extends AnimSprite {
             this.fallCounter++;
         }
     }
+
     doStand() {
         if (!Tile.isSolid(this.coorners.u)) {
             if (this.standCounter++ > 500) {
@@ -254,6 +258,7 @@ class Player extends AnimSprite {
             this.setState(MOVE_PUSH, true);
         }
     }
+
     doPush() {
         this.counter += 2;
         if (this.counter <= ANIM_FRAME_COUNT) {
@@ -294,9 +299,6 @@ class Player extends AnimSprite {
         }
     }
 
-    draw() {
-        AnimSprite.prototype.draw.call(this);
-    }
     move () {
         Sprite.prototype.move.call(this);
         this.gravity();

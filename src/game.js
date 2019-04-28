@@ -7,7 +7,7 @@ class Game {
      * @param {*} resources  Game resources
      */
     constructor(canvas, resources) {
-        this.state = GAME_STATE_PLAY;
+        this.state = GAME_STATE_INTRO;
         this.engine = new Engine(canvas, resources);
         this.createIntro();
         this.gameloop = this.gameloop_.bind(this); // jshint ignore:line
