@@ -40,11 +40,14 @@ class Engine {
     collision() {
         const fires = this.sprites.filter(sprite => sprite.id === OBJECT_FIRE);
         if (!fires.length && !this.editor) {
-            this.level++;
-            localStorage.setItem('level', this.level);
-            this.scene.load(this.level);
-            this.addSfx(new Sparks(this, this.player.xtile, this.player.ytile, '255,255,255', 200));
+            this.player.outro();
         }
+    }
+
+    nextLevel() {
+        this.level++;
+        localStorage.setItem('level', this.level);
+        this.scene.load(this.level);
     }
 
     move() {

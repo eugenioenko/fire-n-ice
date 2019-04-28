@@ -11,7 +11,9 @@ class Player extends AnimSprite {
         this.animDelay = 3;
         this.counter = 0;
         this.fallCounter = 0;
+        this.innerCounter = 0;
         this.standCounter = 0;
+        this.intro();
     }
 
     left() {
@@ -88,6 +90,18 @@ class Player extends AnimSprite {
         }
     }
 
+    intro() {
+        this.setAnim(ANIM_FALL_START,ANIM_BIG_FALL_END, true, ANIM_RIGHT_ROW, 4);
+        this.setState(MOVE_INTRO, true);
+        this.innerCounter = 0;
+    }
+
+    outro() {
+        this.setAnim(ANIM_FALL_START,ANIM_BIG_FALL_END, true, ANIM_RIGHT_ROW, 4);
+        this.setState(MOVE_OUTRO, true);
+        this.innerCounter = 0;
+    }
+
     doRip() {
 
     }
@@ -103,9 +117,9 @@ class Player extends AnimSprite {
                     this.engine.sound.playOnce("falling");
                 }
                 if (this.fallCounter >= 2) {
-                    this.setAnim(ANIM_FALL_START,ANIM_FALL_END,true, ANIM_RIGHT_ROW);
+                    this.setAnim(ANIM_BIG_FALL_START, ANIM_BIG_FALL_END, true, ANIM_RIGHT_ROW);
                 } else {
-                    this.setAnim(ANIM_BIG_FALL_START,ANIM_BIG_FALL_END,true, ANIM_RIGHT_ROW);
+                    this.setAnim(ANIM_FALL_START,ANIM_BIG_FALL_END, true, ANIM_RIGHT_ROW);
                 }
             } else {
                 this.fallCounter = 0;
@@ -183,8 +197,31 @@ class Player extends AnimSprite {
         }
     }
 
+    doOutro() {
+        this.counter += 1;
+        if (this.counter >= 10) {
+            this.innerCounter += 1;
+            this.counter = 0;
+            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255,255,255', 10));
+            if (this.innerCounter % 2 === 0 && this.innerCounter < 10) {
+                this.engine.sound.play('ice-push');
+            }
+        }
+        if (this.innerCounter % 2 === 1) {
+            this.y += 1;
+        } else {
+            this.y -= 1;
+        }
+        if (this.innerCounter >= 10) {
+            this.engine.sound.play('state-leave');
+            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '44,133,233', 50));
+            this.setState(MOVE_STAND, false);
+            this.engine.nextLevel();
+        }
+    }
+
     doGravity() {
-        this.counter++;
+        this.counter += 1;
         if (this.counter <= ANIM_FRAME_COUNT) {
             this.y += this.speed;
         } else {
@@ -207,7 +244,8 @@ class Player extends AnimSprite {
     }
 
     doUp() {
-        if (++this.counter <= 18) {
+        this.counter += 1;
+        if (this.counter <= 18) {
             switch (this.counter) {
                 case 3:
                     this.engine.sound.play('climb');
@@ -262,6 +300,7 @@ class Player extends AnimSprite {
     doPush() {
         this.counter += 2;
         if (this.counter <= ANIM_FRAME_COUNT) {
+            // fixme
         } else {
             let ice =  this.engine.iceAt(this.xtile+this.dirrection, this.ytile);
             if (ice) {
@@ -342,6 +381,10 @@ class Player extends AnimSprite {
                 break;
             case MOVE_RIP:
                 this.doRip();
+                break;
+            case MOVE_OUTRO:
+            case MOVE_INTRO:
+                this.doOutro();
                 break;
         }
     }
