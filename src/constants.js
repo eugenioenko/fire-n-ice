@@ -51,13 +51,14 @@ const TILE_LEFT = 64;
 const TILE_MIDDLE = 96;
 const TILE_RIGHT = 128;
 
+const OBJECT_OUT = -1;
 const OBJECT_BACKGROUND = 0;
 const OBJECT_WALL = 1;
-const OBJECT_FIRE = 6;
 const OBJECT_ICE = 3;
-const OBJECT_OUT = -2;
-const OBJECT_PLAYER = 7;
 const OBJECT_METAL = 4;
+const OBJECT_JAR = 5;
+const OBJECT_FIRE = 6;
+const OBJECT_PLAYER = 7;
 
-const STATE_PLAY = 1;
-const STATE_START = 2;
+const GAME_STATE_PLAY = 1;
+const GAME_STATE_INTRO = 2;

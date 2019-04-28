@@ -16,12 +16,16 @@ class Ice extends AnimSprite {
     }
 
     addBlock(tx) {
+        const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(this.xtile-1, this.ytile);
+        const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile+this.length, this.ytile);
         if (
             (tx > this.xtile && this.getTile(tx+1, this.ytile) === OBJECT_WALL) ||
             (tx < this.xtile && this.getTile(tx-1, this.ytile) === OBJECT_WALL) ||
-            (this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_METAL) ||
-            (this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_METAL)
-        ){
+            (spriteTypeAtLeftCorner === OBJECT_METAL) ||
+            (spriteTypeAtLeftCorner === OBJECT_JAR) ||
+            (spriteTypeAtRightCorner === OBJECT_METAL) ||
+            (spriteTypeAtRightCorner === OBJECT_JAR)
+        ) {
             this.frozen = true;
         }
         this.xtile = tx < this.xtile ? tx : this.xtile;
@@ -129,6 +133,8 @@ class Ice extends AnimSprite {
     }
 
     draw() {
+        const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(this.xtile-1, this.ytile);
+        const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile+this.length, this.ytile);
         this.ctx.save();
         if (this.animDelayCount++ > this.animDelay) {
             this.animDelayCount = 0;
@@ -154,7 +160,8 @@ class Ice extends AnimSprite {
         if (this.frozen) {
             if (
                 this.getTile(this.xtile-1, this.ytile) === OBJECT_WALL ||
-                this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_METAL
+                spriteTypeAtLeftCorner === OBJECT_METAL ||
+                spriteTypeAtLeftCorner === OBJECT_JAR
             ) {
                 this.ctx.drawImage(
                     this.engine.resources.get('frost'),
@@ -164,7 +171,8 @@ class Ice extends AnimSprite {
             }
             if (
                 this.getTile(this.xtile+this.length, this.ytile) === OBJECT_WALL ||
-                this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_METAL
+                spriteTypeAtRightCorner === OBJECT_METAL ||
+                spriteTypeAtRightCorner === OBJECT_JAR
             ) {
                 this.ctx.drawImage(
                     this.engine.resources.get('frost'),
@@ -206,22 +214,30 @@ class Ice extends AnimSprite {
     }
 
     checkUnfreeze() {
+        const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(this.xtile-1, this.ytile);
+        const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile+this.length, this.ytile);
         if (
             this.getTile(this.xtile-1, this.ytile) !== OBJECT_WALL &&
             this.getTile(this.xtile+this.length, this.ytile) !== OBJECT_WALL &&
-            this.engine.spriteTypeAt(this.xtile-1, this.ytile) !== OBJECT_METAL &&
-            this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) !== OBJECT_METAL
+            spriteTypeAtLeftCorner !== OBJECT_METAL &&
+            spriteTypeAtLeftCorner !== OBJECT_JAR &&
+            spriteTypeAtRightCorner !== OBJECT_METAL &&
+            spriteTypeAtRightCorner !== OBJECT_JAR
         ) {
             this.frozen = false;
         }
     }
 
     checkFreeze() {
+        const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(this.xtile-1, this.ytile);
+        const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile+this.length, this.ytile);
         if (
             (this.getTile(this.xtile-1, this.ytile) === OBJECT_WALL) ||
             (this.getTile(this.xtile+this.length, this.ytile) === OBJECT_WALL) ||
-            (this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_METAL) ||
-            (this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_METAL)
+            (spriteTypeAtLeftCorner === OBJECT_METAL) ||
+            (spriteTypeAtLeftCorner === OBJECT_JAR) ||
+            (spriteTypeAtRightCorner === OBJECT_METAL) ||
+            (spriteTypeAtRightCorner === OBJECT_JAR)
         ) {
             this.frozen = true;
         } else {

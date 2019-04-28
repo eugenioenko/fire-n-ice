@@ -32,12 +32,4 @@ class Fire extends AnimSprite {
             this.setState(MOVE_STAND, false);
         }
     }
-
-    draw() {
-        AnimSprite.prototype.draw.call(this);
-        if (this.spriteTypeAt(this.xtile, this.ytile+1) === OBJECT_ICE) {
-            this.ctx.strokeStyle = "red";
-            this.ctx.strokeRect(this.xtile*32, this.ytile*32,32,32);
-        }
-    }
 }

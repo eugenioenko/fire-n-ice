@@ -9,7 +9,7 @@ class Engine {
         this.cheight = canvas.height;
         this.resources = resources;
         this.ctx = this.canvas.getContext('2d');
-        this.state = STATE_START;
+        this.state = GAME_STATE_INTRO;
         this.sprites = [];
         this.sfxs = [];
         this.player = {};
@@ -102,8 +102,9 @@ class Engine {
                 this.player.right();
             }
             if (this.keyboard.enter) {
-               this.scene.load(this.level);
-               this.keyboard.enter = false;
+                this.sound.stop('danger');
+                this.scene.load(this.level);
+                this.keyboard.enter = false;
             }
         }
         this.collision();

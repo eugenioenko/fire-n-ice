@@ -20,6 +20,9 @@ const Tile = {
         },
         [OBJECT_FIRE]: {
             solid: false
+        },
+        [OBJECT_JAR]: {
+            solid: true
         }
     },
 

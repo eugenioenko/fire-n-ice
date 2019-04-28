@@ -42,6 +42,9 @@ class Scene {
                 case OBJECT_FIRE:
                     this.engine.addSprite(new Fire(this.engine, sprite.x, sprite.y));
                     break;
+                case OBJECT_JAR:
+                    this.engine.addSprite(new Jar(this.engine, sprite.x, sprite.y));
+                    break;
             }
         }
     }
