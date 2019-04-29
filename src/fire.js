@@ -22,8 +22,13 @@ class Fire extends AnimSprite {
             this.engine.sound.play('fire-off');
             this.engine.removeFire(this.xtile, this.ytile);
             this.engine.removeIceBlock(this.xtile, this.ytile);
-            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255, 126, 198', 15, 0.5));
-            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '124, 212, 255', 10));
+            this.engine.addSparks(this.xtile, this.ytile, '255, 126, 198', 15, 0.5);
+            this.engine.addSparks(this.xtile, this.ytile, '124, 212, 255', 10);
+        }
+        if (this.engine.spriteTypeAt(this.xtile, this.ytile, OBJECT_FIRE) === OBJECT_METAL) {
+            this.engine.sound.play('fire-off');
+            this.engine.removeFire(this.xtile, this.ytile);
+            this.engine.addSparks(this.xtile, this.ytile, '255, 126, 198', 15, 0.5);
         }
 
     }

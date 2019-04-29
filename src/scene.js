@@ -10,12 +10,13 @@ class Scene {
         data.theme = this.engine.map.theme;
         data.sprites = [];
         for (const sprite of this.engine.sprites) {
-            sprite.length = (typeof sprite.length === "undefined") ? 1 : sprite.length;
+            let value = (typeof sprite.length === "undefined") ? 1 : sprite.length;
+            value = sprite.id === OBJECT_JAR ? sprite.onFire : value;
             data.sprites.push({
                 "id": sprite.id,
                 "x": sprite.xtile,
                 "y": sprite.ytile,
-                "l": sprite.length
+                "v": value
             });
         }
 
@@ -37,8 +38,8 @@ class Scene {
                     this.engine.addSprite(this.engine.player);
                     break;
                 case OBJECT_ICE:
-                    sprite.l = typeof sprite.l === "undefined" ? 1 : sprite.l;
-                    this.engine.addSprite(new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.l)));
+                    sprite.v = typeof sprite.v === "undefined" ? 1 : sprite.v;
+                    this.engine.addSprite(new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v)));
                     break;
                 case OBJECT_METAL:
                     this.engine.addSprite(new Metal(this.engine, sprite.x, sprite.y, 1));
@@ -47,7 +48,9 @@ class Scene {
                     this.engine.addSprite(new Fire(this.engine, sprite.x, sprite.y));
                     break;
                 case OBJECT_JAR:
-                    this.engine.addSprite(new Jar(this.engine, sprite.x, sprite.y));
+                    const jar = new Jar(this.engine, sprite.x, sprite.y);
+                    jar.onFire = sprite.v === "1" ? true : false;
+                    this.engine.addSprite(jar);
                     break;
             }
         }

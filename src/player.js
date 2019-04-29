@@ -127,8 +127,8 @@ class Player extends AnimSprite {
                 if (this.state === MOVE_DOWN) {
                     this.engine.sound.play('fall');
                     if (this.fallCounter >= 2) {
-                        this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile + 1, '255, 135, 124', 5, 0.75));
-                        this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile + 1, '122, 211, 255', 10,  1));
+                        this.engine.addSparks(this.xtile, this.ytile + 1, '255, 135, 124', 5, 0.75);
+                        this.engine.addSparks(this.xtile, this.ytile + 1, '122, 211, 255', 10,  1);
                     }
                 }
                 this.fallCounter = 0;
@@ -210,13 +210,13 @@ class Player extends AnimSprite {
         if (this.counter % 10 === 0) {
             this.innerCounter += 1;
             if (this.innerCounter === 1) {
-                this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '124, 238, 66', 20,  0.5));
+                this.engine.addSparks(this.xtile, this.ytile, '124, 238, 66', 20,  0.5);
             }
             if (this.innerCounter === 3) {
-                this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255, 135, 124', 15, 1));
+                this.engine.addSparks(this.xtile, this.ytile, '255, 135, 124', 15, 1);
             }
             if (this.innerCounter === 5) {
-                this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '122, 211, 255', 10,  1.5));
+                this.engine.addSparks(this.xtile, this.ytile, '122, 211, 255', 10,  1.5);
             }
             if (this.innerCounter % 2 === 0 && this.innerCounter < 6) {
                 this.engine.sound.play('climb');
@@ -237,9 +237,9 @@ class Player extends AnimSprite {
     doIntro() {
         this.counter += 1;
         if (this.counter === 4) {
-            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '124, 238, 66', 20,  0.5));
-            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255, 135, 124', 15, 1));
-            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '122, 211, 255', 10,  1.5));
+            this.engine.addSparks(this.xtile, this.ytile, '124, 238, 66', 20,  0.5);
+            this.engine.addSparks(this.xtile, this.ytile, '255, 135, 124', 15, 1);
+            this.engine.addSparks(this.xtile, this.ytile, '122, 211, 255', 10,  1.5);
             this.engine.sound.play('stage-enter');
         }
         if (this.counter <= 16) {
@@ -279,8 +279,8 @@ class Player extends AnimSprite {
             switch (this.counter) {
                 case 3:
                     this.engine.sound.play('climb');
-                    this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '124, 238, 66', 10,  0.75));
-                    this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255, 135, 124', 5, 1.25));
+                    this.engine.addSparks(this.xtile, this.ytile, '124, 238, 66', 10,  0.75);
+                    this.engine.addSparks(this.xtile, this.ytile, '255, 135, 124', 5, 1.25);
                     this.setAnim(ANIM_PUSH_END, ANIM_PUSH_END, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW);
                     break;
                 case 6:
@@ -312,20 +312,22 @@ class Player extends AnimSprite {
     makeIce() {
         this.engine.sound.play('new-ice');
         this.engine.addIceBlock(this.xtile + this.dirrection, this.ytile+1);
-        this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1));
-        this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1, '124, 214, 255', 5));
+        this.engine.addSparks(this.xtile + this.dirrection, this.ytile + 1);
+        this.engine.addSparks(this.xtile + this.dirrection, this.ytile + 1, '124, 214, 255', 5);
     }
 
     removeIceBlock() {
         this.engine.sound.play('ice-remove');
         this.engine.removeIceBlock(this.xtile + this.dirrection, this.ytile+1);
-        this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1));
-        this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1, '124, 214, 255', 5));
+        this.engine.addSparks(this.xtile + this.dirrection, this.ytile + 1);
+        this.engine.addSparks(this.xtile + this.dirrection, this.ytile + 1, '124, 214, 255', 5);
     }
 
     push() {
         let ice =  this.engine.iceAt(this.xtile+this.dirrection, this.ytile);
         if (ice && ice.canGlide(this.dirrection)) {
+            this.engine.addSparks(this.xtile + this.dirrection, this.ytile, '255, 255, 255', 3);
+            this.engine.addSparks(this.xtile + this.dirrection, this.ytile, '124, 214, 255', 3, 1.5);
             this.setAnim(ANIM_PUSH_START, ANIM_PUSH_END, false, this.dirrection === DIR_RIGHT ? ANIM_RIGHT_ROW : ANIM_LEFT_ROW, 3);
             this.setState(MOVE_PUSH, true);
         }
@@ -362,7 +364,7 @@ class Player extends AnimSprite {
     doFailIce() {
         if (this.counter === 8) {
             this.engine.sound.play('ice-disabled');
-            this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1, '88,66,66'));
+            this.engine.addSparks(this.xtile + this.dirrection, this.ytile + 1, '88,66,66');
         }
         this.counter += 1;
         if (this.counter >= ANIM_FRAME_COUNT) {

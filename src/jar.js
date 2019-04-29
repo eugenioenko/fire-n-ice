@@ -49,13 +49,13 @@ class Jar extends AnimSprite {
     turnOnFire() {
         this.animRow = 1;
         this.onFire = true;
-        this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile - 1, '255, 88, 33', 30));
+        this.engine.addSparks(this.xtile, this.ytile - 1, '255, 88, 33', 30);
     }
 
     meltIce() {
         this.engine.removeIceBlock(this.xtile, this.ytile - 1);
-        this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile - 1, '255, 88, 33', 30));
-        this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile - 1, '33, 88, 255', 40));
+        this.engine.addSparks(this.xtile, this.ytile - 1, '255, 88, 33', 30);
+        this.engine.addSparks(this.xtile, this.ytile - 1, '33, 88, 255', 40);
     }
 
     draw() {

@@ -169,8 +169,8 @@ class Engine {
         return false;
     }
 
-    addSfx(sfx) {
-        this.sfxs.push(sfx);
+    addSparks(xtile, ytile, color, quantity, intensity) {
+        this.sfxs.push(new Sparks(this, xtile, ytile, color, quantity, intensity));
     }
 
     removeSfx(sprite) {
