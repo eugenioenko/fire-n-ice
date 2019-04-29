@@ -91,10 +91,6 @@ class Ice extends AnimSprite {
         if (!this.canGlide(this.dirrection)) {
             this.dirrection = 0;
             this.engine.sound.play('ice-collision');
-            this.setState(MOVE_STAND, false);
-            return true;
-        }
-        if (this.gravity()) {
             return true;
         }
         return false;
@@ -199,14 +195,15 @@ class Ice extends AnimSprite {
         if (this.counter <= TILE_WIDTH) {
             this.y += 4;
         } else {
-            this.setState(MOVE_STAND, false);
+            if (!this.gravity()) {
+                this.setState(MOVE_STAND, false);
+            }
         }
     }
 
     push(dir) {
         this.dirrection = (typeof dir === 'undefined') ? this.dirrection : dir;
-        if (!this.collision()) {
-            this.moving = true;
+        if (!this.collision() && !this.gravity()) {
             this.setState(MOVE_ICE_MOVING, true);
         } else {
             this.setState(MOVE_STAND, false);

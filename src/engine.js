@@ -18,6 +18,7 @@ class Engine {
         this.sound = new Sound();
         this.scene = new Scene(this);
         this.editor = false;
+        this.noObjectsMovedCount = 0;
         const level = localStorage.getItem('level');
         if (level !== null) {
             this.level = parseInt(level, 10);
@@ -53,7 +54,7 @@ class Engine {
     move() {
         let objectsMoving = false;
         for (let i = 0; i < this.sprites.length; ++i) {
-            if (!(this.sprites[i] instanceof Player) &&
+            if (this.sprites[i].id !== OBJECT_PLAYER &&
                 this.sprites[i].moving)
             {
                 objectsMoving = true;
@@ -64,6 +65,11 @@ class Engine {
             this.sfxs[i].engineMove();
         }
         if (!objectsMoving) {
+            this.noObjectsMovedCount += 1;
+        }
+        // check if no objects have moved for 2 turnes
+        if (!objectsMoving && this.noObjectsMovedCount > 1) {
+            this.noObjectsMovedCount = 0;
             if (this.keyboard.up) {
                 //this.player.jump();
             }
@@ -98,7 +104,7 @@ class Engine {
         let foundIceBlocks = [ ];
         frozen = (typeof length === 'undefined') ? false : frozen;
         for (let i = 0; i < this.sprites.length; i++) {
-            if (this.sprites[i] instanceof Ice && this.sprites[i].ytile === ty) {
+            if (this.sprites[i].id === OBJECT_ICE && this.sprites[i].ytile === ty) {
                 let ice = this.sprites[i];
                 if (ice.xtile - 1 === tx || ice.xtile + ice.length === tx) {
                     foundIceBlocks.push(ice);
@@ -125,7 +131,7 @@ class Engine {
 
     removeIceBlock(tx, ty) {
         for (let i = 0; i < this.sprites.length; i++) {
-            if (this.sprites[i] instanceof Ice &&
+            if (this.sprites[i].id === OBJECT_ICE &&
                 this.sprites[i].ytile === ty &&
                 tx >= this.sprites[i].xtile &&
                 tx < this.sprites[i].xtile + this.sprites[i].length)
@@ -140,7 +146,7 @@ class Engine {
 
     removeFire(tx, ty) {
         for (let i = 0; i < this.sprites.length; i++) {
-            if ((this.sprites[i].ytile === ty) && (tx === this.sprites[i].xtile) && (this.sprites[i] instanceof Fire)) {
+            if ((this.sprites[i].ytile === ty) && (tx === this.sprites[i].xtile) && (this.sprites[i].id === OBJECT_FIRE)) {
                 this.sprites.splice(i,1);
                 return;
             }
