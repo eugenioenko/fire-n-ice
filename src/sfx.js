@@ -17,7 +17,6 @@ class Particle {
         this.ctx.beginPath();
         this.ctx.fillStyle = 'rgba(' + this.color+','+opacity+')';
         this.ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, true);
-        //this.ctx.rect(this.x, this.y, this.r, this.r);
         this.ctx.closePath();
         this.ctx.fill();
     }

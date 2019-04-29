@@ -148,7 +148,11 @@ class Engine {
 
     removeFire(tx, ty) {
         for (let i = 0; i < this.sprites.length; i++) {
-            if ((this.sprites[i].ytile === ty) && (tx === this.sprites[i].xtile) && (this.sprites[i].id === OBJECT_FIRE)) {
+            if (
+                (this.sprites[i].ytile === ty) &&
+                (tx === this.sprites[i].xtile) &&
+                (this.sprites[i].id === OBJECT_FIRE)
+            ) {
                 this.sprites.splice(i,1);
                 return;
             }

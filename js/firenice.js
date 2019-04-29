@@ -1479,7 +1479,6 @@ class Particle {
         this.ctx.beginPath();
         this.ctx.fillStyle = 'rgba(' + this.color+','+opacity+')';
         this.ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, true);
-        //this.ctx.rect(this.x, this.y, this.r, this.r);
         this.ctx.closePath();
         this.ctx.fill();
     }
@@ -1794,7 +1793,11 @@ class Engine {
 
     removeFire(tx, ty) {
         for (let i = 0; i < this.sprites.length; i++) {
-            if ((this.sprites[i].ytile === ty) && (tx === this.sprites[i].xtile) && (this.sprites[i].id === OBJECT_FIRE)) {
+            if (
+                (this.sprites[i].ytile === ty) &&
+                (tx === this.sprites[i].xtile) &&
+                (this.sprites[i].id === OBJECT_FIRE)
+            ) {
                 this.sprites.splice(i,1);
                 return;
             }
