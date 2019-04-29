@@ -820,12 +820,14 @@ class Player extends AnimSprite {
         this.engine.sound.play('new-ice');
         this.engine.addIceBlock(this.xtile + this.dirrection, this.ytile+1);
         this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1));
+        this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1, '124, 214, 255', 5));
     }
 
     removeIceBlock() {
         this.engine.sound.play('ice-remove');
         this.engine.removeIceBlock(this.xtile + this.dirrection, this.ytile+1);
         this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1));
+        this.engine.addSfx(new Sparks(this.engine, this.xtile + this.dirrection, this.ytile + 1, '124, 214, 255', 5));
     }
 
     push() {
@@ -956,7 +958,7 @@ class Fire extends AnimSprite {
             this.engine.removeFire(this.xtile, this.ytile);
             this.engine.removeIceBlock(this.xtile, this.ytile);
             this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '255, 126, 198', 15, 0.5));
-            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '124, 212, 255', 15));
+            this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '124, 212, 255', 10));
         }
 
     }
