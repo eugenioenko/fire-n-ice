@@ -18,7 +18,7 @@ class Engine {
         this.sound = new Sound();
         this.scene = new Scene(this);
         this.editor = false;
-        this.noObjectsMovedCount = 0;
+        this.noSpriteMoveCount = 0;
         const level = localStorage.getItem('level');
         if (level !== null) {
             this.level = parseInt(level, 10);
@@ -52,24 +52,26 @@ class Engine {
     }
 
     move() {
-        let objectsMoving = false;
         for (let i = 0; i < this.sprites.length; ++i) {
-            if (this.sprites[i].id !== OBJECT_PLAYER &&
-                this.sprites[i].moving)
-            {
-                objectsMoving = true;
-            }
             this.sprites[i].engineMove();
         }
         for (let i = 0; i < this.sfxs.length; ++i) {
             this.sfxs[i].engineMove();
         }
-        if (!objectsMoving) {
-            this.noObjectsMovedCount += 1;
+        let spritesMoving = false;
+        for (let i = 0; i < this.sprites.length; ++i) {
+            if (this.sprites[i] && this.sprites[i].id !== OBJECT_PLAYER && this.sprites[i].moving) {
+                spritesMoving = true;
+            }
         }
-        // check if no objects have moved for 2 turnes
-        if (!objectsMoving && this.noObjectsMovedCount > 1) {
-            this.noObjectsMovedCount = 0;
+        if (!spritesMoving) {
+            this.noSpriteMoveCount += 1;
+        } else {
+            this.noSpriteMoveCount = 0;
+        }
+        // check if no sprites have moved for 2 turns
+        if (!spritesMoving && this.noSpriteMoveCount > 1) {
+            this.noSpriteMoveCount = 0;
             if (this.keyboard.up) {
                 //this.player.jump();
             }
