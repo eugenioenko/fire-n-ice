@@ -2,7 +2,7 @@ class Particle {
 
     constructor(ctx, x, y, color, intencity) {
         this.color = (typeof color === 'undefined') ? '255,255,255' : color;
-        this.r = 2;
+        this.r = 3;
         this.x = x;
         this.y = y;
         this.vx = (Math.random() * 4 - 2) * intencity;
@@ -17,6 +17,7 @@ class Particle {
         this.ctx.beginPath();
         this.ctx.fillStyle = 'rgba(' + this.color+','+opacity+')';
         this.ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, true);
+        //this.ctx.rect(this.x, this.y, this.r, this.r);
         this.ctx.closePath();
         this.ctx.fill();
     }

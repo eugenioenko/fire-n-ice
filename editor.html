@@ -40,6 +40,7 @@
 				<option value="9">Theme 9</option>
 			</select>
 			<select id="level-selector">
+				<option value="-1">Select a level</option>
 				<option value="0">Level 0</option>
 				<option value="1">Level 1</option>
 				<option value="2">Level 2</option>
@@ -157,9 +158,11 @@
 			});
 
 			document.getElementById('level-selector').addEventListener('change', (e) => {
-				game.engine.level = parseInt(e.target.value, 10);
-				game.engine.scene.load(game.engine.level);
-				e.target.blur();
+				if (e.target.value !== '-1') {
+					game.engine.level = parseInt(e.target.value, 10);
+					game.engine.scene.load(game.engine.level);
+					e.target.blur();
+				}
 			});
 
 			document.getElementById('btn-save').addEventListener('click', () => {

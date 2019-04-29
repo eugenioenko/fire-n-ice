@@ -7,6 +7,7 @@ class Sound {
 		this.sfx = {
 			"fire-off" : document.getElementById('sfx-fire-off'),
 			"ice-push" : document.getElementById('sfx-ice-push'),
+			"fall" : document.getElementById('sfx-fall'),
 			"falling" : document.getElementById('sfx-falling'),
 			"new-ice" : document.getElementById('sfx-new-ice'),
 			"climb" : document.getElementById('sfx-climb'),

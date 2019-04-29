@@ -97,7 +97,7 @@ class Player extends AnimSprite {
     }
 
     outro() {
-        this.setAnim(ANIM_FALL_START,ANIM_BIG_FALL_END, true, ANIM_RIGHT_ROW, 4);
+        this.setAnim(ANIM_FALL_START, ANIM_BIG_FALL_END, true, ANIM_RIGHT_ROW, 4);
         this.setState(MOVE_OUTRO, true);
         this.innerCounter = 0;
     }
@@ -119,13 +119,13 @@ class Player extends AnimSprite {
                 if (this.fallCounter >= 2) {
                     this.setAnim(ANIM_BIG_FALL_START, ANIM_BIG_FALL_END, true, ANIM_RIGHT_ROW);
                 } else {
-                    this.setAnim(ANIM_FALL_START,ANIM_BIG_FALL_END, true, ANIM_RIGHT_ROW);
+                    this.setAnim(ANIM_BIG_FALL_START, ANIM_BIG_FALL_END, true, ANIM_RIGHT_ROW);
                 }
             } else {
 
                 this.engine.sound.stop("falling");
                 if (this.state === MOVE_DOWN) {
-                    this.engine.sound.play('ice-push');
+                    this.engine.sound.play('fall');
                     if (this.fallCounter >= 2) {
                         this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile + 1, '255, 135, 124', 5, 0.75));
                         this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile + 1, '122, 211, 255', 10,  1));
@@ -219,7 +219,7 @@ class Player extends AnimSprite {
                 this.engine.addSfx(new Sparks(this.engine, this.xtile, this.ytile, '122, 211, 255', 10,  1.5));
             }
             if (this.innerCounter % 2 === 0 && this.innerCounter < 6) {
-                this.engine.sound.play('ice-push');
+                this.engine.sound.play('climb');
             }
         }
         if (this.innerCounter % 2 === 1) {
