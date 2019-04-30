@@ -1,4 +1,4 @@
-export const Consts = {
+export const Consts = Object.freeze({
     TILE_WIDTH: 32,
     MOVE_STAND: 0,
     MOVE_LEFT: 1,
@@ -59,4 +59,4 @@ export const Consts = {
     OBJECT_PLAYER: 7,
     GAME_STATE_PLAY: 1,
     GAME_STATE_INTRO: 2
-};
+});

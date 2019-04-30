@@ -12,8 +12,8 @@ export class TileMap {
         this.engine = engine;
         this.map = map;
         this.theme = theme;
-        this.tileWidth = Consts.TileWidth;
-        this.tileHeight = Consts.TileWidth;
+        this.tileWidth = Consts.TILE_WIDTH;
+        this.tileHeight = Consts.TILE_WIDTH;
         this.height = this.map.length - 1;
         this.width = this.map[0].length - 1;
         this.tilesImage = this.engine.resources.get('tilemap');
@@ -53,6 +53,7 @@ export class TileMap {
                         tileType = Consts.TILE_MIDDLE;
                     }
                 }
+
                 this.ctx.drawImage(
                     this.tilesImage,
                     tileType,

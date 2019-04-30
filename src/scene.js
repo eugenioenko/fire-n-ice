@@ -4,6 +4,7 @@ import { Player } from './player';
 import { Ice } from './ice';
 import { Fire } from './fire';
 import { levels } from './levels';
+import { Jar } from './jar';
 
 export class Scene {
 
