@@ -4,6 +4,10 @@ export class Resources {
         this.definitions = [];
         this.resources = { };
         this.loaded = 0;
+        this.canvas = document.getElementById('canvas');
+        if (canvas) {
+            this.ctx = this.canvas.getContext('2d');
+        }
     }
 
     add(type, name, src) {
@@ -15,6 +19,11 @@ export class Resources {
     }
 
     check(callback) {
+        if (this.ctx) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.fillStyle = '#fff';
+            this.ctx.fillRect(50, 250, this.loaded * 450 / this.definitions.length, 40);
+        }
         if (this.loaded === this.definitions.length) {
             callback();
         }
