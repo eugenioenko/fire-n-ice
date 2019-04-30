@@ -1477,7 +1477,7 @@ class Particle {
     draw() {
         let opacity = this.life / 255;
         this.ctx.beginPath();
-        this.ctx.fillStyle = 'rgba(' + this.color+','+opacity+')';
+        this.ctx.fillStyle = 'rgba(' + this.color+ ',' + opacity + ')';
         this.ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, true);
         this.ctx.closePath();
         this.ctx.fill();
