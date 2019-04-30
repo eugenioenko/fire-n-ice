@@ -1,22 +1,25 @@
+import { Engine } from './engine';
+
 export class Sound {
-	constructor() {
+	constructor(resources) {
+		this.resources = resources;
 		this.musicOn = true;
 		this.soundOn = true;
 
 		this.sfxVolume = 0.3;
 		this.sfx = {
-			"fire-off" : document.getElementById('sfx-fire-off'),
-			"ice-push" : document.getElementById('sfx-ice-push'),
-			"fall" : document.getElementById('sfx-fall'),
-			"falling" : document.getElementById('sfx-falling'),
-			"new-ice" : document.getElementById('sfx-new-ice'),
-			"climb" : document.getElementById('sfx-climb'),
-			"ice-collision" : document.getElementById('sfx-ice-collision'),
-			"stage-enter" : document.getElementById('sfx-stage-enter'),
-			"danger" : document.getElementById('sfx-danger'),
-			"ice-remove" : document.getElementById('sfx-ice-remove'),
-			"state-leave" : document.getElementById('sfx-state-leave'),
-			"ice-disabled" : document.getElementById('sfx-disabled')
+			"fire-off": resources.get('sfx-fire-off'),
+			"ice-push": resources.get('sfx-ice-push'),
+			"fall": resources.get('sfx-fall'),
+			"falling": resources.get('sfx-falling'),
+			"new-ice": resources.get('sfx-new-ice'),
+			"climb": resources.get('sfx-climb'),
+			"ice-collision": resources.get('sfx-ice-collision'),
+			"stage-enter": resources.get('sfx-stage-enter'),
+			"danger": resources.get('sfx-danger'),
+			"ice-remove": resources.get('sfx-ice-remove'),
+			"state-leave": resources.get('sfx-state-leave'),
+			"ice-disabled": resources.get('sfx-disabled')
 		};
 	}
 
@@ -42,7 +45,7 @@ export class Sound {
 
 	soundrack() {
 		if (!this.musicOn) return;
-		this.music = document.getElementById('sfx-music-sparks');
+		this.music = this.resources.get('sfx-music-sparks');
 		this.music.muted = false;
 		this.music.volume = 0.2;
 		this.music.loop = true;

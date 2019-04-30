@@ -21,7 +21,7 @@ export class Engine {
         this.player = {};
         this.level = 0;
         this.keyboard = new Keyboard();
-        this.sound = new Sound();
+        this.sound = new Sound(resources);
         this.scene = new Scene(this);
         this.editor = false;
         this.noSpriteMoveCount = 0;
