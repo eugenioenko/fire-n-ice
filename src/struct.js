@@ -1,7 +1,7 @@
 /**
 * Stores position of the corners and vertices
 */
-class Position {
+export class Position {
     constructor() {
         this.u = 0;
         this.d = 0;
@@ -14,7 +14,7 @@ class Position {
     }
 }
 
-class Coor {
+export class Coor {
     constructor (tx, ty) {
         this.xtile = tx;
         this.ytile = ty;

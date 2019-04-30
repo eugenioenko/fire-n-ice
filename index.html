@@ -7,7 +7,7 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-	<script src="js/firenice.js?v=11231"></script>
+	<script src="dist/firenice.min.js"></script>
 </head>
 <body>
 	<div class="wrapper">
@@ -86,33 +86,5 @@
 			<li><b>Enter / Cog</b> reloads current Level</li>
 		</ul>
 	</div>
-	<script>
-		window.addEventListener('load', () => {
-			const resources = new Resources();
-			resources.add('tilemap', document.getElementById('img_tilemap'));
-			resources.add('img_ice', document.getElementById('img_ice'));
-			resources.add('img_jar', document.getElementById('img_jar'));
-			resources.add('img_fire', document.getElementById('img_fire'));
-			resources.add('img_dona', document.getElementById('img_dona'));
-			resources.add('img_intro', document.getElementById('img_intro'));
-			resources.add('img_start', document.getElementById('img_start'));
-			resources.add('img_metal', document.getElementById('img_metal'));
-			resources.add('frost', document.getElementById('img_frozen'));
-
-			const canvas = document.getElementById('canvas');
-			const game = new Game(canvas, resources);
-			window.game = game;
-
-			document.getElementById('level-selector').addEventListener('change', (e) => {
-				if (e.target.value !== '-1') {
-					game.engine.level = parseInt(e.target.value, 10);
-					game.engine.scene.load(game.engine.level);
-					e.target.blur();
-				}
-			});
-
-		});
-	</script>
-
 </body>
 </html>

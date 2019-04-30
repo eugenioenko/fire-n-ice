@@ -1,4 +1,7 @@
-class AnimSprite extends Sprite {
+import { Sprite } from './sprite';
+import { Consts }  from './constants';
+
+export class AnimSprite extends Sprite {
     /**
      * Animated Sprite, inherts from Sprite.
      * Adds drawing of pictures in the body of sprite
@@ -21,7 +24,7 @@ class AnimSprite extends Sprite {
         this.animStart = start;
         this.animEnd = end;
         this.animCount = 0;
-        this.animDelay = ANIM_STANDARD_DELAY;
+        this.animDelay = Consts.ANIM_STANDARD_DELAY;
         this.animDelayCount = 0;
         this.animRow = 0;
         this.offsetX = offsetX;
@@ -39,7 +42,7 @@ class AnimSprite extends Sprite {
      */
     setAnim(start, end, loop, row, delay, once) {
         let _once = (typeof once === 'undefined') ? false : once;
-        let _delay = (typeof delay === 'undefined') ? ANIM_STANDARD_DELAY : delay;
+        let _delay = (typeof delay === 'undefined') ? Consts.ANIM_STANDARD_DELAY : delay;
         let _row = (typeof row === 'undefined') ? this.animRow : row;
         if (!_once) {
             this.animStart = start;

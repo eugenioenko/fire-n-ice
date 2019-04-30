@@ -1,7 +1,13 @@
+import { Keyboard } from './keyboard';
+import { Sound } from './sound';
+import { Scene } from './scene';
+import { Ice } from './ice';
+import { Sparks } from './sfx';
+import { Consts }  from './constants';
 /**
  * Engine Loop
  */
-class Engine {
+export class Engine {
 
     constructor(canvas, resources) {
         this.canvas = canvas;
@@ -9,7 +15,7 @@ class Engine {
         this.cheight = canvas.height;
         this.resources = resources;
         this.ctx = this.canvas.getContext('2d');
-        this.state = GAME_STATE_INTRO;
+        this.state = Consts.GAME_STATE_INTRO;
         this.sprites = [];
         this.sfxs = [];
         this.player = {};
@@ -39,7 +45,7 @@ class Engine {
     }
 
     collision() {
-        const fires = this.sprites.filter(sprite => sprite.id === OBJECT_FIRE);
+        const fires = this.sprites.filter(sprite => sprite.id === Consts.OBJECT_FIRE);
         if (!fires.length && !this.editor && this.player.state !== MOVE_OUTRO) {
             this.player.outro();
         }
@@ -60,7 +66,7 @@ class Engine {
         }
         let spritesMoving = false;
         for (let i = 0; i < this.sprites.length; ++i) {
-            if (this.sprites[i] && this.sprites[i].id !== OBJECT_PLAYER && this.sprites[i].moving) {
+            if (this.sprites[i] && this.sprites[i].id !== Consts.OBJECT_PLAYER && this.sprites[i].moving) {
                 spritesMoving = true;
             }
         }
@@ -106,7 +112,7 @@ class Engine {
         let foundIceBlocks = [ ];
         frozen = (typeof length === 'undefined') ? false : frozen;
         for (let i = 0; i < this.sprites.length; i++) {
-            if (this.sprites[i].id === OBJECT_ICE && this.sprites[i].ytile === ty) {
+            if (this.sprites[i].id === Consts.OBJECT_ICE && this.sprites[i].ytile === ty) {
                 let ice = this.sprites[i];
                 if (ice.xtile - 1 === tx || ice.xtile + ice.length === tx) {
                     foundIceBlocks.push(ice);
@@ -133,7 +139,7 @@ class Engine {
 
     removeIceBlock(tx, ty) {
         for (let i = 0; i < this.sprites.length; i++) {
-            if (this.sprites[i].id === OBJECT_ICE &&
+            if (this.sprites[i].id === Consts.OBJECT_ICE &&
                 this.sprites[i].ytile === ty &&
                 tx >= this.sprites[i].xtile &&
                 tx < this.sprites[i].xtile + this.sprites[i].length)
@@ -151,7 +157,7 @@ class Engine {
             if (
                 (this.sprites[i].ytile === ty) &&
                 (tx === this.sprites[i].xtile) &&
-                (this.sprites[i].id === OBJECT_FIRE)
+                (this.sprites[i].id === Consts.OBJECT_FIRE)
             ) {
                 this.sprites.splice(i,1);
                 return;
@@ -188,9 +194,9 @@ class Engine {
     }
 
     spriteTypeAt(tx, ty, excludeId) {
-        excludeId = (typeof excludeId === 'undefined') ? OBJECT_OUT : excludeId;
+        excludeId = (typeof excludeId === 'undefined') ? Consts.OBJECT_OUT : excludeId;
         if (tx < 0 || ty < 0 || tx > this.map.width || ty > this.map.height) {
-            return OBJECT_OUT;
+            return Consts.OBJECT_OUT;
         }
         if (!this.map.map[ty][tx]) {
             for (let i = 0; i < this.sprites.length; i++) {
@@ -201,7 +207,7 @@ class Engine {
         } else {
             return this.map.map[ty][tx];
         }
-        return OBJECT_BACKGROUND;
+        return Consts.OBJECT_BACKGROUND;
     }
 
     spriteAt(tx, ty) {

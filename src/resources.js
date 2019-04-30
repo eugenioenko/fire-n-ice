@@ -1,4 +1,4 @@
-class Resources {
+export class Resources {
 
     constructor() {
         this.resources = {};

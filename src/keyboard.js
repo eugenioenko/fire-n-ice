@@ -1,9 +1,7 @@
-
-
 /**
  * Keyboard press engine
  */
-class Keyboard {
+export class Keyboard {
     constructor() {
         this.up = false;
         this.down = false;

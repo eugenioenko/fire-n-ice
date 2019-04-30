@@ -1,4 +1,6 @@
-class Jar extends AnimSprite {
+import { AnimSprite } from './animsprite';
+
+export class Jar extends AnimSprite {
 
     constructor(engine, tx, ty) {
         super(OBJECT_JAR, engine, 'img_jar',

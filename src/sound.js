@@ -1,4 +1,4 @@
-class Sound {
+export class Sound {
 	constructor() {
 		this.musicOn = true;
 		this.soundOn = true;
