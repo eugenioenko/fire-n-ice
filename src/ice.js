@@ -79,7 +79,7 @@ export class Ice extends AnimSprite {
     }
 
     gravity() {
-        if (!this.coorners.d && !this.frozen) {
+        if (!Tile.isSolid(this.coorners.d) && !this.frozen) {
             this.falling = true;
             this.setState(Consts.MOVE_DOWN, true);
             return true;
@@ -107,9 +107,6 @@ export class Ice extends AnimSprite {
                 this.coorners.d = tile_down;
             }
 
-        }
-        if (this.coorners.d === Consts.OBJECT_FIRE) {
-            this.coorners.d = Consts.OBJECT_BACKGROUND;
         }
         this.coorners.r = this.spriteTypeAt(this.xtile+this.length, this.ytile);
 

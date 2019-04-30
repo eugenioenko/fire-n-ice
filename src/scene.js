@@ -1,10 +1,11 @@
 import { Consts }  from './constants';
-import { TileMap } from './tilemap';
-import { Player } from './player';
-import { Ice } from './ice';
 import { Fire } from './fire';
-import { levels } from './levels';
+import { Ice } from './ice';
 import { Jar } from './jar';
+import { Metal } from './metal';
+import { Player } from './player';
+import { TileMap } from './tilemap';
+import { levels } from './levels';
 
 export class Scene {
 

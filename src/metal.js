@@ -1,8 +1,12 @@
-class Metal extends AnimSprite {
+import { Consts }  from './constants';
+import { AnimSprite } from './animsprite';
+import { Tile } from './tiles';
+
+export class Metal extends AnimSprite {
 
     constructor(engine, tx, ty, length) {
-        super(OBJECT_METAL, engine, 'img_metal',
-            tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 1, true);
+        super(Consts.OBJECT_METAL, engine, 'img_metal',
+            tx, ty, Consts.TILE_WIDTH, Consts.TILE_WIDTH, 0, 0, 0, 1, true);
         this.xtile = tx;
         this.ytile = ty;
         this.length = length;
@@ -14,19 +18,19 @@ class Metal extends AnimSprite {
     }
 
     canGlide(dir) {
-        if (dir === DIR_LEFT  && Tile.isSolid(this.coorners.l)) {
+        if (dir === Consts.DIR_LEFT  && Tile.isSolid(this.coorners.l)) {
             return false;
         }
-        if (dir === DIR_RIGHT && Tile.isSolid(this.coorners.r)) {
+        if (dir === Consts.DIR_RIGHT && Tile.isSolid(this.coorners.r)) {
             return false;
         }
         return true;
     }
 
     gravity() {
-        if (!this.coorners.d) {
+        if (!Tile.isSolid(this.coorners.d)) {
             this.falling = true;
-            this.setState(MOVE_DOWN, true);
+            this.setState(Consts.MOVE_DOWN, true);
             return true;
         }
         if (this.falling) {
@@ -40,7 +44,7 @@ class Metal extends AnimSprite {
         if (!this.canGlide(this.dirrection)) {
             this.dirrection = 0;
             this.engine.sound.play('ice-collision');
-            this.setState(MOVE_STAND, false);
+            this.setState(Consts.MOVE_STAND, false);
             return true;
         }
         if (this.gravity()) {
@@ -50,29 +54,22 @@ class Metal extends AnimSprite {
     }
 
     move() {
-        for (let i = 0; i < this.length; i++) {
-            let tile_down = this.spriteTypeAt(this.xtile+i, this.ytile+1);
-            if (tile_down && tile_down !== OBJECT_FIRE) {
-                this.coorners.d = tile_down;
-            }
 
-        }
-        if (this.coorners.d === OBJECT_FIRE) {
-            this.coorners.d = OBJECT_BACKGROUND;
-        }
-        this.coorners.r = this.spriteTypeAt(this.xtile+this.length, this.ytile);
+        /*if (this.coorners.d === Consts.OBJECT_FIRE) {
+            this.coorners.d = Consts.OBJECT_BACKGROUND;
+        }*/
 
         if (!this.moving) {
             this.gravity();
         }
         switch (this.state) {
-            case MOVE_ICE_MOVING:
+            case Consts.MOVE_ICE_MOVING:
                 this.glide();
                 break;
-            case MOVE_ICE_CHECK:
+            case Consts.MOVE_ICE_CHECK:
                 this.push();
                 break;
-            case MOVE_DOWN:
+            case Consts.MOVE_DOWN:
                 this.doDown();
                 break;
         }
@@ -84,10 +81,10 @@ class Metal extends AnimSprite {
             this.animDelayCount = 0;
             this.animRow = this.animRow === 0 ? 1 : 0;
         }
-        this.ctx.drawImage(this.image, 0, TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
+        this.ctx.drawImage(this.image, 0, Consts.TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
 
         if (
-            this.engine.spriteTypeAt(this.xtile-1, this.ytile) === OBJECT_ICE &&
+            this.engine.spriteTypeAt(this.xtile-1, this.ytile) === Consts.OBJECT_ICE &&
             this.engine.spriteAt(this.xtile-1, this.ytile).frozen
         ) {
             this.ctx.drawImage(
@@ -97,7 +94,7 @@ class Metal extends AnimSprite {
             );
         }
         if (
-            this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === OBJECT_ICE &&
+            this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === Consts.OBJECT_ICE &&
             this.engine.spriteAt(this.xtile+this.length, this.ytile).frozen
         ) {
             this.ctx.drawImage(
@@ -111,19 +108,19 @@ class Metal extends AnimSprite {
 
     glide() {
         this.counter += 4;
-        if (this.counter <= TILE_WIDTH) {
+        if (this.counter <= Consts.TILE_WIDTH) {
             this.x += 4 * this.dirrection;
         } else {
-            this.setState(MOVE_STAND, false);
+            this.setState(Consts.MOVE_STAND, false);
         }
     }
 
     doDown() {
         this.counter += 4;
-        if (this.counter <= TILE_WIDTH) {
+        if (this.counter <= Consts.TILE_WIDTH) {
             this.y += 4;
         } else {
-            this.setState(MOVE_STAND, false);
+            this.setState(Consts.MOVE_STAND, false);
         }
     }
 
@@ -131,9 +128,9 @@ class Metal extends AnimSprite {
         this.dirrection = (typeof dir === 'undefined') ? this.dirrection : dir;
         if (!this.collision()) {
             this.moving = true;
-            this.setState(MOVE_ICE_MOVING, true);
+            this.setState(Consts.MOVE_ICE_MOVING, true);
         } else {
-            this.setState(MOVE_STAND, false);
+            this.setState(Consts.MOVE_STAND, false);
         }
     }
 }

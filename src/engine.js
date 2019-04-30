@@ -15,7 +15,6 @@ export class Engine {
         this.cheight = canvas.height;
         this.resources = resources;
         this.ctx = this.canvas.getContext('2d');
-        this.state = Consts.GAME_STATE_INTRO;
         this.sprites = [];
         this.sfxs = [];
         this.player = {};

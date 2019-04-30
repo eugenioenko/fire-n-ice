@@ -2,6 +2,7 @@ import { Consts } from './constants';
 import { Fire } from './fire';
 import { Game } from './game';
 import { Jar } from './jar';
+import { Metal } from './metal';
 import { Resources } from './resources';
 
 window.addEventListener('load', () => {
