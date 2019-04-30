@@ -1,9 +1,12 @@
-class Jar extends AnimSprite {
+import { AnimSprite } from './animsprite';
+import { Consts }  from './constants';
+
+export class Jar extends AnimSprite {
 
     constructor(engine, tx, ty) {
-        super(OBJECT_JAR, engine, 'img_jar',
-            tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 3, true);
-        this.animDelay = ANIM_STANDARD_DELAY * 2;
+        super(Consts.OBJECT_JAR, engine, 'img_jar',
+            tx, ty, Consts.TILE_WIDTH, Consts.TILE_WIDTH, 0, 0, 0, 3, true);
+        this.animDelay = Consts.ANIM_STANDARD_DELAY * 2;
         this.onFire = false;
         this.animRow = 0;
     }
@@ -14,24 +17,24 @@ class Jar extends AnimSprite {
             this.gravity();
         }
         switch (this.state) {
-            case MOVE_DOWN:
+            case Consts.MOVE_DOWN:
                 this.doDown();
                 break;
         }
     }
 
     collisions() {
-        if (!this.onFire && this.coorners.u === OBJECT_FIRE) {
+        if (!this.onFire && this.coorners.u === Consts.OBJECT_FIRE) {
             this.turnOnFire();
         }
-        if (this.onFire && this.engine.spriteTypeAt(this.xtile, this.ytile - 1) === OBJECT_ICE) {
+        if (this.onFire && this.engine.spriteTypeAt(this.xtile, this.ytile - 1) === Consts.OBJECT_ICE) {
             this.meltIce();
         }
     }
 
     gravity() {
         if (!this.coorners.d) {
-            this.setState(MOVE_DOWN, true);
+            this.setState(Consts.MOVE_DOWN, true);
             return true;
         }
         return false;
@@ -39,10 +42,10 @@ class Jar extends AnimSprite {
 
     doDown() {
         this.counter += 4;
-        if (this.counter <= TILE_WIDTH) {
+        if (this.counter <= Consts.TILE_WIDTH) {
             this.y += 4;
         } else {
-            this.setState(MOVE_STAND, false);
+            this.setState(Consts.MOVE_STAND, false);
         }
     }
 
@@ -62,7 +65,7 @@ class Jar extends AnimSprite {
         this.ctx.save();
         super.draw();
         if (
-            this.engine.spriteTypeAt(this.xtile - 1, this.ytile) === OBJECT_ICE &&
+            this.engine.spriteTypeAt(this.xtile - 1, this.ytile) === Consts.OBJECT_ICE &&
             this.engine.spriteAt(this.xtile - 1, this.ytile).frozen
         ) {
             this.ctx.drawImage(
@@ -72,7 +75,7 @@ class Jar extends AnimSprite {
             );
         }
         if (
-            this.engine.spriteTypeAt(this.xtile + 1, this.ytile) === OBJECT_ICE &&
+            this.engine.spriteTypeAt(this.xtile + 1, this.ytile) === Consts.OBJECT_ICE &&
             this.engine.spriteAt(this.xtile + 1, this.ytile).frozen
         ) {
             this.ctx.drawImage(

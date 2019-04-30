@@ -1,8 +1,12 @@
-class Ice extends AnimSprite {
+import { Consts }  from './constants';
+import { AnimSprite } from './animsprite';
+import { Tile } from './tiles';
+
+export class Ice extends AnimSprite {
 
     constructor(engine, tx, ty, length, frozen) {
-        super(OBJECT_ICE, engine, 'img_ice',
-            tx, ty, TILE_WIDTH, TILE_WIDTH, 0, 0, 0, 1, true);
+        super(Consts.OBJECT_ICE, engine, 'img_ice',
+            tx, ty, Consts.TILE_WIDTH, Consts.TILE_WIDTH, 0, 0, 0, 1, true);
         this.xtile = tx;
         this.ytile = ty;
         this.frozen = (typeof frozen === 'undefined') ? false : frozen;
@@ -19,17 +23,17 @@ class Ice extends AnimSprite {
         const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(this.xtile-1, this.ytile);
         const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile+this.length, this.ytile);
         if (
-            (tx > this.xtile && this.getTile(tx+1, this.ytile) === OBJECT_WALL) ||
-            (tx < this.xtile && this.getTile(tx-1, this.ytile) === OBJECT_WALL) ||
-            (spriteTypeAtLeftCorner === OBJECT_METAL) ||
-            (spriteTypeAtLeftCorner === OBJECT_JAR) ||
-            (spriteTypeAtRightCorner === OBJECT_METAL) ||
-            (spriteTypeAtRightCorner === OBJECT_JAR)
+            (tx > this.xtile && this.getTile(tx+1, this.ytile) === Consts.OBJECT_WALL) ||
+            (tx < this.xtile && this.getTile(tx-1, this.ytile) === Consts.OBJECT_WALL) ||
+            (spriteTypeAtLeftCorner === Consts.OBJECT_METAL) ||
+            (spriteTypeAtLeftCorner === Consts.OBJECT_JAR) ||
+            (spriteTypeAtRightCorner === Consts.OBJECT_METAL) ||
+            (spriteTypeAtRightCorner === Consts.OBJECT_JAR)
         ) {
             this.frozen = true;
         }
         this.xtile = tx < this.xtile ? tx : this.xtile;
-        this.x = this.xtile * TILE_WIDTH;
+        this.x = this.xtile * Consts.TILE_WIDTH;
         this.length++;
     }
 
@@ -49,7 +53,7 @@ class Ice extends AnimSprite {
     removeBlock(tx) {
         if (tx === this.xtile) {
             this.xtile += 1;
-            this.x += TILE_WIDTH;
+            this.x += Consts.TILE_WIDTH;
             this.length--;
         } else if (tx === this.xtile+this.length-1) {
             this.length--;
@@ -65,10 +69,10 @@ class Ice extends AnimSprite {
         if (this.length !== 1 || this.frozen) {
             return false;
         }
-        if (dir === DIR_LEFT  && Tile.isSolid(this.coorners.l)) {
+        if (dir === Consts.DIR_LEFT  && Tile.isSolid(this.coorners.l)) {
             return false;
         }
-        if (dir === DIR_RIGHT && Tile.isSolid(this.coorners.r)) {
+        if (dir === Consts.DIR_RIGHT && Tile.isSolid(this.coorners.r)) {
             return false;
         }
         return true;
@@ -77,7 +81,7 @@ class Ice extends AnimSprite {
     gravity() {
         if (!this.coorners.d && !this.frozen) {
             this.falling = true;
-            this.setState(MOVE_DOWN, true);
+            this.setState(Consts.MOVE_DOWN, true);
             return true;
         }
         if (this.falling) {
@@ -99,13 +103,13 @@ class Ice extends AnimSprite {
     move() {
         for (let i = 0; i < this.length; i++) {
             let tile_down = this.spriteTypeAt(this.xtile+i, this.ytile+1);
-            if (tile_down && tile_down !== OBJECT_FIRE) {
+            if (tile_down && tile_down !== Consts.OBJECT_FIRE) {
                 this.coorners.d = tile_down;
             }
 
         }
-        if (this.coorners.d === OBJECT_FIRE) {
-            this.coorners.d = OBJECT_BACKGROUND;
+        if (this.coorners.d === Consts.OBJECT_FIRE) {
+            this.coorners.d = Consts.OBJECT_BACKGROUND;
         }
         this.coorners.r = this.spriteTypeAt(this.xtile+this.length, this.ytile);
 
@@ -116,13 +120,13 @@ class Ice extends AnimSprite {
             this.gravity();
         }
         switch (this.state) {
-            case MOVE_ICE_MOVING:
+            case Consts.MOVE_ICE_MOVING:
                 this.glide();
                 break;
-            case MOVE_ICE_CHECK:
+            case Consts.MOVE_ICE_CHECK:
                 this.push();
                 break;
-            case MOVE_DOWN:
+            case Consts.MOVE_DOWN:
                 this.doDown();
                 break;
         }
@@ -137,27 +141,27 @@ class Ice extends AnimSprite {
             this.animRow = this.animRow === 0 ? 1 : 0;
         }
         if (this.length === 1) {
-            this.ctx.drawImage(this.image, 0, TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
+            this.ctx.drawImage(this.image, 0, Consts.TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
         } else if (this.length === 2) {
-            this.ctx.drawImage(this.image, 1*TILE_WIDTH, TILE_WIDTH*this.animRow,
+            this.ctx.drawImage(this.image, 1*Consts.TILE_WIDTH, Consts.TILE_WIDTH*this.animRow,
                 this.width, this.height,  this.x, this.y, this.width, this.height);
-            this.ctx.drawImage(this.image, 3*TILE_WIDTH, TILE_WIDTH*this.animRow,
-                this.width, this.height,  this.x+TILE_WIDTH, this.y, this.width, this.height);
+            this.ctx.drawImage(this.image, 3*Consts.TILE_WIDTH, Consts.TILE_WIDTH*this.animRow,
+                this.width, this.height,  this.x+Consts.TILE_WIDTH, this.y, this.width, this.height);
         } else {
-            this.ctx.drawImage(this.image, 1*TILE_WIDTH, TILE_WIDTH*this.animRow,
+            this.ctx.drawImage(this.image, 1*Consts.TILE_WIDTH, Consts.TILE_WIDTH*this.animRow,
                 this.width, this.height,  this.x, this.y, this.width, this.height);
-            this.ctx.drawImage(this.image, 3*TILE_WIDTH, TILE_WIDTH*this.animRow,
-                this.width, this.height,  this.x+TILE_WIDTH*(this.length-1), this.y, this.width, this.height);
+            this.ctx.drawImage(this.image, 3*Consts.TILE_WIDTH, Consts.TILE_WIDTH*this.animRow,
+                this.width, this.height,  this.x+Consts.TILE_WIDTH*(this.length-1), this.y, this.width, this.height);
             for (let i = 1;  i < this.length-1; i++) {
-                this.ctx.drawImage(this.image, 2*TILE_WIDTH, TILE_WIDTH*this.animRow,
-                    this.width, this.height,  this.x+(TILE_WIDTH*i), this.y, this.width, this.height);
+                this.ctx.drawImage(this.image, 2*Consts.TILE_WIDTH, Consts.TILE_WIDTH*this.animRow,
+                    this.width, this.height,  this.x+(Consts.TILE_WIDTH*i), this.y, this.width, this.height);
             }
         }
         if (this.frozen) {
             if (
-                this.getTile(this.xtile-1, this.ytile) === OBJECT_WALL ||
-                spriteTypeAtLeftCorner === OBJECT_METAL ||
-                spriteTypeAtLeftCorner === OBJECT_JAR
+                this.getTile(this.xtile-1, this.ytile) === Consts.OBJECT_WALL ||
+                spriteTypeAtLeftCorner === Consts.OBJECT_METAL ||
+                spriteTypeAtLeftCorner === Consts.OBJECT_JAR
             ) {
                 this.ctx.drawImage(
                     this.engine.resources.get('frost'),
@@ -166,9 +170,9 @@ class Ice extends AnimSprite {
                 );
             }
             if (
-                this.getTile(this.xtile+this.length, this.ytile) === OBJECT_WALL ||
-                spriteTypeAtRightCorner === OBJECT_METAL ||
-                spriteTypeAtRightCorner === OBJECT_JAR
+                this.getTile(this.xtile+this.length, this.ytile) === Consts.OBJECT_WALL ||
+                spriteTypeAtRightCorner === Consts.OBJECT_METAL ||
+                spriteTypeAtRightCorner === Consts.OBJECT_JAR
             ) {
                 this.ctx.drawImage(
                     this.engine.resources.get('frost'),
@@ -183,7 +187,7 @@ class Ice extends AnimSprite {
 
     glide() {
         this.counter += 4;
-        if (this.counter <= TILE_WIDTH) {
+        if (this.counter <= Consts.TILE_WIDTH) {
             this.x += 4 * this.dirrection;
         } else {
             this.push();
@@ -192,11 +196,11 @@ class Ice extends AnimSprite {
 
     doDown() {
         this.counter += 4;
-        if (this.counter <= TILE_WIDTH) {
+        if (this.counter <= Consts.TILE_WIDTH) {
             this.y += 4;
         } else {
             if (!this.gravity()) {
-                this.setState(MOVE_STAND, false);
+                this.setState(Consts.MOVE_STAND, false);
             }
         }
     }
@@ -204,9 +208,9 @@ class Ice extends AnimSprite {
     push(dir) {
         this.dirrection = (typeof dir === 'undefined') ? this.dirrection : dir;
         if (!this.collision() && !this.gravity()) {
-            this.setState(MOVE_ICE_MOVING, true);
+            this.setState(Consts.MOVE_ICE_MOVING, true);
         } else {
-            this.setState(MOVE_STAND, false);
+            this.setState(Consts.MOVE_STAND, false);
         }
     }
 
@@ -214,12 +218,12 @@ class Ice extends AnimSprite {
         const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(this.xtile-1, this.ytile);
         const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile+this.length, this.ytile);
         if (
-            this.getTile(this.xtile-1, this.ytile) !== OBJECT_WALL &&
-            this.getTile(this.xtile+this.length, this.ytile) !== OBJECT_WALL &&
-            spriteTypeAtLeftCorner !== OBJECT_METAL &&
-            spriteTypeAtLeftCorner !== OBJECT_JAR &&
-            spriteTypeAtRightCorner !== OBJECT_METAL &&
-            spriteTypeAtRightCorner !== OBJECT_JAR
+            this.getTile(this.xtile-1, this.ytile) !== Consts.OBJECT_WALL &&
+            this.getTile(this.xtile+this.length, this.ytile) !== Consts.OBJECT_WALL &&
+            spriteTypeAtLeftCorner !== Consts.OBJECT_METAL &&
+            spriteTypeAtLeftCorner !== Consts.OBJECT_JAR &&
+            spriteTypeAtRightCorner !== Consts.OBJECT_METAL &&
+            spriteTypeAtRightCorner !== Consts.OBJECT_JAR
         ) {
             this.frozen = false;
         }
@@ -229,12 +233,12 @@ class Ice extends AnimSprite {
         const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(this.xtile-1, this.ytile);
         const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile+this.length, this.ytile);
         if (
-            (this.getTile(this.xtile-1, this.ytile) === OBJECT_WALL) ||
-            (this.getTile(this.xtile+this.length, this.ytile) === OBJECT_WALL) ||
-            (spriteTypeAtLeftCorner === OBJECT_METAL) ||
-            (spriteTypeAtLeftCorner === OBJECT_JAR) ||
-            (spriteTypeAtRightCorner === OBJECT_METAL) ||
-            (spriteTypeAtRightCorner === OBJECT_JAR)
+            (this.getTile(this.xtile-1, this.ytile) === Consts.OBJECT_WALL) ||
+            (this.getTile(this.xtile+this.length, this.ytile) === Consts.OBJECT_WALL) ||
+            (spriteTypeAtLeftCorner === Consts.OBJECT_METAL) ||
+            (spriteTypeAtLeftCorner === Consts.OBJECT_JAR) ||
+            (spriteTypeAtRightCorner === Consts.OBJECT_METAL) ||
+            (spriteTypeAtRightCorner === Consts.OBJECT_JAR)
         ) {
             this.frozen = true;
         } else {

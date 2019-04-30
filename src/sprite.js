@@ -1,4 +1,7 @@
-class Sprite {
+import { Consts }  from './constants';
+import { Position } from './struct';
+
+export class Sprite {
     /**
      * Base class of the sprite
      * @param {object} engine   Engine Engine
@@ -16,14 +19,14 @@ class Sprite {
         this.moving = false;
         this.counter = false;
         this.speed = 4;
-        this.state = MOVE_STAND;
+        this.state = Consts.MOVE_STAND;
         this.height = height;
         this.width = width;
         this.dirrection = 0;
         this.xtile = tx;
         this.ytile = ty;
-        this.x = this.xtile * TILE_WIDTH;
-        this.y = this.ytile * TILE_WIDTH;
+        this.x = this.xtile * Consts.TILE_WIDTH;
+        this.y = this.ytile * Consts.TILE_WIDTH;
     }
     /**
      * Sets sprite states
@@ -62,7 +65,7 @@ class Sprite {
 
         this.move();
 
-        this.xtile = Math.floor(this.x / TILE_WIDTH);
-        this.ytile = Math.floor(this.y / TILE_WIDTH);
+        this.xtile = Math.floor(this.x / Consts.TILE_WIDTH);
+        this.ytile = Math.floor(this.y / Consts.TILE_WIDTH);
     }
 }
