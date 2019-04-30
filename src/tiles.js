@@ -1,27 +1,29 @@
-const Tile = {
+import { Consts }  from './constants';
+
+export const Tile = {
    tiles: {
-        [OBJECT_BACKGROUND]: {
+        [Consts.OBJECT_BACKGROUND]: {
             solid: false
         },
-        [OBJECT_OUT]: {
+        [Consts.OBJECT_OUT]: {
             solid: true
         },
-        [OBJECT_PLAYER]: {
+        [Consts.OBJECT_PLAYER]: {
             solid: true
         },
-        [OBJECT_ICE]: {
+        [Consts.OBJECT_ICE]: {
             solid: true
         },
-        [OBJECT_METAL]: {
+        [Consts.OBJECT_METAL]: {
             solid: true
         },
-        [OBJECT_WALL]: {
+        [Consts.OBJECT_WALL]: {
             solid: true
         },
-        [OBJECT_FIRE]: {
+        [Consts.OBJECT_FIRE]: {
             solid: false
         },
-        [OBJECT_JAR]: {
+        [Consts.OBJECT_JAR]: {
             solid: true
         }
     },
@@ -34,4 +36,3 @@ const Tile = {
         }
     }
 };
-Object.freeze(Tile);

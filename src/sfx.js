@@ -1,3 +1,5 @@
+import { Sprite } from './sprite';
+import { Consts }  from './constants';
 class Particle {
 
     constructor(ctx, x, y, color, intencity) {
@@ -15,7 +17,7 @@ class Particle {
     draw() {
         let opacity = this.life / 255;
         this.ctx.beginPath();
-        this.ctx.fillStyle = 'rgba(' + this.color+','+opacity+')';
+        this.ctx.fillStyle = 'rgba(' + this.color+ ',' + opacity + ')';
         this.ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, true);
         this.ctx.closePath();
         this.ctx.fill();
@@ -29,7 +31,7 @@ class Particle {
     }
 }
 
-class Sparks extends Sprite {
+export class Sparks extends Sprite {
 
     constructor (engine, tx, ty, color, length, intencity) {
         super(null, engine, tx, ty, 32, 32);
@@ -38,7 +40,7 @@ class Sparks extends Sprite {
         this.intencity = (typeof intencity === 'undefined') ? 1 : intencity;
         this.particles = [];
         for (let i = 0; i < this.length; i++) {
-            this.particles[i] = new Particle(this.engine.ctx, tx*TILE_WIDTH+16, ty*TILE_WIDTH+16, this.color, this.intencity);
+            this.particles[i] = new Particle(this.engine.ctx, tx*Consts.TILE_WIDTH+16, ty*Consts.TILE_WIDTH+16, this.color, this.intencity);
         }
     }
 
