@@ -9,29 +9,43 @@ export class Ice extends AnimSprite {
             tx, ty, Consts.TILE_WIDTH, Consts.TILE_WIDTH, 0, 0, 0, 1, true);
         this.xtile = tx;
         this.ytile = ty;
-        this.frozen = (typeof frozen === 'undefined') ? false : frozen;
         this.length = length;
         this.animEnd = 1;
         this.animDelay = 9;
         this.animRow = 0;
         this.dirrection = 0;
         this.falling = false;
-        this.checkFreeze();
+        if (typeof frozen !== 'undefined') {
+            this.frozen = frozen;
+        } else {
+            this.checkFreeze();
+        }
     }
 
     addBlock(tx) {
         const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(this.xtile-1, this.ytile);
         const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile+this.length, this.ytile);
-        if (
-            (tx > this.xtile && this.getTile(tx+1, this.ytile) === Consts.OBJECT_WALL) ||
-            (tx < this.xtile && this.getTile(tx-1, this.ytile) === Consts.OBJECT_WALL) ||
-            (spriteTypeAtLeftCorner === Consts.OBJECT_METAL) ||
-            (spriteTypeAtLeftCorner === Consts.OBJECT_JAR) ||
-            (spriteTypeAtRightCorner === Consts.OBJECT_METAL) ||
-            (spriteTypeAtRightCorner === Consts.OBJECT_JAR)
-        ) {
-            this.frozen = true;
+        if (tx > this.xtile) {
+            if (
+                this.getTile(tx + 1, this.ytile) === Consts.OBJECT_WALL ||
+                spriteTypeAtRightCorner === Consts.OBJECT_METAL ||
+                spriteTypeAtRightCorner === Consts.OBJECT_JAR
+            ) {
+                this.frozen = true;
+            }
         }
+
+        if (tx < this.xtile) {
+            if (
+                this.getTile(tx - 1, this.ytile) === Consts.OBJECT_WALL ||
+                spriteTypeAtLeftCorner === Consts.OBJECT_METAL ||
+                spriteTypeAtLeftCorner === Consts.OBJECT_JAR
+            ) {
+                this.frozen = true;
+            }
+        }
+
+
         this.xtile = tx < this.xtile ? tx : this.xtile;
         this.x = this.xtile * Consts.TILE_WIDTH;
         this.length++;
@@ -58,8 +72,7 @@ export class Ice extends AnimSprite {
         } else if (tx === this.xtile+this.length-1) {
             this.length--;
         } else {
-            this.engine.addSprite(
-                new Ice(this.engine, tx+1, this.ytile, this.xtile+this.length-tx-1));
+            this.engine.addSprite(new Ice(this.engine, tx+1, this.ytile, this.xtile + this.length - tx - 1, this.frozen));
             this.length = tx - this.xtile;
         }
         return this.length;

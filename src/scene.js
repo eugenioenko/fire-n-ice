@@ -48,7 +48,11 @@ export class Scene {
                     break;
                 case Consts.OBJECT_ICE:
                     sprite.v = typeof sprite.v === "undefined" ? 1 : sprite.v;
-                    this.engine.addSprite(new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v)));
+                    const ice = new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v));
+                    this.engine.addSprite(ice);
+                    if (typeof sprite.f !== 'undefined') {
+                        ice.frozen = false;
+                    }
                     break;
                 case Consts.OBJECT_METAL:
                     this.engine.addSprite(new Metal(this.engine, sprite.x, sprite.y, 1));
@@ -58,7 +62,9 @@ export class Scene {
                     break;
                 case Consts.OBJECT_JAR:
                     const jar = new Jar(this.engine, sprite.x, sprite.y);
-                    jar.onFire = sprite.v === "1" ? true : false;
+                    if (sprite.v == 1) {
+                        jar.turnOnFire();
+                    }
                     this.engine.addSprite(jar);
                     break;
             }
