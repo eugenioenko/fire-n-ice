@@ -131,7 +131,7 @@ export class Engine {
         let tx = iceblockA.xtile <= iceblockB.xtile ? iceblockA.xtile : iceblockB.xtile;
         let ty = iceblockA.ytile;
         let length = iceblockA.length + iceblockB.length + 1;
-        this.addSprite(new Ice(this, tx, ty, length));
+        this.addSprite(new Ice(this, tx, ty, length, iceblockA.frozen || iceblockB.frozen));
         this.removeSprite(iceblockA);
         this.removeSprite(iceblockB);
     }
