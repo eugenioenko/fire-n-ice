@@ -42,6 +42,7 @@ export class Game {
         this.start.draw();
 
         if (this.engine.keyboard.enter) {
+            this.engine.keyboard.enter = false;
             this.state = Consts.GAME_STATE_PLAY;
             this.engine.sound.soundrack();
         }
