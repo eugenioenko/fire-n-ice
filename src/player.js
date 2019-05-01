@@ -97,7 +97,6 @@ export class Player extends AnimSprite {
     intro() {
         this.setAnim(Consts.ANIM_BIG_FALL_START,Consts.ANIM_BIG_FALL_END, true, Consts.ANIM_RIGHT_ROW, 4);
         this.setState(Consts.MOVE_INTRO, true);
-        this.y -= 32;
     }
 
     outro() {
@@ -240,15 +239,13 @@ export class Player extends AnimSprite {
 
     doIntro() {
         this.counter += 1;
-        if (this.counter === 4) {
+        if (this.counter === 8) {
             this.engine.addSparks(this.xtile, this.ytile, '124, 238, 66', 20,  0.5);
             this.engine.addSparks(this.xtile, this.ytile, '255, 135, 124', 15, 1);
             this.engine.addSparks(this.xtile, this.ytile, '122, 211, 255', 10,  1.5);
             this.engine.sound.play('stage-enter');
         }
-        if (this.counter <= 16) {
-            this.y += 2;
-        } else {
+        if (this.counter >= 32) {
             this.engine.sound.stop("falling");
             this.setState(Consts.MOVE_STAND, false);
         }

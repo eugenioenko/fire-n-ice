@@ -58,7 +58,9 @@ export class Scene {
                     break;
                 case Consts.OBJECT_JAR:
                     const jar = new Jar(this.engine, sprite.x, sprite.y);
-                    jar.onFire = sprite.v === "1" ? true : false;
+                    if (sprite.v == 1) {
+                        jar.turnOnFire();
+                    }
                     this.engine.addSprite(jar);
                     break;
             }
