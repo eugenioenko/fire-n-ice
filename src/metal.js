@@ -27,8 +27,15 @@ export class Metal extends AnimSprite {
         return true;
     }
 
+    frozenToIce() {
+        const rightIce = this.engine.spriteAt(this.xtile + 1, this.ytile);
+        const leftIce = this.engine.spriteAt(this.xtile - 1, this.ytile)
+        return (rightIce && rightIce.id === Consts.OBJECT_ICE && rightIce.frozen) ||
+            (leftIce && leftIce.id === Consts.OBJECT_ICE && leftIce.frozen);
+    }
+
     gravity() {
-        if (!Tile.isSolid(this.coorners.d)) {
+        if (!Tile.isSolid(this.coorners.d) && !this.frozenToIce()) {
             this.falling = true;
             this.setState(Consts.MOVE_DOWN, true);
             return true;
