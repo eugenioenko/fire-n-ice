@@ -40,7 +40,7 @@ export class Sparks extends Sprite {
         this.intencity = (typeof intencity === 'undefined') ? 1 : intencity;
         this.particles = [];
         for (let i = 0; i < this.length; i++) {
-            this.particles[i] = new Particle(this.engine.ctx, tx*Consts.TILE_WIDTH+16, ty*Consts.TILE_WIDTH+16, this.color, this.intencity);
+            this.particles[i] = new Particle(this.engine.ctx, tx*Consts.TileWidth+16, ty*Consts.TileWidth+16, this.color, this.intencity);
         }
     }
 

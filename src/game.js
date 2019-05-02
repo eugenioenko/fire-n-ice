@@ -12,7 +12,7 @@ export class Game {
      * @param {*} resources  Game resources
      */
     constructor(canvas, resources) {
-        this.state = Consts.GAME_STATE_INTRO;
+        this.state = Consts.GameStateIntro;
         this.engine = new Engine(canvas, resources);
         this.levels = levels;
         this.createIntro();
@@ -22,10 +22,10 @@ export class Game {
 
     gameloop_() {
         switch (this.state) {
-            case Consts.GAME_STATE_INTRO:
+            case Consts.GameStateIntro:
                 this.doIntro();
                 break;
-            case Consts.GAME_STATE_PLAY:
+            case Consts.GameStatePlay:
                 this.engine.draw();
                 this.engine.move();
                 break;
@@ -36,7 +36,7 @@ export class Game {
     createIntro() {
         this.intro = new AnimSprite(null, this.engine, 'img_intro', 0, 0, 544, 416, 0, 0, 0, 0, false);
         this.start = new AnimSprite(null, this.engine, 'img_start', 7, 11, 140, 26, -10, 0, 0, 1, true);
-        this.start.animDelay = Consts.ANIM_STANDARD_DELAY * 20;
+        this.start.animDelay = Consts.AnimDefaultDelay * 20;
     }
 
     doIntro() {
@@ -45,7 +45,7 @@ export class Game {
 
         if (this.engine.keyboard.enter) {
             this.engine.keyboard.enter = false;
-            this.state = Consts.GAME_STATE_PLAY;
+            this.state = Consts.GameStatePlay;
             this.engine.sound.soundrack();
         }
     }

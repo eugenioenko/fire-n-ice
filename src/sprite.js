@@ -19,14 +19,14 @@ export class Sprite {
         this.moving = false;
         this.counter = false;
         this.speed = 4;
-        this.state = Consts.MOVE_STAND;
+        this.state = Consts.MoveStand;
         this.height = height;
         this.width = width;
         this.dirrection = 0;
         this.xtile = tx;
         this.ytile = ty;
-        this.x = this.xtile * Consts.TILE_WIDTH;
-        this.y = this.ytile * Consts.TILE_WIDTH;
+        this.x = this.xtile * Consts.TileWidth;
+        this.y = this.ytile * Consts.TileWidth;
     }
     /**
      * Sets sprite states
@@ -51,7 +51,7 @@ export class Sprite {
         return this.engine.spriteTypeAt(tx, ty);
     }
 
-    move () {}
+    move () { }
 
     engineMove() {
         this.coorners.u = this.spriteTypeAt(this.xtile, this.ytile-1);
@@ -65,7 +65,7 @@ export class Sprite {
 
         this.move();
 
-        this.xtile = Math.floor(this.x / Consts.TILE_WIDTH);
-        this.ytile = Math.floor(this.y / Consts.TILE_WIDTH);
+        this.xtile = Math.floor(this.x / Consts.TileWidth);
+        this.ytile = Math.floor(this.y / Consts.TileWidth);
     }
 }

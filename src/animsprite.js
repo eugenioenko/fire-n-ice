@@ -24,7 +24,7 @@ export class AnimSprite extends Sprite {
         this.animStart = start;
         this.animEnd = end;
         this.animCount = 0;
-        this.animDelay = Consts.ANIM_STANDARD_DELAY;
+        this.animDelay = Consts.AnimDefaultDelay;
         this.animDelayCount = 0;
         this.animRow = 0;
         this.offsetX = offsetX;
@@ -42,7 +42,7 @@ export class AnimSprite extends Sprite {
      */
     setAnim(start, end, loop, row, delay, once) {
         once = (typeof once === 'undefined') ? false : once;
-        delay  = (typeof delay === 'undefined') ? Consts.ANIM_STANDARD_DELAY : delay;
+        delay  = (typeof delay === 'undefined') ? Consts.AnimDefaultDelay : delay;
         row = (typeof row === 'undefined') ? this.animRow : row;
         if (!once) {
             this.animStart = start;
