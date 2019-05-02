@@ -26,6 +26,7 @@ export class Jar extends AnimSprite {
     collisions() {
         if (!this.onFire && this.coorners.u === Consts.OBJECT_FIRE) {
             this.turnOnFire();
+            this.engine.removeFire(this.xtile, this.ytile - 1);
         }
         if (this.onFire && this.engine.spriteTypeAt(this.xtile, this.ytile - 1) === Consts.OBJECT_ICE) {
             this.meltIce();
