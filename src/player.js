@@ -37,9 +37,9 @@ export class Player extends AnimSprite {
                 if (!Tile.isSolid(this.coorners.l) && Tile.isSolid(this.coorners.d)) {
                     //not under a brick
                     if (!Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ul)) {
-                        this.setAnim(Consts.ANIM_RUN_START, Consts.ANIM_RUN_END, false, Consts.ANIM_LEFT_ROW);
+                        this.setAnim(Consts.ANIM_RUN_START, Consts.ANIM_RUN_END, true, Consts.ANIM_LEFT_ROW, 2);
                     } else {
-                        this.setAnim(Consts.ANIM_CROUCH_START, Consts.ANIM_CROUCH_END, false, Consts.ANIM_LEFT_ROW);
+                        this.setAnim(Consts.ANIM_CROUCH_START, Consts.ANIM_CROUCH_END, true, Consts.ANIM_LEFT_ROW, 2);
                     }
                     this.setState(Consts.MOVE_LEFT, true);
                 }
@@ -69,9 +69,9 @@ export class Player extends AnimSprite {
             } else{
                 if (!Tile.isSolid(this.coorners.r) && Tile.isSolid(this.coorners.d)) {
                     if (!Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ur)) {
-                        this.setAnim(Consts.ANIM_RUN_START, Consts.ANIM_RUN_END, false, Consts.ANIM_RIGHT_ROW);
+                        this.setAnim(Consts.ANIM_RUN_START, Consts.ANIM_RUN_END, true, Consts.ANIM_RIGHT_ROW, 2);
                     } else {
-                        this.setAnim(Consts.ANIM_CROUCH_START, Consts.ANIM_CROUCH_END, false, Consts.ANIM_RIGHT_ROW);
+                        this.setAnim(Consts.ANIM_CROUCH_START, Consts.ANIM_CROUCH_END, true, Consts.ANIM_RIGHT_ROW, 2);
                     }
                     this.setState(Consts.MOVE_RIGHT, true);
                 }
@@ -118,21 +118,16 @@ export class Player extends AnimSprite {
                 this.setState(Consts.MOVE_DOWN, true);
                 if (this.fallCounter >= 1) {
                     this.engine.sound.playOnce("falling");
-                }
-                if (this.fallCounter >= 2) {
-                    this.setAnim(Consts.ANIM_BIG_FALL_START, Consts.ANIM_BIG_FALL_END, true, Consts.ANIM_RIGHT_ROW);
+                    this.setAnim(Consts.ANIM_BIG_FALL_START, Consts.ANIM_BIG_FALL_END, true, Consts.ANIM_RIGHT_ROW, 1);
                 } else {
-                    this.setAnim(Consts.ANIM_BIG_FALL_START, Consts.ANIM_BIG_FALL_END, true, Consts.ANIM_RIGHT_ROW);
+                    this.setAnim(Consts.ANIM_BIG_FALL_START, Consts.ANIM_BIG_FALL_END, true, Consts.ANIM_RIGHT_ROW, 3);
                 }
             } else {
-
                 this.engine.sound.stop("falling");
                 if (this.state === Consts.MOVE_DOWN) {
                     this.engine.sound.play('fall');
-                    if (this.fallCounter >= 2) {
-                        this.engine.addSparks(this.xtile, this.ytile + 1, '255, 135, 124', 5, 0.75);
-                        this.engine.addSparks(this.xtile, this.ytile + 1, '122, 211, 255', 10,  1);
-                    }
+                    this.engine.addSparks(this.xtile, this.ytile, '124, 238, 66', 10,  0.75);
+                    this.engine.addSparks(this.xtile, this.ytile + 1, '122, 211, 255', 5,  1.25);
                 }
                 this.fallCounter = 0;
                 this.setState(Consts.MOVE_STAND, false);
@@ -193,16 +188,16 @@ export class Player extends AnimSprite {
     }
 
     doRun() {
-        this.counter++;
+        this.counter += 1;
         if (this.counter <= Consts.ANIM_FRAME_COUNT) {
             this.x += this.speed * this.dirrection;
         } else {
-            this.setState(Consts.MOVE_STAND, false);
+           this.setState(Consts.MOVE_STAND, false);
         }
     }
 
     doTurn() {
-        this.counter++;
+        this.counter += 1;
         if (this.counter >= Consts.ANIM_FRAME_COUNT) {
             this.setState(Consts.MOVE_STAND, false);
         }
@@ -213,13 +208,13 @@ export class Player extends AnimSprite {
         if (this.counter % 10 === 0) {
             this.innerCounter += 1;
             if (this.innerCounter === 1) {
-                this.engine.addSparks(this.xtile, this.ytile, '124, 238, 66', 20,  0.5);
+                this.engine.addSparks(this.xtile, this.ytile, '124, 238, 66', 15,  0.5);
             }
             if (this.innerCounter === 3) {
-                this.engine.addSparks(this.xtile, this.ytile, '255, 135, 124', 15, 1);
+                this.engine.addSparks(this.xtile, this.ytile, '255, 135, 124', 20, 1);
             }
             if (this.innerCounter === 5) {
-                this.engine.addSparks(this.xtile, this.ytile, '122, 211, 255', 10,  1.5);
+                this.engine.addSparks(this.xtile, this.ytile, '122, 211, 255', 25,  1.5);
             }
             if (this.innerCounter % 2 === 0 && this.innerCounter < 6) {
                 this.engine.sound.play('climb');

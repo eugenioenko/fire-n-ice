@@ -41,26 +41,26 @@ export class AnimSprite extends Sprite {
      * @param {boolean} once  Sets all the new values only one time.
      */
     setAnim(start, end, loop, row, delay, once) {
-        let _once = (typeof once === 'undefined') ? false : once;
-        let _delay = (typeof delay === 'undefined') ? Consts.ANIM_STANDARD_DELAY : delay;
-        let _row = (typeof row === 'undefined') ? this.animRow : row;
-        if (!_once) {
+        once = (typeof once === 'undefined') ? false : once;
+        delay  = (typeof delay === 'undefined') ? Consts.ANIM_STANDARD_DELAY : delay;
+        row = (typeof row === 'undefined') ? this.animRow : row;
+        if (!once) {
             this.animStart = start;
             this.animEnd = end;
             this.animCount = start;
             this.animLoop = loop;
-            this.animDelay = _delay;
-            this.animRow = _row;
+            this.animDelay = delay;
+            this.animRow = row;
         } else {
             if (this.animStart !== start || this.animEnd !== end ||
-                this.animLoop !== loop || this.animRow !== _row)
+                this.animLoop !== loop || this.animRow !== row)
             {
                 this.animStart = start;
                 this.animEnd = end;
                 this.animCount = start;
                 this.animLoop = loop;
-                this.animDelay = _delay;
-                this.animRow = _row;
+                this.animDelay = delay;
+                this.animRow = row;
             }
         }
     }
@@ -68,7 +68,6 @@ export class AnimSprite extends Sprite {
      * Draws the frame of the sprite in the canvas
      */
     draw() {
-        this.ctx.save();
         this.ctx.drawImage(
             this.image,
             this.animCount * this.width,
@@ -78,8 +77,10 @@ export class AnimSprite extends Sprite {
             this.y + this.offsetY,
             this.width, this.height
         );
+
         if (this.animDelayCount++ > this.animDelay) {
-            if (++this.animCount > this.animEnd) {
+            this.animCount += 1;
+            if (this.animCount > this.animEnd) {
                 if (this.animLoop) {
                     this.animCount = this.animStart;
                 } else {
@@ -88,6 +89,5 @@ export class AnimSprite extends Sprite {
             }
             this.animDelayCount = 0;
         }
-        this.ctx.restore();
     }
 }
