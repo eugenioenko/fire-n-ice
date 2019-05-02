@@ -71,9 +71,11 @@
 		app.controller('controller', ['$scope', function ($scope) {
 			$scope.levels = [];
 			setTimeout(() => {
-				$scope.levels = game.levels;
-				$scope.$apply();
-			}, 1000);
+				if (game) {
+					$scope.levels = game.levels;
+					$scope.$apply();
+				}
+			}, 3000);
 			$scope.toolSelect = function(e) {
 				tool = e;
 				$scope.tool = e;
