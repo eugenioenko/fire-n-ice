@@ -20,11 +20,23 @@ export class Keyboard {
             }
             this.intro = false;
         });
-        document.getElementById('btn_action').addEventListener('pointerdown', () => this.down = true);
+        document.getElementById('btn_action').addEventListener('pointerdown', () => {
+            this.down = true;
+            this.left = false;
+            this.right = false;
+        });
         document.getElementById('btn_action').addEventListener('pointerup', () => this.down = false);
-        document.getElementById('btn_left').addEventListener('pointerdown', () => this.left = true);
+        document.getElementById('btn_left').addEventListener('pointerdown', () => {
+            this.left = true;
+            this.right = false;
+            this.down = false;
+        });
         document.getElementById('btn_left').addEventListener('pointerup', () => this.left = false);
-        document.getElementById('btn_right').addEventListener('pointerdown', () => this.right = true);
+        document.getElementById('btn_right').addEventListener('pointerdown', () => {
+            this.right = true;
+            this.left = false;
+            this.down = false;
+        });
         document.getElementById('btn_right').addEventListener('pointerup', () => this.right = false);
         document.getElementById('btn_select').addEventListener('pointerup', () => this.enter = true);
     }
