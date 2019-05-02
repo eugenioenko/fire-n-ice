@@ -76,6 +76,11 @@ ul#controls>li{
 	font-size: 38px;
 	padding: 3px;
 	margin: 10px;
+	cursor: pointer;
+}
+
+.active {
+	color: #155fd9;
 }
 
 .pull-right {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 <head>
 	<title>Fire 'n Ice</title>
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
@@ -7,68 +7,27 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-	<script>
-		var FIRENICE_EDITOR_MODE = true;
-		var tool = 1;
-		function toolSelect(e) {
-			tool = e;
-		}
-	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js"></script>
 	<script src="dist/firenice.js"></script>
 </head>
-<body>
+<body ng-controller="controller">
 	<div class="wrapper" style="padding-bottom: 15px">
 		<h1>Fire 'n Ice Level Editor</h1>
 	</div>
 	<div class="wrapper">
 		<div class="bg-dark">
-			<span onclick="toolSelect(0)" class="far fa-square"></span>
-			<span onclick="toolSelect(1)" class="fab fa-delicious"></span>
-			<span onclick="toolSelect(6)" class="fa fa-fire"></span>
-			<span onclick="toolSelect(3)" class="fa fa-cube"></span>
-			<span onclick="toolSelect(5)" class="fa fa-hourglass"></span>
-			<span onclick="toolSelect(7)" class="fa fa-user"></span>
-			<select id="theme-selector">
-				<option value="0">Theme 0</option>
-				<option value="1">Theme 1</option>
-				<option value="2">Theme 2</option>
-				<option value="3">Theme 3</option>
-				<option value="4">Theme 4</option>
-				<option value="5">Theme 5</option>
-				<option value="6">Theme 6</option>
-				<option value="7">Theme 7</option>
-				<option value="8">Theme 8</option>
-				<option value="9">Theme 9</option>
-			</select>
-			<select id="level-selector">
-				<option value="-1">Select a level</option>
-				<option value="0">Level 0</option>
-				<option value="1">Level 1</option>
-				<option value="2">Level 2</option>
-				<option value="3">Level 3</option>
-				<option value="4">Level 4</option>
-				<option value="5">Level 5</option>
-				<option value="6">Level 6</option>
-				<option value="7">Level 7</option>
-				<option value="8">Level 8</option>
-				<option value="9">Level 9</option>
-				<option value="10">Level 10</option>
-				<option value="11">Level 11</option>
-				<option value="12">Level 12</option>
-				<option value="13">Level 13</option>
-				<option value="14">Level 14</option>
-				<option value="15">Level 15</option>
-				<option value="16">Level 16</option>
-				<option value="17">Level 17</option>
-				<option value="18">Level 18</option>
-				<option value="19">Level 19</option>
-			</select>
+			<span ng-click="toolSelect(0)" class="far fa-square" ng-class="{'active': tool === 0}"></span>
+			<span ng-click="toolSelect(1)" class="fab fa-delicious" ng-class="{'active': tool === 1}"></span>
+			<span ng-click="toolSelect(6)" class="fa fa-fire" ng-class="{'active': tool === 6}"></span>
+			<span ng-click="toolSelect(3)" class="fa fa-dice-three" ng-class="{'active': tool === 3}"></span>
+			<span ng-click="toolSelect(4)" class="fa fa-weight-hanging" ng-class="{'active': tool === 4}"></span>
+			<span ng-click="toolSelect(5)" class="fa fa-hourglass" ng-class="{'active': tool === 5}"></span>
+			<span ng-click="toolSelect(7)" class="fa fa-user" ng-class="{'active': tool === 7}"></span>
+			<span ng-click="loadLevelsList()" class="fa fa-sync-alt"></span>
 		</div>
 	</div>
 	<div class="wrapper">
-		<canvas id="canvas" height="416" width="544">
-
-		</canvas>
+		<canvas id="canvas" height="416" width="544"></canvas>
 	</div>
 
 	<div class="wrapper" style="display: none">
@@ -85,8 +44,44 @@
 		<div class="bg-dark">
 			<textarea id="txt-level"></textarea>
 			<button id="btn-save">Save</button>
+
+			<select id="theme-selector">
+				<option value="0">Theme 0</option>
+				<option value="1">Theme 1</option>
+				<option value="2">Theme 2</option>
+				<option value="3">Theme 3</option>
+				<option value="4">Theme 4</option>
+				<option value="5">Theme 5</option>
+				<option value="6">Theme 6</option>
+				<option value="7">Theme 7</option>
+				<option value="8">Theme 8</option>
+				<option value="9">Theme 9</option>
+			</select>
+			<select id="level-selector">
+				<option value="-1">Select a level</option>
+				<option ng-repeat="level in levels" value="{{$index}}">Level {{$index}}</option>
+			</select>
 		</div>
 	</div>
+	<script>
+		var FIRENICE_EDITOR_MODE = true;
+		var tool = 1;
+		var app = angular.module('app', []);
 
+		app.controller('controller', ['$scope', function ($scope) {
+			$scope.levels = [];
+			setTimeout(() => {
+				$scope.levels = game.levels;
+				$scope.$apply();
+			}, 1000);
+			$scope.toolSelect = function(e) {
+				tool = e;
+				$scope.tool = e;
+			}
+			$scope.loadLevelsList = function() {
+				$scope.levels = game.levels;
+			}
+		}]);
+	</script>
 </body>
 </html>

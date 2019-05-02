@@ -1,6 +1,7 @@
-import { Engine } from './engine';
 import { AnimSprite } from './animsprite';
 import { Consts }  from './constants';
+import { Engine } from './engine';
+import { levels } from './levels';
 
 /**
  * Game Loop
@@ -13,6 +14,7 @@ export class Game {
     constructor(canvas, resources) {
         this.state = Consts.GAME_STATE_INTRO;
         this.engine = new Engine(canvas, resources);
+        this.levels = levels;
         this.createIntro();
         this.gameloop = this.gameloop_.bind(this); // jshint ignore:line
         this.gameloop();
