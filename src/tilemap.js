@@ -12,8 +12,8 @@ export class TileMap {
         this.engine = engine;
         this.map = map;
         this.theme = theme;
-        this.tileWidth = Consts.TILE_WIDTH;
-        this.tileHeight = Consts.TILE_WIDTH;
+        this.tileWidth = Consts.TileWidth;
+        this.tileHeight = Consts.TileWidth;
         this.height = this.map.length - 1;
         this.width = this.map[0].length - 1;
         this.tilesImage = this.engine.resources.get('tilemap');
@@ -27,7 +27,7 @@ export class TileMap {
      */
     getTile(x, y) {
         if (x < 0 || y < 0 || x > this.width || y > this.height) {
-            return Consts.OBJECT_OUT;
+            return Consts.ObjectOut;
         }
         return this.map[y][x];
 
@@ -41,16 +41,16 @@ export class TileMap {
         this.ctx.save();
         for (let i = 0; i <= this.width; ++i) {
             for (let j = 0; j <= this.height; ++j) {
-                let tileType = Consts.TILE_BACKGROUND;
+                let tileType = Consts.TileBackground;
                 if (this.map[j][i] === 1) {
                     if (!this.getTile(i-1, j) && !this.getTile(i+1, j)) {
-                        tileType = Consts.TILE_BOTH;
+                        tileType = Consts.TileBothSides;
                     } else if (!this.getTile(i-1, j)) {
-                        tileType = Consts.TILE_LEFT;
+                        tileType = Consts.TileLeftSide;
                     } else if (!this.getTile(i+1, j)) {
-                        tileType = Consts.TILE_RIGHT;
+                        tileType = Consts.TileRightSide;
                     } else {
-                        tileType = Consts.TILE_MIDDLE;
+                        tileType = Consts.TileMiddle;
                     }
                 }
 

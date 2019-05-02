@@ -5,13 +5,13 @@ import { Consts }  from './constants';
 export class Player extends AnimSprite {
 
     constructor(engine, tx, ty) {
-        super(Consts.OBJECT_PLAYER, engine, 'img_dona', tx, ty, 48, 64, -10, -32, 2, 2, false);
+        super(Consts.ObjectPlayer, engine, 'img_dona', tx, ty, 48, 64, -10, -32, 2, 2, false);
         this.speed = 2;
         this.dirrection = 1;
         this.state = 0; //standing top right down left
         this.moving = false;
-        this.tileWidth = Consts.TILE_WIDTH;
-        this.tileHeight = Consts.TILE_WIDTH;
+        this.tileWidth = Consts.TileWidth;
+        this.tileHeight = Consts.TileWidth;
         this.animDelay = 3;
         this.counter = 0;
         this.fallCounter = 0;
@@ -23,34 +23,34 @@ export class Player extends AnimSprite {
     left() {
         if (!this.moving) {
             //if standing then turn
-            if (this.dirrection !== Consts.DIR_LEFT) {
+            if (this.dirrection !== Consts.DirLeft) {
                 //is not under a brick
                 if (!Tile.isSolid(this.coorners.u)) {
-                    this.setAnim(Consts.ANIM_TURN_START, Consts.ANIM_TURN_END, false, Consts.ANIM_RIGHT_ROW, 4);
+                    this.setAnim(Consts.AnimTurnStart, Consts.AnimTurnEnd, false, Consts.AnimRightRow, 4);
                 } else {
-                    this.setAnim(Consts.ANIM_CROUCH_START,Consts.ANIM_CROUCH_START, false, Consts.ANIM_LEFT_ROW, 4);
+                    this.setAnim(Consts.AnimCrouchStart,Consts.AnimCrouchStart, false, Consts.AnimLeftRow, 4);
                 }
-                this.setState(Consts.MOVE_TURN, true);
-                this.dirrection = Consts.DIR_LEFT;
+                this.setState(Consts.MoveTurn, true);
+                this.dirrection = Consts.DirLeft;
             } else{
                 //running
                 if (!Tile.isSolid(this.coorners.l) && Tile.isSolid(this.coorners.d)) {
                     //not under a brick
                     if (!Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ul)) {
-                        this.setAnim(Consts.ANIM_RUN_START, Consts.ANIM_RUN_END, true, Consts.ANIM_LEFT_ROW, 2);
+                        this.setAnim(Consts.AnimRunStart, Consts.AnimRunEnd, true, Consts.AnimLeftRow, 2);
                     } else {
-                        this.setAnim(Consts.ANIM_CROUCH_START, Consts.ANIM_CROUCH_END, true, Consts.ANIM_LEFT_ROW, 2);
+                        this.setAnim(Consts.AnimCrouchStart, Consts.AnimCrouchEnd, true, Consts.AnimLeftRow, 2);
                     }
-                    this.setState(Consts.MOVE_LEFT, true);
+                    this.setState(Consts.MoveLeft, true);
                 }
                 //hit an ice
-                if (Tile.isSolid(this.coorners.d) && (this.coorners.l === Consts.OBJECT_ICE || this.coorners.l === Consts.OBJECT_METAL)) {
+                if (Tile.isSolid(this.coorners.d) && (this.coorners.l === Consts.ObjectIce || this.coorners.l === Consts.ObjectMetal)) {
                     this.push();
                 }
                 //climb
                 if (Tile.isSolid(this.coorners.l) && Tile.isSolid(this.coorners.d)  && !Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ul) && !this.moving) {
-                    this.setAnim(Consts.ANIM_PUSH_START,Consts.ANIM_PUSH_START,false, Consts.ANIM_LEFT_ROW);
-                    this.setState(Consts.MOVE_UP, true);
+                    this.setAnim(Consts.AnimPushStart,Consts.AnimPushStart,false, Consts.AnimLeftRow);
+                    this.setState(Consts.MoveUp, true);
                 }
             }
         }
@@ -58,50 +58,50 @@ export class Player extends AnimSprite {
 
     right() {
         if (!this.moving) {
-            if (this.dirrection !== Consts.DIR_RIGHT) {
+            if (this.dirrection !== Consts.DirRight) {
                 if (!Tile.isSolid(this.coorners.u)) {
-                    this.setAnim(Consts.ANIM_TURN_START, Consts.ANIM_TURN_END, false, Consts.ANIM_LEFT_ROW, 4);
+                    this.setAnim(Consts.AnimTurnStart, Consts.AnimTurnEnd, false, Consts.AnimLeftRow, 4);
                 } else {
-                    this.setAnim(Consts.ANIM_CROUCH_START,Consts.ANIM_CROUCH_START, false, Consts.ANIM_RIGHT_ROW, 4);
+                    this.setAnim(Consts.AnimCrouchStart,Consts.AnimCrouchStart, false, Consts.AnimRightRow, 4);
                 }
-                this.setState(Consts.MOVE_TURN, true);
-                this.dirrection = Consts.DIR_RIGHT;
+                this.setState(Consts.MoveTurn, true);
+                this.dirrection = Consts.DirRight;
             } else{
                 if (!Tile.isSolid(this.coorners.r) && Tile.isSolid(this.coorners.d)) {
                     if (!Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ur)) {
-                        this.setAnim(Consts.ANIM_RUN_START, Consts.ANIM_RUN_END, true, Consts.ANIM_RIGHT_ROW, 2);
+                        this.setAnim(Consts.AnimRunStart, Consts.AnimRunEnd, true, Consts.AnimRightRow, 2);
                     } else {
-                        this.setAnim(Consts.ANIM_CROUCH_START, Consts.ANIM_CROUCH_END, true, Consts.ANIM_RIGHT_ROW, 2);
+                        this.setAnim(Consts.AnimCrouchStart, Consts.AnimCrouchEnd, true, Consts.AnimRightRow, 2);
                     }
-                    this.setState(Consts.MOVE_RIGHT, true);
+                    this.setState(Consts.MoveRight, true);
                 }
-                if (Tile.isSolid(this.coorners.d) && (this.coorners.r === Consts.OBJECT_ICE || this.coorners.r === Consts.OBJECT_METAL)) {
+                if (Tile.isSolid(this.coorners.d) && (this.coorners.r === Consts.ObjectIce || this.coorners.r === Consts.ObjectMetal)) {
                     this.push();
                 }
                 if (Tile.isSolid(this.coorners.r) && Tile.isSolid(this.coorners.d) && !Tile.isSolid(this.coorners.u) && !Tile.isSolid(this.coorners.ur) && !this.moving) {
-                    this.setAnim(Consts.ANIM_PUSH_START,Consts.ANIM_PUSH_START,false, Consts.ANIM_RIGHT_ROW);
-                    this.setState(Consts.MOVE_UP, true);
+                    this.setAnim(Consts.AnimPushStart,Consts.AnimPushStart,false, Consts.AnimRightRow);
+                    this.setState(Consts.MoveUp, true);
                 }
             }
         }
     }
 
     burn() {
-        if (this.state !== Consts.MOVE_RIP) {
+        if (this.state !== Consts.MoveRip) {
             this.engine.sound.playOnce('danger');
-            this.setState(Consts.MOVE_RIP, true);
-            this.setAnim(Consts.ANIM_RIP_START,Consts.ANIM_RIP_END, true, Consts.ANIM_RIGHT_ROW);
+            this.setState(Consts.MoveRip, true);
+            this.setAnim(Consts.AnimRipStart,Consts.AnimRipEnd, true, Consts.AnimRightRow);
         }
     }
 
     intro() {
-        this.setAnim(Consts.ANIM_BIG_FALL_START,Consts.ANIM_BIG_FALL_END, true, Consts.ANIM_RIGHT_ROW, 4);
-        this.setState(Consts.MOVE_INTRO, true);
+        this.setAnim(Consts.AnimBigFallStart,Consts.AnimBigFallEnd, true, Consts.AnimRightRow, 4);
+        this.setState(Consts.MoveLevelEnter, true);
     }
 
     outro() {
-        this.setAnim(Consts.ANIM_FALL_START, Consts.ANIM_BIG_FALL_END, true, Consts.ANIM_RIGHT_ROW, 4);
-        this.setState(Consts.MOVE_OUTRO, true);
+        this.setAnim(Consts.AnimFallStart, Consts.AnimBigFallEnd, true, Consts.AnimRightRow, 4);
+        this.setState(Consts.MoveLevelExit, true);
         this.innerCounter = 0;
     }
 
@@ -115,23 +115,23 @@ export class Player extends AnimSprite {
                 console.eror('undefined coorner');
             }
             if (!Tile.isSolid(this.coorners.d)) {
-                this.setState(Consts.MOVE_DOWN, true);
+                this.setState(Consts.MoveDown, true);
                 if (this.fallCounter >= 1) {
                     this.engine.sound.playOnce("falling");
-                    this.setAnim(Consts.ANIM_BIG_FALL_START, Consts.ANIM_BIG_FALL_END, true, Consts.ANIM_RIGHT_ROW, 1);
+                    this.setAnim(Consts.AnimBigFallStart, Consts.AnimBigFallEnd, true, Consts.AnimRightRow, 1);
                 } else {
-                    this.setAnim(Consts.ANIM_BIG_FALL_START, Consts.ANIM_BIG_FALL_END, true, Consts.ANIM_RIGHT_ROW, 3);
+                    this.setAnim(Consts.AnimBigFallStart, Consts.AnimBigFallEnd, true, Consts.AnimRightRow, 3);
                 }
             } else {
                 this.engine.sound.stop("falling");
-                if (this.state === Consts.MOVE_DOWN) {
+                if (this.state === Consts.MoveDown) {
                     this.engine.sound.play('fall');
                     this.engine.addSparks(this.xtile, this.ytile, '124, 238, 66', 10,  0.75);
                     this.engine.addSparks(this.xtile, this.ytile + 1, '122, 211, 255', 5,  1.25);
                 }
                 this.fallCounter = 0;
-                this.setState(Consts.MOVE_STAND, false);
-                if (this.coorners.d === Consts.OBJECT_JAR) {
+                this.setState(Consts.MoveStand, false);
+                if (this.coorners.d === Consts.ObjectJar) {
                     const jar = this.engine.spriteAt(this.xtile, this.ytile + 1);
                     if (jar && jar.onFire) {
                         this.burn();
@@ -144,27 +144,27 @@ export class Player extends AnimSprite {
     ice() {
         if (!this.moving) {
             if (Tile.isSolid(this.coorners.d)) {
-                if (this.dirrection === Consts.DIR_RIGHT) {
-                    if (!Tile.isSolid(this.coorners.dr) && this.coorners.dr !== Consts.OBJECT_FIRE) {
-                        this.setAnim(Consts.ANIM_ICE_START,Consts.ANIM_ICE_END,false, Consts.ANIM_RIGHT_ROW, 4);
-                        this.setState(Consts.MOVE_ICE_MAKE, true);
-                    } else if (this.coorners.dr === Consts.OBJECT_ICE) {
-                        this.setAnim(Consts.ANIM_ICE_START,Consts.ANIM_ICE_END,false, Consts.ANIM_RIGHT_ROW, 4);
-                        this.setState(Consts.MOVE_ICE_REMOVE, true);
+                if (this.dirrection === Consts.DirRight) {
+                    if (!Tile.isSolid(this.coorners.dr) && this.coorners.dr !== Consts.ObjectFire) {
+                        this.setAnim(Consts.AnimIceStart,Consts.AnimIceEnd,false, Consts.AnimRightRow, 4);
+                        this.setState(Consts.MoveIceMake, true);
+                    } else if (this.coorners.dr === Consts.ObjectIce) {
+                        this.setAnim(Consts.AnimIceStart,Consts.AnimIceEnd,false, Consts.AnimRightRow, 4);
+                        this.setState(Consts.MoveIceRemove, true);
                     } else {
-                        this.setAnim(Consts.ANIM_ICE_START,Consts.ANIM_ICE_END,false, Consts.ANIM_RIGHT_ROW, 4);
-                        this.setState(Consts.MOVE_ICE_FAIL, true);
+                        this.setAnim(Consts.AnimIceStart,Consts.AnimIceEnd,false, Consts.AnimRightRow, 4);
+                        this.setState(Consts.MoveIceFail, true);
                     }
                 } else {
-                    if (!Tile.isSolid(this.coorners.dl) && (this.coorners.dl !== Consts.OBJECT_FIRE)) {
-                        this.setAnim(Consts.ANIM_ICE_START,Consts.ANIM_ICE_END,false, Consts.ANIM_LEFT_ROW, 4);
-                        this.setState(Consts.MOVE_ICE_MAKE, true);
-                    } else if (this.coorners.dl === Consts.OBJECT_ICE) {
-                        this.setAnim(Consts.ANIM_ICE_START,Consts.ANIM_ICE_END,false, Consts.ANIM_LEFT_ROW, 4);
-                        this.setState(Consts.MOVE_ICE_REMOVE, true);
+                    if (!Tile.isSolid(this.coorners.dl) && (this.coorners.dl !== Consts.ObjectFire)) {
+                        this.setAnim(Consts.AnimIceStart,Consts.AnimIceEnd,false, Consts.AnimLeftRow, 4);
+                        this.setState(Consts.MoveIceMake, true);
+                    } else if (this.coorners.dl === Consts.ObjectIce) {
+                        this.setAnim(Consts.AnimIceStart,Consts.AnimIceEnd,false, Consts.AnimLeftRow, 4);
+                        this.setState(Consts.MoveIceRemove, true);
                     } else {
-                        this.setAnim(Consts.ANIM_ICE_START,Consts.ANIM_ICE_END,false, Consts.ANIM_LEFT_ROW, 4);
-                        this.setState(Consts.MOVE_ICE_FAIL, true);
+                        this.setAnim(Consts.AnimIceStart,Consts.AnimIceEnd,false, Consts.AnimLeftRow, 4);
+                        this.setState(Consts.MoveIceFail, true);
                     }
                 }
             }
@@ -173,15 +173,15 @@ export class Player extends AnimSprite {
 
     jump() {
         if (!this.moving) {
-            if (this.dirrection === Consts.DIR_RIGHT) {
+            if (this.dirrection === Consts.DirRight) {
                 if (Tile.isSolid(this.coorners.r) && !Tile.isSolid(this.coorners.ur) && !Tile.isSolid(this.coorners.u)) {
-                    this.setAnim(Consts.ANIM_PUSH_START,Consts.ANIM_PUSH_START,false, Consts.ANIM_RIGHT_ROW);
-                    this.setState(Consts.MOVE_UP, true);
+                    this.setAnim(Consts.AnimPushStart,Consts.AnimPushStart,false, Consts.AnimRightRow);
+                    this.setState(Consts.MoveUp, true);
                 }
             } else {
                 if (Tile.isSolid(this.coorners.l) && !Tile.isSolid(this.coorners.ul) && !Tile.isSolid(this.coorners.u)) {
-                    this.setAnim(Consts.ANIM_PUSH_START,Consts.ANIM_PUSH_START,false, Consts.ANIM_LEFT_ROW);
-                    this.setState(Consts.MOVE_UP, true);
+                    this.setAnim(Consts.AnimPushStart,Consts.AnimPushStart,false, Consts.AnimLeftRow);
+                    this.setState(Consts.MoveUp, true);
                 }
             }
         }
@@ -189,17 +189,17 @@ export class Player extends AnimSprite {
 
     doRun() {
         this.counter += 1;
-        if (this.counter <= Consts.ANIM_FRAME_COUNT) {
+        if (this.counter <= Consts.AnimFrameCount) {
             this.x += this.speed * this.dirrection;
         } else {
-           this.setState(Consts.MOVE_STAND, false);
+           this.setState(Consts.MoveStand, false);
         }
     }
 
     doTurn() {
         this.counter += 1;
-        if (this.counter >= Consts.ANIM_FRAME_COUNT) {
-            this.setState(Consts.MOVE_STAND, false);
+        if (this.counter >= Consts.AnimFrameCount) {
+            this.setState(Consts.MoveStand, false);
         }
     }
 
@@ -227,7 +227,7 @@ export class Player extends AnimSprite {
         }
         if (this.innerCounter >= 6) {
             this.engine.sound.play('state-leave');
-            this.setState(Consts.MOVE_STAND, false);
+            this.setState(Consts.MoveStand, false);
             this.engine.nextLevel();
         }
     }
@@ -242,13 +242,13 @@ export class Player extends AnimSprite {
         }
         if (this.counter >= 32) {
             this.engine.sound.stop("falling");
-            this.setState(Consts.MOVE_STAND, false);
+            this.setState(Consts.MoveStand, false);
         }
     }
 
     doGravity() {
         this.counter += 1;
-        if (this.counter <= Consts.ANIM_FRAME_COUNT) {
+        if (this.counter <= Consts.AnimFrameCount) {
             this.y += this.speed;
         } else {
             this.moving = false;
@@ -260,12 +260,12 @@ export class Player extends AnimSprite {
     doStand() {
         if (!Tile.isSolid(this.coorners.u)) {
             if (this.standCounter++ > 500) {
-                this.setAnim(Consts.ANIM_SLEEP_START,Consts.ANIM_SLEEP_END,true, this.dirrection !== 1 ? Consts.ANIM_LEFT_ROW : Consts.ANIM_RIGHT_ROW, 48, true);
+                this.setAnim(Consts.AnimSleepStart,Consts.AnimSleepEnd,true, this.dirrection !== 1 ? Consts.AnimLeftRow : Consts.AnimRightRow, 48, true);
             } else {
-                this.setAnim(Consts.ANIM_STAND_START,Consts.ANIM_STAND_END,true, this.dirrection !== 1 ? Consts.ANIM_LEFT_ROW : Consts.ANIM_RIGHT_ROW, 8, true);
+                this.setAnim(Consts.AnimStandStart,Consts.AnimStandEnd,true, this.dirrection !== 1 ? Consts.AnimLeftRow : Consts.AnimRightRow, 8, true);
             }
         } else {
-            this.setAnim(Consts.ANIM_CROUCH_START,Consts.ANIM_CROUCH_START, false, this.dirrection !== 1 ? Consts.ANIM_LEFT_ROW : Consts.ANIM_RIGHT_ROW, 8, true);
+            this.setAnim(Consts.AnimCrouchStart,Consts.AnimCrouchStart, false, this.dirrection !== 1 ? Consts.AnimLeftRow : Consts.AnimRightRow, 8, true);
         }
     }
 
@@ -277,31 +277,31 @@ export class Player extends AnimSprite {
                     this.engine.sound.play('climb');
                     this.engine.addSparks(this.xtile, this.ytile, '124, 238, 66', 10,  0.75);
                     this.engine.addSparks(this.xtile, this.ytile, '255, 135, 124', 5, 1.25);
-                    this.setAnim(Consts.ANIM_PUSH_END, Consts.ANIM_PUSH_END, false, this.dirrection === Consts.DIR_RIGHT ? Consts.ANIM_RIGHT_ROW : Consts.ANIM_LEFT_ROW);
+                    this.setAnim(Consts.AnimPushEnd, Consts.AnimPushEnd, false, this.dirrection === Consts.DirRight ? Consts.AnimRightRow : Consts.AnimLeftRow);
                     break;
                 case 6:
-                    this.setAnim(Consts.ANIM_JUMP_START, Consts.ANIM_JUMP_START, false, this.dirrection === Consts.DIR_RIGHT ? Consts.ANIM_RIGHT_ROW : Consts.ANIM_LEFT_ROW);
+                    this.setAnim(Consts.AnimJumpStart, Consts.AnimJumpStart, false, this.dirrection === Consts.DirRight ? Consts.AnimRightRow : Consts.AnimLeftRow);
                     this.x += 8 * this.dirrection;
                     this.y -= 8;
                     break;
                 case 9:
-                    this.setAnim(Consts.ANIM_JUMP_END, Consts.ANIM_JUMP_END, false, this.dirrection === Consts.DIR_RIGHT ? Consts.ANIM_RIGHT_ROW : Consts.ANIM_LEFT_ROW);
+                    this.setAnim(Consts.AnimJumpEnd, Consts.AnimJumpEnd, false, this.dirrection === Consts.DirRight ? Consts.AnimRightRow : Consts.AnimLeftRow);
                     this.x += 8 * this.dirrection;
                     this.y -= 8;
                     break;
                 case 12:
-                    this.setAnim(2, 2, false, this.dirrection === Consts.DIR_RIGHT ? Consts.ANIM_RIGHT_ROW : Consts.ANIM_LEFT_ROW);
+                    this.setAnim(2, 2, false, this.dirrection === Consts.DirRight ? Consts.AnimRightRow : Consts.AnimLeftRow);
                     this.x += 8 * this.dirrection;
                     this.y -= 8;
                     break;
                 case 18:
-                    this.setAnim(Consts.ANIM_STAND, Consts.ANIM_STAND, false, this.dirrection === Consts.DIR_RIGHT ? Consts.ANIM_RIGHT_ROW : Consts.ANIM_LEFT_ROW);
+                    this.setAnim(Consts.AnimStand, Consts.AnimStand, false, this.dirrection === Consts.DirRight ? Consts.AnimRightRow : Consts.AnimLeftRow);
                     this.x += 8 * this.dirrection;
                     this.y -= 8;
                 break;
             }
         } else {
-            this.setState(Consts.MOVE_STAND, false);
+            this.setState(Consts.MoveStand, false);
         }
     }
 
@@ -324,14 +324,14 @@ export class Player extends AnimSprite {
         if (ice && ice.canGlide(this.dirrection)) {
             this.engine.addSparks(this.xtile + this.dirrection, this.ytile, '255, 255, 255', 3);
             this.engine.addSparks(this.xtile + this.dirrection, this.ytile, '124, 214, 255', 3, 1.5);
-            this.setAnim(Consts.ANIM_PUSH_START, Consts.ANIM_PUSH_END, false, this.dirrection === Consts.DIR_RIGHT ? Consts.ANIM_RIGHT_ROW : Consts.ANIM_LEFT_ROW, 3);
-            this.setState(Consts.MOVE_PUSH, true);
+            this.setAnim(Consts.AnimPushStart, Consts.AnimPushEnd, false, this.dirrection === Consts.DirRight ? Consts.AnimRightRow : Consts.AnimLeftRow, 3);
+            this.setState(Consts.MovePush, true);
         }
     }
 
     doPush() {
         this.counter += 2;
-        if (this.counter <= Consts.ANIM_FRAME_COUNT) {
+        if (this.counter <= Consts.AnimFrameCount) {
             // fixme
         } else {
             let ice =  this.engine.iceAt(this.xtile+this.dirrection, this.ytile);
@@ -339,21 +339,21 @@ export class Player extends AnimSprite {
                 this.engine.sound.play('ice-push');
                 ice.push(this.dirrection);
             }
-            this.setState(Consts.MOVE_STAND, false);
+            this.setState(Consts.MoveStand, false);
         }
     }
 
     doIce() {
         if (this.counter === 8) {
-            if (this.state === Consts.MOVE_ICE_MAKE) {
+            if (this.state === Consts.MoveIceMake) {
                 this.makeIce();
             } else{
                 this.removeIceBlock();
             }
         }
         this.counter += 1;
-        if (this.counter >= Consts.ANIM_FRAME_COUNT) {
-            this.setState(Consts.MOVE_STAND, false);
+        if (this.counter >= Consts.AnimFrameCount) {
+            this.setState(Consts.MoveStand, false);
         }
     }
 
@@ -363,13 +363,13 @@ export class Player extends AnimSprite {
             this.engine.addSparks(this.xtile + this.dirrection, this.ytile + 1, '88,66,66');
         }
         this.counter += 1;
-        if (this.counter >= Consts.ANIM_FRAME_COUNT) {
-            this.setState(Consts.MOVE_STAND, false);
+        if (this.counter >= Consts.AnimFrameCount) {
+            this.setState(Consts.MoveStand, false);
         }
     }
 
     collisions() {
-        if (this.engine.spriteTypeAt(this.xtile, this.ytile, Consts.OBJECT_PLAYER) === Consts.OBJECT_FIRE) {
+        if (this.engine.spriteTypeAt(this.xtile, this.ytile, Consts.ObjectPlayer) === Consts.ObjectFire) {
             this.burn();
         }
     }
@@ -377,48 +377,48 @@ export class Player extends AnimSprite {
     move () {
         this.gravity();
         this.collisions();
-        if (this.state !== Consts.MOVE_STAND) {
+        if (this.state !== Consts.MoveStand) {
             this.standCounter = 0;
         }
-        if (this.state !== Consts.MOVE_DOWN) {
+        if (this.state !== Consts.MoveDown) {
             this.fallCounter = 0;
         }
         switch (this.state) {
-            case Consts.MOVE_RIGHT:
+            case Consts.MoveRight:
                 this.doRun();
                 break;
-            case Consts.MOVE_LEFT:
+            case Consts.MoveLeft:
                 this.doRun();
                 break;
-            case Consts.MOVE_DOWN:
+            case Consts.MoveDown:
                 this.doGravity();
                 break;
-            case Consts.MOVE_UP:
+            case Consts.MoveUp:
                 this.doUp();
                 break;
-            case Consts.MOVE_TURN:
+            case Consts.MoveTurn:
                 this.doTurn();
                 break;
-            case Consts.MOVE_ICE_MAKE:
-            case Consts.MOVE_ICE_REMOVE:
+            case Consts.MoveIceMake:
+            case Consts.MoveIceRemove:
                 this.doIce();
                 break;
-            case Consts.MOVE_ICE_FAIL:
+            case Consts.MoveIceFail:
                 this.doFailIce();
                 break;
-            case Consts.MOVE_STAND:
+            case Consts.MoveStand:
                 this.doStand();
                 break;
-            case Consts.MOVE_PUSH:
+            case Consts.MovePush:
                 this.doPush();
                 break;
-            case Consts.MOVE_RIP:
+            case Consts.MoveRip:
                 this.doRip();
                 break;
-            case Consts.MOVE_OUTRO:
+            case Consts.MoveLevelExit:
                 this.doOutro();
                 break;
-            case Consts.MOVE_INTRO:
+            case Consts.MoveLevelEnter:
                 this.doIntro();
                 break;
         }

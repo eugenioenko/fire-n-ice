@@ -5,8 +5,8 @@ import { Tile } from './tiles';
 export class Metal extends AnimSprite {
 
     constructor(engine, tx, ty, length) {
-        super(Consts.OBJECT_METAL, engine, 'img_metal',
-            tx, ty, Consts.TILE_WIDTH, Consts.TILE_WIDTH, 0, 0, 0, 1, true);
+        super(Consts.ObjectMetal, engine, 'img_metal',
+            tx, ty, Consts.TileWidth, Consts.TileWidth, 0, 0, 0, 1, true);
         this.xtile = tx;
         this.ytile = ty;
         this.length = length;
@@ -18,26 +18,26 @@ export class Metal extends AnimSprite {
     }
 
     canGlide(dir) {
-        if (dir === Consts.DIR_LEFT  && Tile.isSolid(this.coorners.l)) {
+        if (dir === Consts.DirLeft  && Tile.isSolid(this.coorners.l)) {
             return false;
         }
-        if (dir === Consts.DIR_RIGHT && Tile.isSolid(this.coorners.r)) {
+        if (dir === Consts.DirRight && Tile.isSolid(this.coorners.r)) {
             return false;
         }
         return true;
     }
 
     frozenToIce() {
-        const rightIce = this.engine.spriteAt(this.xtile + 1, this.ytile);
-        const leftIce = this.engine.spriteAt(this.xtile - 1, this.ytile)
-        return ((rightIce && rightIce.id === Consts.OBJECT_ICE && rightIce.frozen) ||
-            (leftIce && leftIce.id === Consts.OBJECT_ICE && leftIce.frozen));
+        const rightSprite = this.engine.spriteAt(this.xtile + 1, this.ytile);
+        const leftSprite = this.engine.spriteAt(this.xtile - 1, this.ytile)
+        return  !this.falling && ((rightSprite && rightSprite.id === Consts.ObjectIce && rightSprite.frozenLeft) ||
+            (leftSprite && leftSprite.id === Consts.ObjectIce && leftSprite.frozenRight));
     }
 
     gravity() {
         if (!Tile.isSolid(this.coorners.d) && !this.frozenToIce()) {
             this.falling = true;
-            this.setState(Consts.MOVE_DOWN, true);
+            this.setState(Consts.MoveDown, true);
             return true;
         }
         if (this.falling) {
@@ -51,7 +51,7 @@ export class Metal extends AnimSprite {
         if (!this.canGlide(this.dirrection)) {
             this.dirrection = 0;
             this.engine.sound.play('ice-collision');
-            this.setState(Consts.MOVE_STAND, false);
+            this.setState(Consts.MoveStand, false);
             return true;
         }
         if (this.gravity()) {
@@ -61,22 +61,17 @@ export class Metal extends AnimSprite {
     }
 
     move() {
-
-        /*if (this.coorners.d === Consts.OBJECT_FIRE) {
-            this.coorners.d = Consts.OBJECT_BACKGROUND;
-        }*/
-
         if (!this.moving) {
             this.gravity();
         }
         switch (this.state) {
-            case Consts.MOVE_ICE_MOVING:
+            case Consts.MoveIceMoving:
                 this.glide();
                 break;
-            case Consts.MOVE_ICE_CHECK:
+            case Consts.MoveIceCheck:
                 this.push();
                 break;
-            case Consts.MOVE_DOWN:
+            case Consts.MoveDown:
                 this.doDown();
                 break;
         }
@@ -88,26 +83,26 @@ export class Metal extends AnimSprite {
             this.animDelayCount = 0;
             this.animRow = this.animRow === 0 ? 1 : 0;
         }
-        this.ctx.drawImage(this.image, 0, Consts.TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
+        this.ctx.drawImage(this.image, 0, Consts.TileWidth*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
 
         if (
-            this.engine.spriteTypeAt(this.xtile-1, this.ytile) === Consts.OBJECT_ICE &&
-            this.engine.spriteAt(this.xtile-1, this.ytile).frozen
+            this.engine.spriteTypeAt(this.xtile - 1, this.ytile) === Consts.ObjectIce &&
+            this.engine.spriteAt(this.xtile - 1, this.ytile).frozenRight
         ) {
             this.ctx.drawImage(
                 this.engine.resources.get('frost'),
-                (this.xtile*this.width)-7,
-                this.ytile*this.height
+                (this.xtile * this.width) - 7,
+                this.ytile * this.height
             );
         }
         if (
-            this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === Consts.OBJECT_ICE &&
-            this.engine.spriteAt(this.xtile+this.length, this.ytile).frozen
+            this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === Consts.ObjectIce &&
+            this.engine.spriteAt(this.xtile+this.length, this.ytile).frozenLeft
         ) {
             this.ctx.drawImage(
                 this.engine.resources.get('frost'),
-                (this.xtile+this.length)*this.width-7,
-                this.ytile*this.height
+                (this.xtile + this.length) * this.width - 7,
+                this.ytile * this.height
             );
         }
         this.ctx.restore();
@@ -115,19 +110,19 @@ export class Metal extends AnimSprite {
 
     glide() {
         this.counter += 4;
-        if (this.counter <= Consts.TILE_WIDTH) {
+        if (this.counter <= Consts.TileWidth) {
             this.x += 4 * this.dirrection;
         } else {
-            this.setState(Consts.MOVE_STAND, false);
+            this.setState(Consts.MoveStand, false);
         }
     }
 
     doDown() {
         this.counter += 4;
-        if (this.counter <= Consts.TILE_WIDTH) {
+        if (this.counter <= Consts.TileWidth) {
             this.y += 4;
         } else {
-            this.setState(Consts.MOVE_STAND, false);
+            this.setState(Consts.MoveStand, false);
         }
     }
 
@@ -135,9 +130,9 @@ export class Metal extends AnimSprite {
         this.dirrection = (typeof dir === 'undefined') ? this.dirrection : dir;
         if (!this.collision()) {
             this.moving = true;
-            this.setState(Consts.MOVE_ICE_MOVING, true);
+            this.setState(Consts.MoveIceMoving, true);
         } else {
-            this.setState(Consts.MOVE_STAND, false);
+            this.setState(Consts.MoveStand, false);
         }
     }
 }

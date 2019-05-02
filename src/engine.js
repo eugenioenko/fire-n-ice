@@ -44,8 +44,8 @@ export class Engine {
     }
 
     collision() {
-        const fires = this.sprites.filter(sprite => sprite.id === Consts.OBJECT_FIRE);
-        if (!fires.length && !this.editor && this.player.state !== Consts.MOVE_OUTRO) {
+        const fires = this.sprites.filter(sprite => sprite.id === Consts.ObjectFire);
+        if (!fires.length && !this.editor && this.player.state !== Consts.MoveLevelExit) {
             this.player.outro();
         }
     }
@@ -65,7 +65,7 @@ export class Engine {
         }
         let spritesMoving = false;
         for (let i = 0; i < this.sprites.length; ++i) {
-            if (this.sprites[i] && this.sprites[i].id !== Consts.OBJECT_PLAYER && this.sprites[i].moving) {
+            if (this.sprites[i] && this.sprites[i].id !== Consts.ObjectPlayer && this.sprites[i].moving) {
                 spritesMoving = true;
             }
         }
@@ -107,11 +107,10 @@ export class Engine {
         return false;
     }
 
-    addIceBlock(tx, ty, frozen) {
+    addIceBlock(tx, ty, frozenLeft, frozenRight) {
         let foundIceBlocks = [ ];
-        frozen = (typeof length === 'undefined') ? false : frozen;
         for (let i = 0; i < this.sprites.length; i++) {
-            if (this.sprites[i].id === Consts.OBJECT_ICE && this.sprites[i].ytile === ty) {
+            if (this.sprites[i].id === Consts.ObjectIce && this.sprites[i].ytile === ty) {
                 let ice = this.sprites[i];
                 if (ice.xtile - 1 === tx || ice.xtile + ice.length === tx) {
                     foundIceBlocks.push(ice);
@@ -119,26 +118,30 @@ export class Engine {
             }
         }
         if (foundIceBlocks.length === 0) {
-            this.sprites.push(new Ice(this, tx, ty, 1, frozen));
+            this.sprites.push(new Ice(this, tx, ty, 1, frozenLeft, frozenRight));
         } else if (foundIceBlocks.length === 1) {
             foundIceBlocks[0].addBlock(tx);
         } else {
-            this.joinIceBlocks(foundIceBlocks[0], foundIceBlocks[1]);
+            if (foundIceBlocks[0].xtile <= foundIceBlocks[1].xtile) {
+                this.joinIceBlocks(foundIceBlocks[0], foundIceBlocks[1]);
+            } else {
+                this.joinIceBlocks(foundIceBlocks[1], foundIceBlocks[0]);
+            }
         }
     }
 
     joinIceBlocks(iceblockA,iceblockB) {
-        let tx = iceblockA.xtile <= iceblockB.xtile ? iceblockA.xtile : iceblockB.xtile;
+        let tx = iceblockA.xtile;
         let ty = iceblockA.ytile;
         let length = iceblockA.length + iceblockB.length + 1;
-        this.addSprite(new Ice(this, tx, ty, length, iceblockA.frozen || iceblockB.frozen));
+        this.addSprite(new Ice(this, tx, ty, length, iceblockA.frozenLeft, iceblockB.frozenRight));
         this.removeSprite(iceblockA);
         this.removeSprite(iceblockB);
     }
 
     removeIceBlock(tx, ty) {
         for (let i = 0; i < this.sprites.length; i++) {
-            if (this.sprites[i].id === Consts.OBJECT_ICE &&
+            if (this.sprites[i].id === Consts.ObjectIce &&
                 this.sprites[i].ytile === ty &&
                 tx >= this.sprites[i].xtile &&
                 tx < this.sprites[i].xtile + this.sprites[i].length)
@@ -156,7 +159,7 @@ export class Engine {
             if (
                 (this.sprites[i].ytile === ty) &&
                 (tx === this.sprites[i].xtile) &&
-                (this.sprites[i].id === Consts.OBJECT_FIRE)
+                (this.sprites[i].id === Consts.ObjectFire)
             ) {
                 this.sprites.splice(i,1);
                 return;
@@ -193,9 +196,9 @@ export class Engine {
     }
 
     spriteTypeAt(tx, ty, excludeId) {
-        excludeId = (typeof excludeId === 'undefined') ? Consts.OBJECT_OUT : excludeId;
+        excludeId = (typeof excludeId === 'undefined') ? Consts.ObjectOut : excludeId;
         if (tx < 0 || ty < 0 || tx > this.map.width || ty > this.map.height) {
-            return Consts.OBJECT_OUT;
+            return Consts.ObjectOut;
         }
         if (!this.map.map[ty][tx]) {
             for (let i = 0; i < this.sprites.length; i++) {
@@ -206,7 +209,7 @@ export class Engine {
         } else {
             return this.map.map[ty][tx];
         }
-        return Consts.OBJECT_BACKGROUND;
+        return Consts.ObjectBackground;
     }
 
     spriteAt(tx, ty) {

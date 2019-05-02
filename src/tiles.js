@@ -2,28 +2,28 @@ import { Consts }  from './constants';
 
 export const Tile = {
    tiles: {
-        [Consts.OBJECT_BACKGROUND]: {
+        [Consts.ObjectBackground]: {
             solid: false
         },
-        [Consts.OBJECT_OUT]: {
+        [Consts.ObjectOut]: {
             solid: true
         },
-        [Consts.OBJECT_PLAYER]: {
+        [Consts.ObjectPlayer]: {
             solid: true
         },
-        [Consts.OBJECT_ICE]: {
+        [Consts.ObjectIce]: {
             solid: true
         },
-        [Consts.OBJECT_METAL]: {
+        [Consts.ObjectMetal]: {
             solid: true
         },
-        [Consts.OBJECT_WALL]: {
+        [Consts.ObjectWall]: {
             solid: true
         },
-        [Consts.OBJECT_FIRE]: {
+        [Consts.ObjectFire]: {
             solid: false
         },
-        [Consts.OBJECT_JAR]: {
+        [Consts.ObjectJar]: {
             solid: true
         }
     },

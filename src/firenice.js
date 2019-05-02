@@ -53,7 +53,7 @@ function CheckEditor() {
     if (window.FIRENICE_EDITOR_MODE) {
         game.engine.sound.musicOn = false;
 		game.engine.sound.soundOn = false;
-        game.state = Consts.GAME_STATE_PLAY;
+        game.state = Consts.GameStatePlay;
         game.engine.editor = true;
         game.engine.keyboard.intro = false;
 
@@ -64,20 +64,20 @@ function CheckEditor() {
                 game.engine.map.map[ytile][xtile] = tool;
             } else {
                 switch (tool) {
-                    case Consts.OBJECT_PLAYER:
+                    case Consts.ObjectPlayer:
                         game.engine.player.x = xtile * 32;
                         game.engine.player.y = ytile * 32;
                         break;
-                    case Consts.OBJECT_ICE:
+                    case Consts.ObjectIce:
                         game.engine.addIceBlock(xtile, ytile);
                         break;
-                    case Consts.OBJECT_METAL:
+                    case Consts.ObjectMetal:
                         game.engine.addSprite(new Metal(game.engine, xtile, ytile, 1));
                         break;
-                    case Consts.OBJECT_FIRE:
+                    case Consts.ObjectFire:
                         game.engine.addSprite(new Fire(game.engine, xtile, ytile));
                         break;
-                    case Consts.OBJECT_JAR:
+                    case Consts.ObjectJar:
                         game.engine.addSprite(new Jar(game.engine, xtile, ytile));
                         break;
                 }

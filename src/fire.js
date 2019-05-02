@@ -5,8 +5,8 @@ import { Tile } from './tiles';
 export class Fire extends AnimSprite {
 
     constructor(engine, tx, ty) {
-        super(Consts.OBJECT_FIRE, engine, 'img_fire',
-            tx, ty, Consts.TILE_WIDTH, Consts.TILE_WIDTH, 0, 0, 0, 3, true);
+        super(Consts.ObjectFire, engine, 'img_fire',
+            tx, ty, Consts.TileWidth, Consts.TileWidth, 0, 0, 0, 3, true);
     }
 
     move() {
@@ -15,21 +15,21 @@ export class Fire extends AnimSprite {
             this.gravity();
         }
         switch (this.state) {
-            case Consts.MOVE_DOWN:
+            case Consts.MoveDown:
                 this.doDown();
                 break;
         }
     }
 
     collisions() {
-        if (this.engine.spriteTypeAt(this.xtile, this.ytile, Consts.OBJECT_FIRE) === Consts.OBJECT_ICE) {
+        if (this.engine.spriteTypeAt(this.xtile, this.ytile, Consts.ObjectFire) === Consts.ObjectIce) {
             this.engine.sound.play('fire-off');
             this.engine.removeFire(this.xtile, this.ytile);
             this.engine.removeIceBlock(this.xtile, this.ytile);
             this.engine.addSparks(this.xtile, this.ytile, '255, 126, 198', 15, 0.5);
             this.engine.addSparks(this.xtile, this.ytile, '124, 212, 255', 10);
         }
-        if (this.engine.spriteTypeAt(this.xtile, this.ytile, Consts.OBJECT_FIRE) === Consts.OBJECT_METAL) {
+        if (this.engine.spriteTypeAt(this.xtile, this.ytile, Consts.ObjectFire) === Consts.ObjectMetal) {
             this.engine.sound.play('fire-off');
             this.engine.removeFire(this.xtile, this.ytile);
             this.engine.addSparks(this.xtile, this.ytile, '255, 222, 127', 15, 0.5);
@@ -40,7 +40,7 @@ export class Fire extends AnimSprite {
 
     gravity() {
         if (!Tile.isSolid(this.coorners.d)) {
-            this.setState(Consts.MOVE_DOWN, true);
+            this.setState(Consts.MoveDown, true);
             return true;
         }
         return false;
@@ -48,10 +48,10 @@ export class Fire extends AnimSprite {
 
     doDown() {
         this.counter += 4;
-        if (this.counter <= Consts.TILE_WIDTH) {
+        if (this.counter <= Consts.TileWidth) {
             this.y += 4;
         } else {
-            this.setState(Consts.MOVE_STAND, false);
+            this.setState(Consts.MoveStand, false);
         }
     }
 }

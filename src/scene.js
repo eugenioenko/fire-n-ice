@@ -20,12 +20,19 @@ export class Scene {
         data.sprites = [];
         for (const sprite of this.engine.sprites) {
             let value = (typeof sprite.length === "undefined") ? 1 : sprite.length;
-            value = sprite.id === Consts.OBJECT_JAR ? sprite.onFire : value;
+            value = sprite.id === Consts.ObjectJar ? sprite.onFire : value;
+            let fl, fr;
+            if (sprite.id === Consts.ObjectIce) {
+                fl = sprite.frozenLeft;
+                fr = sprite.frozenRight;
+            }
             data.sprites.push({
                 "id": sprite.id,
                 "x": sprite.xtile,
                 "y": sprite.ytile,
-                "v": value
+                "v": value,
+                "fl": fl,
+                "fr": fr
             });
         }
 
@@ -42,25 +49,20 @@ export class Scene {
         this.engine.map = new TileMap(this.engine, level.map, level.theme);
         for (const sprite of level.sprites) {
             switch(sprite.id) {
-                case Consts.OBJECT_PLAYER:
+                case Consts.ObjectPlayer:
                     this.engine.player = new Player(this.engine, sprite.x, sprite.y);
                     this.engine.addSprite(this.engine.player);
                     break;
-                case Consts.OBJECT_ICE:
-                    sprite.v = typeof sprite.v === "undefined" ? 1 : sprite.v;
-                    const ice = new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v));
-                    this.engine.addSprite(ice);
-                    if (typeof sprite.f !== 'undefined') {
-                        ice.frozen = false;
-                    }
+                case Consts.ObjectIce:
+                    this.engine.addSprite(new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v), sprite.fl, sprite.fr));
                     break;
-                case Consts.OBJECT_METAL:
+                case Consts.ObjectMetal:
                     this.engine.addSprite(new Metal(this.engine, sprite.x, sprite.y, 1));
                     break;
-                case Consts.OBJECT_FIRE:
+                case Consts.ObjectFire:
                     this.engine.addSprite(new Fire(this.engine, sprite.x, sprite.y));
                     break;
-                case Consts.OBJECT_JAR:
+                case Consts.ObjectJar:
                     const jar = new Jar(this.engine, sprite.x, sprite.y);
                     if (sprite.v == 1) {
                         jar.turnOnFire();
