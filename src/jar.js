@@ -67,7 +67,7 @@ export class Jar extends AnimSprite {
         super.draw();
         if (
             this.engine.spriteTypeAt(this.xtile - 1, this.ytile) === Consts.OBJECT_ICE &&
-            this.engine.spriteAt(this.xtile - 1, this.ytile).frozen
+            this.engine.spriteAt(this.xtile - 1, this.ytile).frozenLeft
         ) {
             this.ctx.drawImage(
                 this.engine.resources.get('frost'),
@@ -77,7 +77,7 @@ export class Jar extends AnimSprite {
         }
         if (
             this.engine.spriteTypeAt(this.xtile + 1, this.ytile) === Consts.OBJECT_ICE &&
-            this.engine.spriteAt(this.xtile + 1, this.ytile).frozen
+            this.engine.spriteAt(this.xtile + 1, this.ytile).frozenRight
         ) {
             this.ctx.drawImage(
                 this.engine.resources.get('frost'),
