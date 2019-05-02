@@ -34,16 +34,20 @@ export class Keyboard {
         switch (e.keyCode) {
             case 37: // Left
                 this.left = true;
+                this.right = false;
                 break;
             case 38: // Up
                 this.up = true;
                 break;
             case 39: // Right
                 this.right = true;
+                this.left = false;
                 break;
             case 40: // Down
             case 32: // Space
                 this.action = true;
+                this.left = false;
+                this.right = false;
                 this.down = true;
                 break;
             case 13: //Enter
