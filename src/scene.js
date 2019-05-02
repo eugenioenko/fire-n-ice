@@ -21,11 +21,18 @@ export class Scene {
         for (const sprite of this.engine.sprites) {
             let value = (typeof sprite.length === "undefined") ? 1 : sprite.length;
             value = sprite.id === Consts.OBJECT_JAR ? sprite.onFire : value;
+            let fl, fr;
+            if (sprite.id === Consts.OBJECT_ICE) {
+                fl = sprite.frozenLeft;
+                fr = sprite.frozenRight;
+            }
             data.sprites.push({
                 "id": sprite.id,
                 "x": sprite.xtile,
                 "y": sprite.ytile,
-                "v": value
+                "v": value,
+                "fl": fl,
+                "fr": fr
             });
         }
 
@@ -47,12 +54,7 @@ export class Scene {
                     this.engine.addSprite(this.engine.player);
                     break;
                 case Consts.OBJECT_ICE:
-                    sprite.v = typeof sprite.v === "undefined" ? 1 : sprite.v;
-                    const ice = new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v));
-                    this.engine.addSprite(ice);
-                    if (typeof sprite.f !== 'undefined') {
-                        ice.frozen = false;
-                    }
+                    this.engine.addSprite(new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v), sprite.fl, sprite.fr));
                     break;
                 case Consts.OBJECT_METAL:
                     this.engine.addSprite(new Metal(this.engine, sprite.x, sprite.y, 1));

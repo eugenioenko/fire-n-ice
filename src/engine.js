@@ -107,9 +107,8 @@ export class Engine {
         return false;
     }
 
-    addIceBlock(tx, ty, frozen) {
+    addIceBlock(tx, ty, frozenLeft, frozenRight) {
         let foundIceBlocks = [ ];
-        frozen = (typeof length === 'undefined') ? false : frozen;
         for (let i = 0; i < this.sprites.length; i++) {
             if (this.sprites[i].id === Consts.OBJECT_ICE && this.sprites[i].ytile === ty) {
                 let ice = this.sprites[i];
@@ -119,19 +118,23 @@ export class Engine {
             }
         }
         if (foundIceBlocks.length === 0) {
-            this.sprites.push(new Ice(this, tx, ty, 1, frozen));
+            this.sprites.push(new Ice(this, tx, ty, 1, frozenLeft, frozenRight));
         } else if (foundIceBlocks.length === 1) {
             foundIceBlocks[0].addBlock(tx);
         } else {
-            this.joinIceBlocks(foundIceBlocks[0], foundIceBlocks[1]);
+            if (foundIceBlocks[0].xtile <= foundIceBlocks[1].xtile) {
+                this.joinIceBlocks(foundIceBlocks[0], foundIceBlocks[1]);
+            } else {
+                this.joinIceBlocks(foundIceBlocks[1], foundIceBlocks[0]);
+            }
         }
     }
 
     joinIceBlocks(iceblockA,iceblockB) {
-        let tx = iceblockA.xtile <= iceblockB.xtile ? iceblockA.xtile : iceblockB.xtile;
+        let tx = iceblockA.xtile;
         let ty = iceblockA.ytile;
         let length = iceblockA.length + iceblockB.length + 1;
-        this.addSprite(new Ice(this, tx, ty, length, iceblockA.frozen || iceblockB.frozen));
+        this.addSprite(new Ice(this, tx, ty, length, iceblockA.frozenLeft, iceblockB.frozenRight));
         this.removeSprite(iceblockA);
         this.removeSprite(iceblockB);
     }
