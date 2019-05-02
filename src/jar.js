@@ -63,28 +63,26 @@ export class Jar extends AnimSprite {
     }
 
     draw() {
-        this.ctx.save();
         super.draw();
         if (
             this.engine.spriteTypeAt(this.xtile - 1, this.ytile) === Consts.OBJECT_ICE &&
-            this.engine.spriteAt(this.xtile - 1, this.ytile).frozenLeft
+            this.engine.spriteAt(this.xtile - 1, this.ytile).frozenRight
         ) {
             this.ctx.drawImage(
                 this.engine.resources.get('frost'),
-                (this.xtile * this.width)-7,
+                (this.xtile * this.width) - 7,
                 this.ytile * this.height
             );
         }
         if (
-            this.engine.spriteTypeAt(this.xtile + 1, this.ytile) === Consts.OBJECT_ICE &&
-            this.engine.spriteAt(this.xtile + 1, this.ytile).frozenRight
+            this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === Consts.OBJECT_ICE &&
+            this.engine.spriteAt(this.xtile+this.length, this.ytile).frozenLeft
         ) {
             this.ctx.drawImage(
                 this.engine.resources.get('frost'),
-                (this.xtile + 1) * this.width-7,
+                (this.xtile + this.length) * this.width - 7,
                 this.ytile * this.height
             );
         }
-        this.ctx.restore();
     }
 }
