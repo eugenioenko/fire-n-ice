@@ -30,8 +30,8 @@ export class Metal extends AnimSprite {
     frozenToIce() {
         const rightIce = this.engine.spriteAt(this.xtile + 1, this.ytile);
         const leftIce = this.engine.spriteAt(this.xtile - 1, this.ytile)
-        return (rightIce && rightIce.id === Consts.OBJECT_ICE && rightIce.frozen) ||
-            (leftIce && leftIce.id === Consts.OBJECT_ICE && leftIce.frozen);
+        return ((rightIce && rightIce.id === Consts.OBJECT_ICE && rightIce.frozen) ||
+            (leftIce && leftIce.id === Consts.OBJECT_ICE && leftIce.frozen));
     }
 
     gravity() {
