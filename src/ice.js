@@ -24,8 +24,8 @@ export class Ice extends AnimSprite {
     }
 
     addBlock(tx) {
-        const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(this.xtile-1, this.ytile);
-        const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile+this.length, this.ytile);
+        const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(tx - 1, this.ytile);
+        const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xtile + this.length + 1, this.ytile);
         if (tx > this.xtile) {
             if (
                 this.getTile(tx + 1, this.ytile) === Consts.OBJECT_WALL ||
@@ -37,6 +37,7 @@ export class Ice extends AnimSprite {
         }
 
         if (tx < this.xtile) {
+            this.xtile = tx;
             if (
                 this.getTile(tx - 1, this.ytile) === Consts.OBJECT_WALL ||
                 spriteTypeAtLeftCorner === Consts.OBJECT_METAL ||
@@ -45,11 +46,8 @@ export class Ice extends AnimSprite {
                 this.frozenLeft = true;
             }
         }
-
-
-        this.xtile = tx < this.xtile ? tx : this.xtile;
         this.x = this.xtile * Consts.TILE_WIDTH;
-        this.length++;
+        this.length += 1;
     }
 
     isSpriteAt(tx, ty) {
@@ -69,10 +67,10 @@ export class Ice extends AnimSprite {
         if (tx === this.xtile) {
             this.xtile += 1;
             this.x += Consts.TILE_WIDTH;
-            this.length--;
+            this.length -= 1;
             this.checkUnfreezeLeft();
         } else if (tx === this.xtile + this.length - 1) {
-            this.length--;
+            this.length -= 1;
             this.checkUnfreezeRight();
         } else {
             this.engine.addSprite(new Ice(this.engine, tx + 1, this.ytile, this.xtile + this.length - tx - 1, false, this.frozenRight));
@@ -128,7 +126,7 @@ export class Ice extends AnimSprite {
             }
 
         }
-        this.coorners.r = this.spriteTypeAt(this.xtile+this.length, this.ytile);
+        this.coorners.r = this.spriteTypeAt(this.xtile + this.length, this.ytile);
 
         if (this.frozen()) {
             this.checkUnfreezeLeft();
@@ -176,15 +174,15 @@ export class Ice extends AnimSprite {
         if (this.frozenLeft) {
             this.ctx.drawImage(
                 this.engine.resources.get('frost'),
-                (this.xtile*this.width)-7,
-                this.ytile*this.height
+                (this.xtile * this.width) - 7,
+                this.ytile * this.height
             );
         }
         if (this.frozenRight) {
             this.ctx.drawImage(
                 this.engine.resources.get('frost'),
-                (this.xtile+this.length)*this.width-7,
-                this.ytile*this.height
+                (this.xtile + this.length) * this.width - 7,
+                this.ytile * this.height
             );
         }
 

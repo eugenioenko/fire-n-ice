@@ -28,10 +28,10 @@ export class Metal extends AnimSprite {
     }
 
     frozenToIce() {
-        const rightIce = this.engine.spriteAt(this.xtile + 1, this.ytile);
-        const leftIce = this.engine.spriteAt(this.xtile - 1, this.ytile)
-        return  !this.falling && ((rightIce && rightIce.id === Consts.OBJECT_ICE && rightIce.frozen) ||
-            (leftIce && leftIce.id === Consts.OBJECT_ICE && leftIce.frozen));
+        const rightSprite = this.engine.spriteAt(this.xtile + 1, this.ytile);
+        const leftSprite = this.engine.spriteAt(this.xtile - 1, this.ytile)
+        return  !this.falling && ((rightSprite && rightSprite.id === Consts.OBJECT_ICE && rightSprite.frozenLeft) ||
+            (leftSprite && leftSprite.id === Consts.OBJECT_ICE && leftSprite.frozenRight));
     }
 
     gravity() {
@@ -61,11 +61,6 @@ export class Metal extends AnimSprite {
     }
 
     move() {
-
-        /*if (this.coorners.d === Consts.OBJECT_FIRE) {
-            this.coorners.d = Consts.OBJECT_BACKGROUND;
-        }*/
-
         if (!this.moving) {
             this.gravity();
         }
@@ -91,23 +86,23 @@ export class Metal extends AnimSprite {
         this.ctx.drawImage(this.image, 0, Consts.TILE_WIDTH*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
 
         if (
-            this.engine.spriteTypeAt(this.xtile-1, this.ytile) === Consts.OBJECT_ICE &&
-            this.engine.spriteAt(this.xtile-1, this.ytile).frozen
+            this.engine.spriteTypeAt(this.xtile - 1, this.ytile) === Consts.OBJECT_ICE &&
+            this.engine.spriteAt(this.xtile - 1, this.ytile).frozenRight
         ) {
             this.ctx.drawImage(
                 this.engine.resources.get('frost'),
-                (this.xtile*this.width)-7,
-                this.ytile*this.height
+                (this.xtile * this.width) - 7,
+                this.ytile * this.height
             );
         }
         if (
             this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === Consts.OBJECT_ICE &&
-            this.engine.spriteAt(this.xtile+this.length, this.ytile).frozen
+            this.engine.spriteAt(this.xtile+this.length, this.ytile).frozenLeft
         ) {
             this.ctx.drawImage(
                 this.engine.resources.get('frost'),
-                (this.xtile+this.length)*this.width-7,
-                this.ytile*this.height
+                (this.xtile + this.length) * this.width - 7,
+                this.ytile * this.height
             );
         }
         this.ctx.restore();
