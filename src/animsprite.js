@@ -69,10 +69,15 @@ export class AnimSprite extends Sprite {
      */
     draw() {
         this.ctx.save();
-        this.ctx.drawImage(this.image, this.animCount*this.width,
-            this.animRow * this.height, this.width, this.height,
-            this.x+this.offsetX, this.y+this.offsetY,
-            this.width, this.height);
+        this.ctx.drawImage(
+            this.image,
+            this.animCount * this.width,
+            this.animRow * this.height,
+            this.width, this.height,
+            this.x + this.offsetX,
+            this.y + this.offsetY,
+            this.width, this.height
+        );
         if (this.animDelayCount++ > this.animDelay) {
             if (++this.animCount > this.animEnd) {
                 if (this.animLoop) {
