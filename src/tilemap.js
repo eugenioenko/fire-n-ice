@@ -56,14 +56,10 @@ export class TileMap {
 
                 this.ctx.drawImage(
                     this.tilesImage,
-                    tileType,
-                    this.theme * this.tileHeight,
-                    this.tileWidth,
-                    this.tileHeight,
-                    i * this.tileWidth,
-                    j * this.tileHeight,
-                    this.tileWidth,
-                    this.tileHeight
+                    tileType, this.theme * this.tileHeight,
+                    this.tileWidth, this.tileHeight,
+                    i * this.tileWidth, j * this.tileHeight,
+                    this.tileWidth, this.tileHeight
                 );
             }
         }

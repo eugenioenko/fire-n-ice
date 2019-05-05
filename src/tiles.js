@@ -1,30 +1,38 @@
 import { Consts }  from './constants';
 
-export const Tile = {
+export const Tile = Object.freeze({
    tiles: {
         [Consts.ObjectBackground]: {
-            solid: false
+            solid: false,
+            freeze: false
         },
         [Consts.ObjectOut]: {
-            solid: true
+            solid: true,
+            freeze: false
         },
         [Consts.ObjectPlayer]: {
-            solid: true
+            solid: true,
+            freeze: false
         },
         [Consts.ObjectIce]: {
-            solid: true
+            solid: true,
+            freeze: false
         },
         [Consts.ObjectMetal]: {
-            solid: true
+            solid: true,
+            freeze: true
         },
         [Consts.ObjectWall]: {
-            solid: true
+            solid: true,
+            freeze: true
         },
         [Consts.ObjectFire]: {
-            solid: false
+            solid: false,
+            freeze: false
         },
         [Consts.ObjectJar]: {
-            solid: true
+            solid: true,
+            freeze: true
         }
     },
 
@@ -34,5 +42,13 @@ export const Tile = {
         } else {
             return this.tiles[id].solid;
         }
+    },
+
+    isFreezable: function(id) {
+        if (typeof this.tiles[id] === 'undefined') {
+            throw new Error('UNDEFINED ON isFreezable');
+        } else {
+            return this.tiles[id].freeze;
+        }
     }
-};
+});
