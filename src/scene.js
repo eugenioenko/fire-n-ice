@@ -1,4 +1,5 @@
 import { Consts }  from './constants';
+import { Dirrection } from './struct';
 import { Fire } from './fire';
 import { Ice } from './ice';
 import { Jar } from './jar';
@@ -23,8 +24,8 @@ export class Scene {
             value = sprite.id === Consts.ObjectJar ? sprite.onFire : value;
             let fl, fr;
             if (sprite.id === Consts.ObjectIce) {
-                fl = sprite.frozenLeft;
-                fr = sprite.frozenRight;
+                fl = sprite.frozen.left;
+                fr = sprite.frozen.right;
             }
             data.sprites.push({
                 "id": sprite.id,
@@ -54,7 +55,12 @@ export class Scene {
                     this.engine.addSprite(this.engine.player);
                     break;
                 case Consts.ObjectIce:
-                    this.engine.addSprite(new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v), sprite.fl, sprite.fr));
+                    let frozen = new Dirrection(true, true);
+                    if (typeof sprite.fl !== 'undefined') {
+                        frozen.left = sprite.fl;
+                        frozen.right = sprite.fr;
+                    }
+                    this.engine.addSprite(new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v), frozen));
                     break;
                 case Consts.ObjectMetal:
                     this.engine.addSprite(new Metal(this.engine, sprite.x, sprite.y, 1));

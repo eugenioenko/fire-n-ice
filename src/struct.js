@@ -20,3 +20,10 @@ export class Coor {
         this.ytile = ty;
     }
 }
+
+export class Dirrection {
+    constructor(left, right) {
+        this.left = left;
+        this.right = right;
+    }
+}

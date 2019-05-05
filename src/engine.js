@@ -1,9 +1,10 @@
-import { Keyboard } from './keyboard';
-import { Sound } from './sound';
-import { Scene } from './scene';
-import { Ice } from './ice';
-import { Sparks } from './sfx';
 import { Consts }  from './constants';
+import { Dirrection } from './struct';
+import { Ice } from './ice';
+import { Keyboard } from './keyboard';
+import { Scene } from './scene';
+import { Sound } from './sound';
+import { Sparks } from './sfx';
 /**
  * Engine Loop
  */
@@ -107,7 +108,7 @@ export class Engine {
         return false;
     }
 
-    addIceBlock(tx, ty, frozenLeft, frozenRight) {
+    addIceBlock(tx, ty) {
         let foundIceBlocks = [ ];
         for (let i = 0; i < this.sprites.length; i++) {
             if (this.sprites[i].id === Consts.ObjectIce && this.sprites[i].ytile === ty) {
@@ -118,7 +119,7 @@ export class Engine {
             }
         }
         if (foundIceBlocks.length === 0) {
-            this.sprites.push(new Ice(this, tx, ty, 1, frozenLeft, frozenRight));
+            this.sprites.push(new Ice(this, tx, ty, 1));
         } else if (foundIceBlocks.length === 1) {
             foundIceBlocks[0].addBlock(tx);
         } else {
@@ -134,7 +135,9 @@ export class Engine {
         let tx = iceblockA.xtile;
         let ty = iceblockA.ytile;
         let length = iceblockA.length + iceblockB.length + 1;
-        this.addSprite(new Ice(this, tx, ty, length, iceblockA.frozenLeft, iceblockB.frozenRight));
+        this.addSprite(
+            new Ice(this, tx, ty, length, new Dirrection(iceblockA.frozen.left, iceblockB.frozen.right))
+        );
         this.removeSprite(iceblockA);
         this.removeSprite(iceblockB);
     }
@@ -200,14 +203,14 @@ export class Engine {
         if (tx < 0 || ty < 0 || tx > this.map.width || ty > this.map.height) {
             return Consts.ObjectOut;
         }
-        if (!this.map.map[ty][tx]) {
+        if (this.map.map[ty][tx]) {
+            return this.map.map[ty][tx];
+        } else {
             for (let i = 0; i < this.sprites.length; i++) {
                 if (this.sprites[i].isSpriteAt(tx, ty) && this.sprites[i].id !== excludeId) {
                     return this.sprites[i].id;
                 }
             }
-        } else {
-            return this.map.map[ty][tx];
         }
         return Consts.ObjectBackground;
     }

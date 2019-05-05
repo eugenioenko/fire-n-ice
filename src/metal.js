@@ -30,8 +30,8 @@ export class Metal extends AnimSprite {
     frozenToIce() {
         const rightSprite = this.engine.spriteAt(this.xtile + 1, this.ytile);
         const leftSprite = this.engine.spriteAt(this.xtile - 1, this.ytile)
-        return  !this.falling && ((rightSprite && rightSprite.id === Consts.ObjectIce && rightSprite.frozenLeft) ||
-            (leftSprite && leftSprite.id === Consts.ObjectIce && leftSprite.frozenRight));
+        return  !this.falling && ((rightSprite && rightSprite.id === Consts.ObjectIce && rightSprite.frozen.left) ||
+            (leftSprite && leftSprite.id === Consts.ObjectIce && leftSprite.frozen.right));
     }
 
     gravity() {
@@ -87,7 +87,8 @@ export class Metal extends AnimSprite {
 
         if (
             this.engine.spriteTypeAt(this.xtile - 1, this.ytile) === Consts.ObjectIce &&
-            this.engine.spriteAt(this.xtile - 1, this.ytile).frozenRight
+            this.engine.spriteAt(this.xtile - 1, this.ytile).frozen &&
+            this.engine.spriteAt(this.xtile - 1, this.ytile).frozen.right
         ) {
             this.ctx.drawImage(
                 this.engine.resources.get('frost'),
@@ -97,7 +98,8 @@ export class Metal extends AnimSprite {
         }
         if (
             this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === Consts.ObjectIce &&
-            this.engine.spriteAt(this.xtile+this.length, this.ytile).frozenLeft
+            this.engine.spriteAt(this.xtile+this.length, this.ytile).frozen &&
+            this.engine.spriteAt(this.xtile+this.length, this.ytile).frozen.left
         ) {
             this.ctx.drawImage(
                 this.engine.resources.get('frost'),
