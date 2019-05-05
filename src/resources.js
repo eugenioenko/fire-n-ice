@@ -40,12 +40,10 @@ export class Resources {
                 this.resources[resource.name] = image;
             }
             if (resource.type ==='audio') {
-                const audio = new Audio(resource.src);
-                audio.addEventListener('canplaythrough', () => {
-                    this.loaded += 1;
-                    this.check(callback);
-                });
+                const audio = document.getElementById(resource.name);
+                this.loaded += 1;
                 this.resources[resource.name] = audio;
+                this.check(callback);
             }
         }
     }
