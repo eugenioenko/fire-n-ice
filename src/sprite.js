@@ -51,21 +51,27 @@ export class Sprite {
         return this.engine.spriteTypeAt(tx, ty);
     }
 
+    updateCoorners() {
+        this.coorners.u = this.spriteTypeAt(this.xtile, this.ytile - 1);
+        this.coorners.d = this.spriteTypeAt(this.xtile, this.ytile + 1);
+        this.coorners.l = this.spriteTypeAt(this.xtile - 1, this.ytile);
+        this.coorners.r = this.spriteTypeAt(this.xtile + 1, this.ytile);
+        this.coorners.ul = this.spriteTypeAt(this.xtile - 1, this.ytile - 1);
+        this.coorners.ur = this.spriteTypeAt(this.xtile + 1, this.ytile - 1);
+        this.coorners.dl = this.spriteTypeAt(this.xtile - 1, this.ytile + 1);
+        this.coorners.dr = this.spriteTypeAt(this.xtile + 1, this.ytile + 1);
+    }
+
+    updatePosition() {
+        this.xtile = Math.floor(this.x / Consts.TileWidth);
+        this.ytile = Math.floor(this.y / Consts.TileWidth);
+    }
+
     move () { }
 
     engineMove() {
-        this.coorners.u = this.spriteTypeAt(this.xtile, this.ytile-1);
-        this.coorners.d = this.spriteTypeAt(this.xtile, this.ytile+1);
-        this.coorners.l = this.spriteTypeAt(this.xtile-1, this.ytile);
-        this.coorners.r = this.spriteTypeAt(this.xtile+1, this.ytile);
-        this.coorners.ul = this.spriteTypeAt(this.xtile-1, this.ytile-1);
-        this.coorners.ur = this.spriteTypeAt(this.xtile+1, this.ytile-1);
-        this.coorners.dl = this.spriteTypeAt(this.xtile-1, this.ytile+1);
-        this.coorners.dr = this.spriteTypeAt(this.xtile+1, this.ytile+1);
-
+        this.updateCoorners();
         this.move();
-
-        this.xtile = Math.floor(this.x / Consts.TileWidth);
-        this.ytile = Math.floor(this.y / Consts.TileWidth);
+        this.updatePosition();
     }
 }
