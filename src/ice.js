@@ -75,7 +75,9 @@ export class Ice extends AnimSprite {
             this.length -= 1;
             this.checkUnfreezeRight();
         } else {
-            this.engine.addSprite(new Ice(this.engine, tx + 1, this.ytile, this.xtile + this.length - tx - 1, false, this.frozen.right));
+            this.engine.addSprite(
+                new Ice(this.engine, tx + 1, this.ytile, this.xtile + this.length - tx - 1, new Dirrection(false, this.frozen.right))
+            );
             this.length = tx - this.xtile;
             this.checkUnfreezeRight();
         }

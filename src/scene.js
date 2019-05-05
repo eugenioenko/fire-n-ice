@@ -55,7 +55,12 @@ export class Scene {
                     this.engine.addSprite(this.engine.player);
                     break;
                 case Consts.ObjectIce:
-                    this.engine.addSprite(new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v), new Dirrection(sprite.fl, sprite.fr)));
+                    let frozen = new Dirrection(true, true);
+                    if (typeof sprite.fl !== 'undefined') {
+                        frozen.left = sprite.fl;
+                        frozen.right = sprite.fr;
+                    }
+                    this.engine.addSprite(new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v), frozen));
                     break;
                 case Consts.ObjectMetal:
                     this.engine.addSprite(new Metal(this.engine, sprite.x, sprite.y, 1));
