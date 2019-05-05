@@ -6,6 +6,15 @@ import { Metal } from './metal';
 import { Resources } from './resources';
 
 window.addEventListener('load', () => {
+    const loader = document.getElementById('loader');
+    loader.addEventListener('click', () => {
+        loader.style.display = 'none';
+        loader.style.opacity = 0;
+        PreloadGame();
+    });
+});
+
+function PreloadGame() {
     const resources = new Resources();
     resources.add('image', 'tilemap', 'images/tilemap.png');
     resources.add('image', 'img_ice', 'images/ice.png');
@@ -34,7 +43,7 @@ window.addEventListener('load', () => {
         StartGame(resources);
         CheckEditor();
     });
-});
+}
 
 function StartGame(resources) {
     let canvas = document.getElementById('canvas');
@@ -56,6 +65,7 @@ function CheckEditor() {
         game.state = Consts.GameStatePlay;
         game.engine.editor = true;
         game.engine.keyboard.intro = false;
+        game.engine.sound.music.pause();
 
         canvas.addEventListener('click', (e) => {
             const xtile = Math.floor(e.offsetX / 32);

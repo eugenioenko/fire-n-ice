@@ -33,6 +33,7 @@ h1{
 	color: #ffa7ff;
 }
 .wrapper {
+	position: relative;
 	margin-left: auto;
 	margin-right: auto;
 	width: 100%;
@@ -90,5 +91,62 @@ ul#controls>li{
 @media (max-width: 767px) {
 	.wrapper-explanation {
 		padding-top: 50px;
+	}
+}
+
+.vertical-center {
+	display: table;
+	width: 100%;
+	height: 100%;
+}
+
+.vertical-centered {
+	width: 100%;
+	height: 100%;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+#loader {
+	position: absolute;
+	left: 15px;
+	top: 0;
+	right: 15px;
+	bottom: 0;
+	text-align: center;
+	background-image: url(../images/intro.png);
+	background-size: cover;
+	cursor: pointer;
+}
+
+.start {
+	font-family: monospace;
+	color: #fff;
+    position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	font-size: 24px;
+	text-align: center;
+	padding: 20px;
+}
+.img-responsive {
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+}
+
+.blink {
+	animation: blink-animation 1s steps(5, start) infinite;
+	-webkit-animation: blink-animation 1s steps(5, start) infinite;
+  }
+  @keyframes blink-animation {
+	to {
+	  visibility: hidden;
+	}
+  }
+  @-webkit-keyframes blink-animation {
+	to {
+	  visibility: hidden;
 	}
 }

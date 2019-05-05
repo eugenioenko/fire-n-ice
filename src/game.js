@@ -12,10 +12,10 @@ export class Game {
      * @param {*} resources  Game resources
      */
     constructor(canvas, resources) {
-        this.state = Consts.GameStateIntro;
         this.engine = new Engine(canvas, resources);
         this.levels = levels;
-        this.createIntro();
+        this.state = Consts.GameStatePlay;
+        this.engine.sound.soundrack();
         this.gameloop = this.gameloop_.bind(this); // jshint ignore:line
         this.gameloop();
     }
