@@ -21,7 +21,7 @@ export class Coor {
     }
 }
 
-export class Dirrection {
+export class Frost {
     constructor(left, right) {
         this.left = left;
         this.right = right;

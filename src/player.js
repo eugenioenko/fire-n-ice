@@ -331,10 +331,8 @@ export class Player extends AnimSprite {
 
     doPush() {
         this.counter += 2;
-        if (this.counter <= Consts.AnimFrameCount) {
-            // fixme
-        } else {
-            let ice =  this.engine.iceAt(this.xtile+this.dirrection, this.ytile);
+        if (this.counter > Consts.AnimFrameCount) {
+            const ice =  this.engine.iceAt(this.xtile + this.dirrection, this.ytile);
             if (ice) {
                 this.engine.sound.play('ice-push');
                 ice.push(this.dirrection);

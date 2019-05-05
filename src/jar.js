@@ -64,21 +64,7 @@ export class Jar extends AnimSprite {
 
     draw() {
         super.draw();
-        const leftSprite = this.engine.spriteAt(this.xtile - 1, this.ytile);
-        if (leftSprite && leftSprite.id === Consts.ObjectIce && leftSprite.frozen.right) {
-            this.ctx.drawImage(
-                this.engine.resources.get('frost'),
-                (this.xtile * this.width) - 7,
-                this.ytile * this.height
-            );
-        }
-        const rightSprite = this.engine.spriteAt(this.xtile + 1, this.ytile);
-        if (rightSprite && rightSprite.id === Consts.ObjectIce && rightSprite.frozen.right) {
-            this.ctx.drawImage(
-                this.engine.resources.get('frost'),
-                (this.xtile + this.length) * this.width - 7,
-                this.ytile * this.height
-            );
-        }
+        this.drawFrost();
     }
+
 }

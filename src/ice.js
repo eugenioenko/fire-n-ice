@@ -1,7 +1,7 @@
 import { Consts }  from './constants';
 import { AnimSprite } from './animsprite';
 import { Tile } from './tiles';
-import { Dirrection } from './struct';
+import { Frost } from './struct';
 
 export class Ice extends AnimSprite {
 
@@ -19,7 +19,7 @@ export class Ice extends AnimSprite {
         if (typeof frozen !== 'undefined') {
             this.frozen = frozen;
         } else {
-            this.frozen = new Dirrection(false, false);
+            this.frozen = new Frost(false, false);
             this.updateCoorners();
             this.checkFreeze();
         }
@@ -76,7 +76,7 @@ export class Ice extends AnimSprite {
             this.checkUnfreezeRight();
         } else {
             this.engine.addSprite(
-                new Ice(this.engine, tx + 1, this.ytile, this.xtile + this.length - tx - 1, new Dirrection(false, this.frozen.right))
+                new Ice(this.engine, tx + 1, this.ytile, this.xtile + this.length - tx - 1, new Frost(false, this.frozen.right))
             );
             this.length = tx - this.xtile;
             this.checkUnfreezeRight();

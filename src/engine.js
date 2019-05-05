@@ -1,5 +1,5 @@
 import { Consts }  from './constants';
-import { Dirrection } from './struct';
+import { Frost } from './struct';
 import { Ice } from './ice';
 import { Keyboard } from './keyboard';
 import { Scene } from './scene';
@@ -78,25 +78,26 @@ export class Engine {
         // check if no sprites have moved for 2 turns
         if (!spritesMoving && this.noSpriteMoveCount > 1) {
             this.noSpriteMoveCount = 0;
-            if (this.keyboard.up) {
-                //this.player.jump();
-            }
-            if (this.keyboard.down || this.keyboard.action) {
-                this.player.ice();
-            }
-            if (this.keyboard.left) {
-                this.player.left();
-            }
-            if (this.keyboard.right) {
-                this.player.right();
-            }
-            if (this.keyboard.enter) {
-                this.sound.stop('danger');
-                this.scene.load(this.level);
-                this.keyboard.enter = false;
-            }
+            this.input();
         }
         this.collision();
+    }
+
+    input() {
+        if (this.keyboard.down || this.keyboard.action) {
+            this.player.ice();
+        }
+        if (this.keyboard.left) {
+            this.player.left();
+        }
+        if (this.keyboard.right) {
+            this.player.right();
+        }
+        if (this.keyboard.enter) {
+            this.sound.stop('danger');
+            this.scene.load(this.level);
+            this.keyboard.enter = false;
+        }
     }
 
     iceAt(tx, ty) {
@@ -136,7 +137,7 @@ export class Engine {
         let ty = iceblockA.ytile;
         let length = iceblockA.length + iceblockB.length + 1;
         this.addSprite(
-            new Ice(this, tx, ty, length, new Dirrection(iceblockA.frozen.left, iceblockB.frozen.right))
+            new Ice(this, tx, ty, length, new Frost(iceblockA.frozen.left, iceblockB.frozen.right))
         );
         this.removeSprite(iceblockA);
         this.removeSprite(iceblockB);
@@ -186,16 +187,6 @@ export class Engine {
 
     addSparks(xtile, ytile, color, quantity, intensity) {
         this.sfxs.push(new Sparks(this, xtile, ytile, color, quantity, intensity));
-    }
-
-    removeSfx(sprite) {
-        for (let i = 0; i < this.sfxs.length; i++) {
-            if (this.sfxs[i] === sprite) {
-                this.sfxs.splice(i,1);
-                return true;
-            }
-        }
-        return false;
     }
 
     spriteTypeAt(tx, ty, excludeId) {

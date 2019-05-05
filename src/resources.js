@@ -28,6 +28,7 @@ export class Resources {
             callback();
         }
     }
+
     ready(callback) {
         for (const resource of this.definitions) {
             if (resource.type === 'image') {
