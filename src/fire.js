@@ -39,7 +39,7 @@ export class Fire extends AnimSprite {
     }
 
     gravity() {
-        if (!Tile.isSolid(this.coorners.d)) {
+        if (!Tile.isSolid(this.coorners.d) && this.coorners.d !== Consts.ObjectFire) {
             this.setState(Consts.MoveDown, true);
             return true;
         }
