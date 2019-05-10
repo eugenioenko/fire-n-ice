@@ -33,7 +33,7 @@ export class Engine {
     }
 
     draw() {
-        this.ctx.clearRect(0,0,this.cwidth,this.cheight);
+        this.ctx.clearRect(0, 0, this.cwidth, this.cheight);
         this.map.draw();
         // reverse loop, player draws last
         for (let i = this.sprites.length - 1; i >= 0; i--) {
@@ -41,6 +41,19 @@ export class Engine {
         }
         for (let i = 0; i < this.sfxs.length; ++i) {
             this.sfxs[i].draw();
+        }
+
+
+        if (this.editor) {
+            this.ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+            this.ctx.strokeWidth = 1;
+            this.ctx.beginPath();
+            for (let x = 0; x < this.cwidth; x += 32) {
+                for (let y = 0; y < this.cheight; y += 32) {
+                    this.ctx.strokeRect(x, y, x + 32, y + 32);
+                }
+            }
+            this.ctx.closePath();
         }
     }
 
