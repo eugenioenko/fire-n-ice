@@ -64,7 +64,16 @@ export class Sparks extends Sprite {
             }
         }
         if (!this.particles.length) {
-            this.engine.removeSfx(this);
+            this.removeSelf();
         }
     }
+
+    removeSelf() {
+        for (let i = 0; i < this.engine.sfxs.length; i++) {
+            if (this.engine.sfxs[i] === this) {
+                this.engine.sfxs.splice(i, 1);
+            }
+        }
+    }
+
 }

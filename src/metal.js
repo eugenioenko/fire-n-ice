@@ -10,9 +10,7 @@ export class Metal extends AnimSprite {
         this.xtile = tx;
         this.ytile = ty;
         this.length = length;
-        this.animEnd = 1;
         this.animDelay = 9;
-        this.animRow = 0;
         this.dirrection = 0;
         this.falling = false;
     }
@@ -78,36 +76,8 @@ export class Metal extends AnimSprite {
     }
 
     draw() {
-        this.ctx.save();
-        if (this.animDelayCount++ > this.animDelay) {
-            this.animDelayCount = 0;
-            this.animRow = this.animRow === 0 ? 1 : 0;
-        }
-        this.ctx.drawImage(this.image, 0, Consts.TileWidth*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
-
-        if (
-            this.engine.spriteTypeAt(this.xtile - 1, this.ytile) === Consts.ObjectIce &&
-            this.engine.spriteAt(this.xtile - 1, this.ytile).frozen &&
-            this.engine.spriteAt(this.xtile - 1, this.ytile).frozen.right
-        ) {
-            this.ctx.drawImage(
-                this.engine.resources.get('frost'),
-                (this.xtile * this.width) - 7,
-                this.ytile * this.height
-            );
-        }
-        if (
-            this.engine.spriteTypeAt(this.xtile+this.length, this.ytile) === Consts.ObjectIce &&
-            this.engine.spriteAt(this.xtile+this.length, this.ytile).frozen &&
-            this.engine.spriteAt(this.xtile+this.length, this.ytile).frozen.left
-        ) {
-            this.ctx.drawImage(
-                this.engine.resources.get('frost'),
-                (this.xtile + this.length) * this.width - 7,
-                this.ytile * this.height
-            );
-        }
-        this.ctx.restore();
+        super.draw();
+        this.drawFrost();
     }
 
     glide() {

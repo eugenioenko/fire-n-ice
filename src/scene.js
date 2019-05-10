@@ -1,5 +1,5 @@
 import { Consts }  from './constants';
-import { Dirrection } from './struct';
+import { Frost } from './struct';
 import { Fire } from './fire';
 import { Ice } from './ice';
 import { Jar } from './jar';
@@ -55,7 +55,7 @@ export class Scene {
                     this.engine.addSprite(this.engine.player);
                     break;
                 case Consts.ObjectIce:
-                    let frozen = new Dirrection(true, true);
+                    let frozen = new Frost(true, true);
                     if (typeof sprite.fl !== 'undefined') {
                         frozen.left = sprite.fl;
                         frozen.right = sprite.fr;

@@ -1,7 +1,7 @@
 import { Consts }  from './constants';
 import { AnimSprite } from './animsprite';
 import { Tile } from './tiles';
-import { Dirrection } from './struct';
+import { Frost } from './struct';
 
 export class Ice extends AnimSprite {
 
@@ -19,7 +19,7 @@ export class Ice extends AnimSprite {
         if (typeof frozen !== 'undefined') {
             this.frozen = frozen;
         } else {
-            this.frozen = new Dirrection(false, false);
+            this.frozen = new Frost(false, false);
             this.updateCoorners();
             this.checkFreeze();
         }
@@ -76,7 +76,7 @@ export class Ice extends AnimSprite {
             this.checkUnfreezeRight();
         } else {
             this.engine.addSprite(
-                new Ice(this.engine, tx + 1, this.ytile, this.xtile + this.length - tx - 1, new Dirrection(false, this.frozen.right))
+                new Ice(this.engine, tx + 1, this.ytile, this.xtile + this.length - tx - 1, new Frost(false, this.frozen.right))
             );
             this.length = tx - this.xtile;
             this.checkUnfreezeRight();
@@ -100,6 +100,7 @@ export class Ice extends AnimSprite {
     isFrozen() {
         return this.frozen.left || this.frozen.right;
     }
+
     gravity() {
         if (!Tile.isSolid(this.coorners.d) && !this.isFrozen()) {
             this.falling = true;
@@ -159,20 +160,46 @@ export class Ice extends AnimSprite {
             this.animRow = this.animRow === 0 ? 1 : 0;
         }
         if (this.length === 1) {
-            this.ctx.drawImage(this.image, 0, Consts.TileWidth*this.animRow, this.width, this.height,  this.x, this.y, this.width, this.height);
+            this.ctx.drawImage(
+                this.image, 0,
+                Consts.TileWidth * this.animRow,
+                this.width, this.height,
+                this.x, this.y,
+                this.width, this.height
+            );
         } else if (this.length === 2) {
-            this.ctx.drawImage(this.image, 1*Consts.TileWidth, Consts.TileWidth*this.animRow,
-                this.width, this.height,  this.x, this.y, this.width, this.height);
-            this.ctx.drawImage(this.image, 3*Consts.TileWidth, Consts.TileWidth*this.animRow,
-                this.width, this.height,  this.x+Consts.TileWidth, this.y, this.width, this.height);
+            this.ctx.drawImage(this.image,
+                Consts.TileWidth, Consts.TileWidth * this.animRow,
+                this.width, this.height,
+                this.x, this.y,
+                this.width, this.height
+            );
+            this.ctx.drawImage(this.image,
+                3 * Consts.TileWidth, Consts.TileWidth * this.animRow,
+                this.width, this.height,
+                this.x + Consts.TileWidth, this.y,
+                this.width, this.height
+            );
         } else {
-            this.ctx.drawImage(this.image, 1*Consts.TileWidth, Consts.TileWidth*this.animRow,
-                this.width, this.height,  this.x, this.y, this.width, this.height);
-            this.ctx.drawImage(this.image, 3*Consts.TileWidth, Consts.TileWidth*this.animRow,
-                this.width, this.height,  this.x+Consts.TileWidth*(this.length-1), this.y, this.width, this.height);
-            for (let i = 1;  i < this.length-1; i++) {
-                this.ctx.drawImage(this.image, 2*Consts.TileWidth, Consts.TileWidth*this.animRow,
-                    this.width, this.height,  this.x+(Consts.TileWidth*i), this.y, this.width, this.height);
+            this.ctx.drawImage(this.image,
+                Consts.TileWidth, Consts.TileWidth * this.animRow,
+                this.width, this.height,
+                this.x, this.y,
+                this.width, this.height
+            );
+            this.ctx.drawImage(this.image,
+                3 * Consts.TileWidth, Consts.TileWidth * this.animRow,
+                this.width, this.height,
+                this.x + Consts.TileWidth * (this.length - 1), this.y,
+                this.width, this.height
+            );
+            for (let i = 1;  i < this.length - 1; i++) {
+                this.ctx.drawImage(this.image,
+                    2 * Consts.TileWidth, Consts.TileWidth * this.animRow,
+                    this.width, this.height,
+                    this.x + (Consts.TileWidth * i), this.y,
+                    this.width, this.height
+                );
             }
         }
         if (this.frozen.left) {
@@ -223,20 +250,12 @@ export class Ice extends AnimSprite {
     }
 
     checkFreeze() {
-        if (
-            this.coorners.l === Consts.ObjectWall ||
-            this.coorners.l === Consts.ObjectMetal ||
-            this.coorners.l === Consts.ObjectJar
-         ) {
+        if (Tile.isFreezable(this.coorners.l)) {
             this.frozen.left = true;
         } else {
             this.frozen.left = false;
         }
-        if (
-            this.coorners.r === Consts.ObjectWall ||
-            this.coorners.r === Consts.ObjectMetal ||
-            this.coorners.r === Consts.ObjectJar
-        ) {
+        if (Tile.isFreezable(this.coorners.r)) {
             this.frozen.right = true;
         } else {
             this.frozen.right = false;
@@ -244,23 +263,13 @@ export class Ice extends AnimSprite {
     }
 
     checkUnfreezeLeft() {
-        if (
-            this.frozen.left &&
-            this.coorners.l !== Consts.ObjectWall &&
-            this.coorners.l !== Consts.ObjectMetal &&
-            this.coorners.l !== Consts.ObjectJar
-         ) {
+        if (this.frozen.left && !Tile.isFreezable(this.coorners.l)) {
             this.frozen.left = false;
         }
     }
 
     checkUnfreezeRight() {
-        if (
-            this.frozen.right &&
-            this.coorners.r !== Consts.ObjectWall &&
-            this.coorners.r !== Consts.ObjectMetal &&
-            this.coorners.r !== Consts.ObjectJar
-        ) {
+        if (this.frozen.right && !Tile.isFreezable(this.coorners.r)) {
             this.frozen.right = false;
         }
     }

@@ -2,6 +2,7 @@
  * Keyboard press engine
  */
 export class Keyboard {
+
     constructor() {
         this.up = false;
         this.down = false;
@@ -40,7 +41,6 @@ export class Keyboard {
         document.getElementById('btn_right').addEventListener('pointerup', () => this.right = false);
         document.getElementById('btn_select').addEventListener('pointerup', () => this.enter = true);
     }
-
 
     keydown_(e) {
         switch (e.keyCode) {

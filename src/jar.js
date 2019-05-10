@@ -28,7 +28,7 @@ export class Jar extends AnimSprite {
             this.turnOnFire();
             this.engine.removeFire(this.xtile, this.ytile - 1);
         }
-        if (this.onFire && this.engine.spriteTypeAt(this.xtile, this.ytile - 1) === Consts.ObjectIce) {
+        if (this.onFire && this.coorners.u === Consts.ObjectIce) {
             this.meltIce();
         }
     }
@@ -64,27 +64,7 @@ export class Jar extends AnimSprite {
 
     draw() {
         super.draw();
-        if (
-            this.engine.spriteTypeAt(this.xtile - 1, this.ytile) === Consts.ObjectIce &&
-            this.engine.spriteAt(this.xtile - 1, this.ytile).frozen &&
-            this.engine.spriteAt(this.xtile - 1, this.ytile).frozen.right
-        ) {
-            this.ctx.drawImage(
-                this.engine.resources.get('frost'),
-                (this.xtile * this.width) - 7,
-                this.ytile * this.height
-            );
-        }
-        if (
-            this.engine.spriteTypeAt(this.xtile + this.length, this.ytile) === Consts.ObjectIce &&
-            this.engine.spriteAt(this.xtile + this.length, this.ytile).frozen &&
-            this.engine.spriteAt(this.xtile + this.length, this.ytile).frozen.left
-        ) {
-            this.ctx.drawImage(
-                this.engine.resources.get('frost'),
-                (this.xtile + this.length) * this.width - 7,
-                this.ytile * this.height
-            );
-        }
+        this.drawFrost();
     }
+
 }
