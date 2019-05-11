@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style>
         body, html {
             width: 100%;
@@ -10,41 +11,49 @@
             cursor: pointer;
             outline: 4px solid red;
         }
+        textarea {
+            width: 200px;
+            height: 100px;
+        }
     </style>
 </head>
 <body id="body">
-    <button id="button">button</button>
+    <button id="button">button</button><br><br>
+    <textarea id="textarea" col="40" row="20"></textarea>
     <script>
-        alert('start');
+        function log(text) {
+            document.getElementById('textarea').innerHTML += text + '\n';
+        }
+        log('start');
         document.getElementById('body').addEventListener('pointerdown', (e) => {
-            alert('pointerdown');
+            log('pointerdown');
         });
         document.getElementById('body').addEventListener('click', (e) => {
-            alert('click');
+            log('click');
         });
         document.getElementById('body').addEventListener('mousedown', (e) => {
-            alert('mousedown');
+            log('mousedown');
         });
         document.getElementById('body').addEventListener('touch', (e) => {
-            alert('touch');
+            log('touch');
         });
         document.getElementById('body').addEventListener('touchstart', (e) => {
-            alert('touchstart');
+            log('touchstart');
         });
         document.getElementById('button').addEventListener('pointerdown', (e) => {
-            alert('pointerdown button');
+            log('pointerdown button');
         });
         document.getElementById('button').addEventListener('click', (e) => {
-            alert('click button');
+            log('click button');
         });
         document.getElementById('button').addEventListener('mousedown', (e) => {
-            alert('mousedown button');
+            log('mousedown button');
         });
         document.getElementById('button').addEventListener('touch', (e) => {
-            alert('touch button');
+            log('touch button');
         });
         document.getElementById('button').addEventListener('touchstart', (e) => {
-            alert('touchstart button');
+            log('touchstart button');
         });
     </script>
 </body>
