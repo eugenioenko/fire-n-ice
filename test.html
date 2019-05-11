@@ -25,34 +25,34 @@
             document.getElementById('textarea').innerHTML += text + '\n';
         }
         log('start');
-        document.getElementById('body').addEventListener('pointerdown', (e) => {
+        document.getElementById('body').addEventListener('pointerdown', function(e){
             log('pointerdown');
         });
-        document.getElementById('body').addEventListener('click', (e) => {
+        document.getElementById('body').addEventListener('click', function(e){
             log('click');
         });
-        document.getElementById('body').addEventListener('mousedown', (e) => {
+        document.getElementById('body').addEventListener('mousedown', function(e){
             log('mousedown');
         });
-        document.getElementById('body').addEventListener('touch', (e) => {
+        document.getElementById('body').addEventListener('touch', function(e){
             log('touch');
         });
-        document.getElementById('body').addEventListener('touchstart', (e) => {
+        document.getElementById('body').addEventListener('touchstart', function(e){
             log('touchstart');
         });
-        document.getElementById('button').addEventListener('pointerdown', (e) => {
+        document.getElementById('button').addEventListener('pointerdown', function(e){
             log('pointerdown button');
         });
-        document.getElementById('button').addEventListener('click', (e) => {
+        document.getElementById('button').addEventListener('click', function(e){
             log('click button');
         });
-        document.getElementById('button').addEventListener('mousedown', (e) => {
+        document.getElementById('button').addEventListener('mousedown', function(e){
             log('mousedown button');
         });
-        document.getElementById('button').addEventListener('touch', (e) => {
+        document.getElementById('button').addEventListener('touch', function(e){
             log('touch button');
         });
-        document.getElementById('button').addEventListener('touchstart', (e) => {
+        document.getElementById('button').addEventListener('touchstart', function(e){
             log('touchstart button');
         });
     </script>
