@@ -21,25 +21,25 @@ export class Keyboard {
             }
             this.intro = false;
         });
-        document.getElementById('btn_action').addEventListener('pointerdown', () => {
+        document.getElementById('btn_action').addEventListener('touchstart', () => {
             this.down = true;
             this.left = false;
             this.right = false;
         });
-        document.getElementById('btn_action').addEventListener('pointerup', () => this.down = false);
-        document.getElementById('btn_left').addEventListener('pointerdown', () => {
+        document.getElementById('btn_action').addEventListener('touchend', () => this.down = false);
+        document.getElementById('btn_left').addEventListener('touchstart', () => {
             this.left = true;
             this.right = false;
             this.down = false;
         });
-        document.getElementById('btn_left').addEventListener('pointerup', () => this.left = false);
-        document.getElementById('btn_right').addEventListener('pointerdown', () => {
+        document.getElementById('btn_left').addEventListener('touchend', () => this.left = false);
+        document.getElementById('btn_right').addEventListener('touchstart', () => {
             this.right = true;
             this.left = false;
             this.down = false;
         });
-        document.getElementById('btn_right').addEventListener('pointerup', () => this.right = false);
-        document.getElementById('btn_select').addEventListener('pointerup', () => this.enter = true);
+        document.getElementById('btn_right').addEventListener('touchend', () => this.right = false);
+        document.getElementById('btn_select').addEventListener('click', () => this.enter = true);
     }
 
     keydown_(e) {
