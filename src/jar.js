@@ -53,6 +53,7 @@ export class Jar extends AnimSprite {
     turnOnFire() {
         this.animRow = 1;
         this.onFire = true;
+        this.engine.sound.play('fire-off');
         this.engine.addSparks(this.xtile, this.ytile - 1, '255, 88, 33', 30);
     }
 
