@@ -8,10 +8,12 @@
             min-height: 100%;
             min-width: 100%;
             cursor: pointer;
+            outline: 4px solid red;
         }
     </style>
 </head>
 <body id="body">
+    <button id="button">button</button>
     <script>
         document.getElementById('body').addEventListener('pointerdown', (e) => {
             alert('pointerdown');
@@ -27,6 +29,21 @@
         });
         document.getElementById('body').addEventListener('touchstart', (e) => {
             alert('touchstart');
+        });
+        document.getElementById('button').addEventListener('pointerdown', (e) => {
+            alert('pointerdown button');
+        });
+        document.getElementById('button').addEventListener('click', (e) => {
+            alert('click button');
+        });
+        document.getElementById('button').addEventListener('mousedown', (e) => {
+            alert('mousedown button');
+        });
+        document.getElementById('button').addEventListener('touch', (e) => {
+            alert('touch button');
+        });
+        document.getElementById('button').addEventListener('touchstart', (e) => {
+            alert('touchstart button');
         });
     </script>
 </body>
