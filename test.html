@@ -7,6 +7,7 @@
             height: 100%;
             min-height: 100%;
             min-width: 100%;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -14,6 +15,18 @@
     <script>
         document.getElementById('body').addEventListener('pointerdown', (e) => {
             alert('pointerdown');
+        });
+        document.getElementById('body').addEventListener('click', (e) => {
+            alert('click');
+        });
+        document.getElementById('body').addEventListener('mousedown', (e) => {
+            alert('mousedown');
+        });
+        document.getElementById('body').addEventListener('touch', (e) => {
+            alert('touch');
+        });
+        document.getElementById('body').addEventListener('touchstart', (e) => {
+            alert('touchstart');
         });
     </script>
 </body>
