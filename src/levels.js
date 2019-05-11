@@ -546,7 +546,7 @@ export const levels = [
             {"id":6,"x":5,"y":8,"v":1},
             {"id":3,"x":5,"y":7,"v":3,"fl":true,"fr":false},
             {"id":3,"x":7,"y":8,"v":1,"fl":false,"fr":false},
-            {"id":6,"x":11,"y":6,"v":1},
+            {"id":6,"x":10,"y":6,"v":1},
             {"id":3,"x":6,"y":6,"v":1,"fl":false,"fr":false},
             {"id":3,"x":6,"y":5,"v":3,"fl":false,"fr":false},
             {"id":3,"x":9,"y":5,"v":1,"fl":false,"fr":false}
