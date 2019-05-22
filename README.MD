@@ -1,4 +1,4 @@
-# Fire 'n Ice (Solomon's Key 2)
+# Fire'n Ice (Solomon's Key 2)
 > Fire n Ice, a remake in progress of the game from NES with the same name
 
 Try it out!
