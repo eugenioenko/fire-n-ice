@@ -1,7 +1,6 @@
 # Fire'n Ice (Solomon's Key 2)
 > Fire n Ice, a remake in progress of the game from NES with the same name
 
-Try it out!
 ## [Online demo Here](https://eugenioenko.github.io/fire-n-ice/)
 
 ## Objective
@@ -21,6 +20,8 @@ Destroy all the fires on the level by colliding them with blocks of ice
  - **Right**: Move right
  - **Down**: Create or destroy block of ice
  - **Enter**: Reloads current level
+
+### [Play it now here](https://eugenioenko.github.io/fire-n-ice/)
 
 ### Credits
 - Game development: Eugene Enko
