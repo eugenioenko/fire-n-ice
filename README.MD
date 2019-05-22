@@ -1,4 +1,4 @@
-# Fire 'n Ice
+# Fire 'n Ice (Solomon's Key 2)
 > Fire n Ice, a remake in progress of the game from NES with the same name
 
 Try it out!
@@ -22,9 +22,7 @@ Destroy all the fires on the level by colliding them with blocks of ice
  - **Down**: Create or destroy block of ice
  - **Enter**: Reloads current level
 
-
 ### Credits
 - Game development: Eugene Enko
 - Music composition: Margaret Nelson
 - Level design: wallypg
-- Testing and QA: gdzabaleta
