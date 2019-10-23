@@ -61,6 +61,7 @@ export class Jar extends AnimSprite {
         this.engine.removeIceBlock(this.xtile, this.ytile - 1);
         this.engine.addSparks(this.xtile, this.ytile - 1, '255, 88, 33', 30);
         this.engine.addSparks(this.xtile, this.ytile - 1, '33, 88, 255', 40);
+        this.engine.sound.play('fire-off');
     }
 
     draw() {
