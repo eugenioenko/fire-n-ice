@@ -11,6 +11,7 @@ window.addEventListener('load', () => {
         loader.style.display = 'none';
         loader.style.opacity = 0;
         PreloadGame();
+        window.firenice = true;
     });
 });
 
@@ -22,7 +23,6 @@ function PreloadGame() {
     resources.add('image', 'img_fire', 'images/fire.png');
     resources.add('image', 'img_dona', 'images/dona.png');
     resources.add('image', 'img_intro', 'images/intro.png');
-    resources.add('image', 'img_start', 'images/start.png');
     resources.add('image', 'img_metal', 'images/metal.png');
     resources.add('image', 'frost', 'images/frozen.png');
     resources.add('audio', 'sfx-ice-push', 'sounds/sfx-ice-push.mp3');

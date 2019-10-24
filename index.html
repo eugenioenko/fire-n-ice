@@ -33,7 +33,7 @@
 			</div>
 		</canvas>
 		<div class="bg-dark" id="loader">
-			<div class="start blink">PRESS START</div>
+			<div class="start blink">CLICK TO START</div>
 		</div>
 	</div>
 	<div class="wrapper">
@@ -54,35 +54,22 @@
 			<label style="display: block; padding: 5px;">Level Selector</label>
 			<select id="level-selector" style="font-size: 18px;">
 				<option value="-1">Select a level</option>
-				<option value="0">Level 0</option>
-				<option value="1">Level 1</option>
-				<option value="2">Level 2</option>
-				<option value="3">Level 3</option>
-				<option value="4">Level 4</option>
-				<option value="5">Level 5</option>
-				<option value="6">Level 6</option>
-				<option value="7">Level 7</option>
-				<option value="8">Level 8</option>
-				<option value="9">Level 9</option>
-				<option value="10">Level 10</option>
-				<option value="11">Level 11</option>
-				<option value="12">Level 12</option>
-				<option value="13">Level 13</option>
-				<option value="14">Level 14</option>
-				<option value="15">Level 15</option>
-				<option value="16">Level 16</option>
-				<option value="17">Level 17</option>
-				<option value="18">Level 18</option>
-				<option value="19">Level 19</option>
-				<option value="20">Level 20</option>
-				<option value="21">Level 21</option>
-				<option value="22">Level 22</option>
-				<option value="23">Level 23</option>
-				<option value="24">Level 24</option>
-				<option value="25">Level 25</option>
-				<option value="26">Level 26</option>
-				<option value="27">Level 27</option>
 			</select>
+			<script>
+				let $select = document.getElementById('level-selector');
+				let levels = 28;
+				let options = '';
+				for (let i = 0; i <= levels; ++i) {
+					options += '<option value="' + i + '"' + '>Level ' + i + '</option>';
+				}
+				$select.innerHTML += options;
+
+				$select.addEventListener('change', (e) => {
+					if (typeof window.firenice === 'undefined') {
+						document.getElementById('loader').click();
+					}
+				});
+			</script>
 		</div>
 	</div>
 	<div class="wrapper" style="padding-bottom: 10px;">
