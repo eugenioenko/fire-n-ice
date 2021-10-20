@@ -70,8 +70,8 @@ export class Jar extends AnimSprite {
 
   meltIce() {
     this.engine.removeIceBlock(this.xTile, this.yTile - 1);
-    this.engine.addSparks(this.xTile, this.yTile - 1, "255, 88, 33", 30);
-    this.engine.addSparks(this.xTile, this.yTile - 1, "33, 88, 255", 40);
+    this.engine.addSparks(this.xTile, this.yTile - 1, "255, 88, 33", 20);
+    this.engine.addSparks(this.xTile, this.yTile - 1, "122, 211, 255", 10);
     this.engine.sound.play("fire-off");
   }
 

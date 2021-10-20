@@ -45,17 +45,21 @@ function PreloadGame() {
   });
 }
 
+function loadLevelFromEvent(event) {
+  let lvl = event.target.getAttribute("lvl");
+  game.engine.level = parseInt(lvl, 10);
+  game.engine.scene.load(game.engine.level);
+}
+
 function StartGame(resources) {
   let canvas = document.getElementById("canvas");
   let game = new Game(canvas, resources);
   window.game = game;
-  document.getElementById("level-selector").addEventListener("change", (e) => {
-    if (e.target.value !== "-1") {
-      game.engine.level = parseInt(e.target.value, 10);
-      game.engine.scene.load(game.engine.level);
-      e.target.blur();
-    }
+  document.querySelectorAll("button.lvl").forEach((btn) => {
+    btn.addEventListener("click", loadLevelFromEvent);
   });
+  let lvlSelector = document.getElementById("level-selector");
+  lvlSelector.style.opacity = 1;
 }
 
 function CheckEditor() {
@@ -99,16 +103,6 @@ function CheckEditor() {
       .addEventListener("change", (e) => {
         game.engine.map.theme = parseInt(e.target.value, 10);
         e.target.blur();
-      });
-
-    document
-      .getElementById("level-selector")
-      .addEventListener("change", (e) => {
-        if (e.target.value !== "-1") {
-          game.engine.level = parseInt(e.target.value, 10);
-          game.engine.scene.load(game.engine.level);
-          e.target.blur();
-        }
       });
 
     document.getElementById("btn-save").addEventListener("click", () => {

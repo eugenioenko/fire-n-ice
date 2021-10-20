@@ -397,13 +397,13 @@ export class Player extends AnimSprite {
     if (this.counter % 10 === 0) {
       this.innerCounter += 1;
       if (this.innerCounter === 1) {
-        this.engine.addSparks(this.xTile, this.yTile, "124, 238, 66", 15, 0.5);
+        this.engine.addSparks(this.xTile, this.yTile, "124, 238, 66", 25, 0.5);
       }
       if (this.innerCounter === 3) {
-        this.engine.addSparks(this.xTile, this.yTile, "255, 135, 124", 20, 1);
+        this.engine.addSparks(this.xTile, this.yTile, "255, 135, 124", 30, 1);
       }
       if (this.innerCounter === 5) {
-        this.engine.addSparks(this.xTile, this.yTile, "122, 211, 255", 25, 1.5);
+        this.engine.addSparks(this.xTile, this.yTile, "122, 211, 255", 35, 1.5);
       }
       if (this.innerCounter % 2 === 0 && this.innerCounter < 6) {
         this.engine.sound.play("climb");
@@ -424,9 +424,9 @@ export class Player extends AnimSprite {
   doIntro() {
     this.counter += 1;
     if (this.counter === 8) {
-      this.engine.addSparks(this.xTile, this.yTile, "124, 238, 66", 20, 0.5);
-      this.engine.addSparks(this.xTile, this.yTile, "255, 135, 124", 15, 1);
-      this.engine.addSparks(this.xTile, this.yTile, "122, 211, 255", 10, 1.5);
+      this.engine.addSparks(this.xTile, this.yTile, "124, 238, 66", 20, 2.5);
+      this.engine.addSparks(this.xTile, this.yTile, "255, 135, 124", 35, 1);
+      this.engine.addSparks(this.xTile, this.yTile, "122, 211, 255", 20, 1.5);
       this.engine.sound.play("stage-enter");
     }
     if (this.counter >= 32) {

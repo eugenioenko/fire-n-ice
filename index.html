@@ -67,37 +67,39 @@
         <span class="fa fa-arrow-circle-right" id="btn_right"></span>
       </div>
       <div class="col-50 bg-dark">
-        <span class="fa fa-cog" id="btn_select"></span>
+        <span class="fa fa-redo-alt" id="btn_select"></span>
         <span class="fa fa-dot-circle pull-right" id="btn_action"></span>
       </div>
     </div>
-    <div class="wrapper wrapper-explanation">
-      <div class="col-50">
-        <h3>Controls</h3>
-      </div>
-      <div class="col-50 text-right">
-        <label style="display: block; padding: 5px">Level Selector</label>
-        <select id="level-selector" style="font-size: 18px">
-          <option value="-1">Select a level</option>
-        </select>
+    <div class="wrapper">
+      <div class="col-50" id="level-selector" style="opacity: 0">
+        <h3>Level Select</h3>
+        <div id="lvl-select"></div>
         <script>
-          let $select = document.getElementById("level-selector");
+          let $select = document.getElementById("lvl-select");
           let levels = 28;
           let options = "";
           for (let i = 0; i <= levels; ++i) {
             options +=
-              '<option value="' + i + '"' + ">Level " + i + "</option>";
+              '<button class="lvl" lvl="' +
+              i +
+              '"' +
+              ">[" +
+              (i + 1) +
+              "]</button>";
           }
           $select.innerHTML += options;
         </script>
       </div>
-    </div>
-    <div class="wrapper" style="padding-bottom: 10px">
-      <ul id="controls">
-        <li><b>Left</b> and <b>Right</b> move player</li>
-        <li><b>Down / Space / Circle</b> creates an ice block</li>
-        <li><b>Enter / Cog</b> reloads current Level</li>
-      </ul>
+
+      <div class="col-50">
+        <h3>Controls</h3>
+        <ul id="controls">
+          <li><b>Left</b> and <b>Right</b> move player</li>
+          <li><b>Down / Space / Circle</b> creates an ice block</li>
+          <li><b>Enter / Redo</b> reloads current Level</li>
+        </ul>
+      </div>
     </div>
   </body>
 </html>

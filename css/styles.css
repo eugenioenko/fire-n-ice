@@ -1,153 +1,179 @@
-body, html {
-	height: 100%;
-	min-height: 100%;
-
+body,
+html {
+  height: 100%;
+  min-height: 100%;
 }
 body {
-	background-color: #333;
-	margin: 0;
-	padding: 0;
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-	font-weight: 300;
-	color: #ffb6a9;
-	padding-bottom: 10px;
+  background-color: #333;
+  margin: 0;
+  padding: 0;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+    Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  color: #ffb6a9;
+  padding-bottom: 10px;
 }
 canvas {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	max-width: 100%;
-	cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+  cursor: pointer;
 }
-b, h3{
-	color: #fff;
+b,
+h3 {
+  color: #fff;
+  padding-bottom: 10px;
 }
-h3, h1{
-	margin-bottom: 0;
+h3,
+h1 {
+  margin-top: 15px;
+  margin-bottom: 0;
 }
-p{
-	margin-top: 10px;
-	color: #ffb6a9;
-	font-size: 16px;
+p {
+  margin-top: 10px;
+  color: #ffb6a9;
+  font-size: 16px;
 }
-h1{
-	color: #ffa7ff;
+h1 {
+  color: #ffa7ff;
 }
 .wrapper {
-	position: relative;
-	margin-left: auto;
-	margin-right: auto;
-	width: 100%;
-	max-width: 574px;
-	padding: 0 15px;
-	box-sizing: border-box;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 574px;
+  padding: 0 15px;
+  box-sizing: border-box;
 }
 .wrapper:after {
-	content: " ";
-	clear: both;
-	display: table;
+  content: " ";
+  clear: both;
+  display: table;
 }
 
 .wrapper:before {
-	content: " ";
-	display: table;
+  content: " ";
+  display: table;
 }
-a{
-	color: #ffe17f;
+a {
+  color: #ffe17f;
 }
-ul#controls>li{
-	font-size: 17px;
-	line-height: 21px;
-
+ul {
+  padding: 0;
+  list-style: none;
+  margin: 0;
+}
+ul > li {
+  font-size: 16px;
+  line-height: 21px;
+  margin-bottom: 5px;
 }
 
 .text-right {
-	text-align: right;
+  text-align: right;
 }
 .pt-5 {
-	padding-top: 10px;
+  padding-top: 10px;
 }
 .col-50 {
-	width: 50%;
-	float: left;
+  box-sizing: border-box;
+  width: 50%;
+  float: left;
+  padding-right: 10px;
 }
 .bg-dark {
-	background-color: rgba(.0, .0, .0, .3);
+  background-color: rgba(0, 0, 0, 0.3);
 }
-.fa , .far, .fab {
-	font-size: 38px;
-	padding: 3px;
-	margin: 10px;
-	cursor: pointer;
+.fa,
+.far,
+.fab {
+  font-size: 38px;
+  padding: 3px;
+  margin: 10px;
+  cursor: pointer;
 }
 
 .active {
-	color: #155fd9;
+  color: #155fd9;
 }
 
 .pull-right {
-	float: right;
+  float: right;
 }
 
 @media (max-width: 767px) {
-	.wrapper-explanation {
-		padding-top: 50px;
-	}
+  .wrapper-explanation {
+    padding-top: 50px;
+  }
 }
 
 .vertical-center {
-	display: table;
-	width: 100%;
-	height: 100%;
+  display: table;
+  width: 100%;
+  height: 100%;
 }
 
 .vertical-centered {
-	width: 100%;
-	height: 100%;
-	display: table-cell;
-	vertical-align: middle;
+  width: 100%;
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
 }
 
 #loader {
-	position: absolute;
-	left: 15px;
-	top: 0;
-	right: 15px;
-	bottom: 0;
-	text-align: center;
-	background-image: url(../images/intro.png);
-	background-size: cover;
-	cursor: pointer;
+  position: absolute;
+  left: 15px;
+  top: 0;
+  right: 15px;
+  bottom: 0;
+  text-align: center;
+  background-image: url(../images/intro.png);
+  background-size: cover;
+  cursor: pointer;
 }
 
 .start {
-	font-family: monospace;
-	color: #fff;
-    position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	font-size: 24px;
-	text-align: center;
-	padding: 20px;
+  font-family: monospace;
+  color: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-size: 24px;
+  text-align: center;
+  padding: 20px;
 }
 .img-responsive {
-	width: 100%;
-	max-width: 100%;
-	height: auto;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
 }
 
 .blink {
-	animation: blink-animation 1s steps(5, start) infinite;
-	-webkit-animation: blink-animation 1s steps(5, start) infinite;
+  animation: blink-animation 1s steps(2, start) infinite;
+  -webkit-animation: blink-animation 1s steps(2, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
   }
-  @keyframes blink-animation {
-	to {
-	  visibility: hidden;
-	}
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
   }
-  @-webkit-keyframes blink-animation {
-	to {
-	  visibility: hidden;
-	}
+}
+
+button {
+  background-color: transparent;
+  background-image: none;
+  -webkit-appearance: none;
+  color: #ffb6a9;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  font-size: 16px;
+  margin-right: 4px;
 }
