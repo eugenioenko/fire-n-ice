@@ -25,7 +25,7 @@ export class Ice extends AnimSprite {
     this.animEnd = 1;
     this.animDelay = 9;
     this.animRow = 0;
-    this.dirrection = 0;
+    this.direction = 0;
     this.falling = false;
     if (typeof frozen !== "undefined") {
       this.frozen = frozen;
@@ -134,8 +134,8 @@ export class Ice extends AnimSprite {
   }
 
   collision() {
-    if (!this.canGlide(this.dirrection)) {
-      this.dirrection = 0;
+    if (!this.canGlide(this.direction)) {
+      this.direction = 0;
       this.engine.sound.play("ice-collision");
       return true;
     }
@@ -270,7 +270,7 @@ export class Ice extends AnimSprite {
   glide() {
     this.counter += 4;
     if (this.counter <= Consts.TileWidth) {
-      this.x += 4 * this.dirrection;
+      this.x += 4 * this.direction;
     } else {
       this.push();
     }
@@ -288,7 +288,7 @@ export class Ice extends AnimSprite {
   }
 
   push(dir) {
-    this.dirrection = typeof dir === "undefined" ? this.dirrection : dir;
+    this.direction = typeof dir === "undefined" ? this.direction : dir;
     if (!this.collision() && !this.gravity()) {
       this.setState(Consts.MoveIceMoving, true);
     } else {

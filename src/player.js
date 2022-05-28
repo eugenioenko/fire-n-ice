@@ -19,7 +19,7 @@ export class Player extends AnimSprite {
       false
     );
     this.speed = 2;
-    this.dirrection = 1;
+    this.direction = 1;
     this.state = 0; //standing top right down left
     this.moving = false;
     this.tileWidth = Consts.TileWidth;
@@ -35,7 +35,7 @@ export class Player extends AnimSprite {
   left() {
     if (!this.moving) {
       //if standing then turn
-      if (this.dirrection !== Consts.DirLeft) {
+      if (this.direction !== Consts.DirLeft) {
         //is not under a brick
         if (!Tile.isSolid(this.corners.u)) {
           this.setAnim(
@@ -55,7 +55,7 @@ export class Player extends AnimSprite {
           );
         }
         this.setState(Consts.MoveTurn, true);
-        this.dirrection = Consts.DirLeft;
+        this.direction = Consts.DirLeft;
       } else {
         //running
         if (!Tile.isSolid(this.corners.l) && Tile.isSolid(this.corners.d)) {
@@ -109,7 +109,7 @@ export class Player extends AnimSprite {
 
   right() {
     if (!this.moving) {
-      if (this.dirrection !== Consts.DirRight) {
+      if (this.direction !== Consts.DirRight) {
         if (!Tile.isSolid(this.corners.u)) {
           this.setAnim(
             Consts.AnimTurnStart,
@@ -128,7 +128,7 @@ export class Player extends AnimSprite {
           );
         }
         this.setState(Consts.MoveTurn, true);
-        this.dirrection = Consts.DirRight;
+        this.direction = Consts.DirRight;
       } else {
         if (!Tile.isSolid(this.corners.r) && Tile.isSolid(this.corners.d)) {
           if (!Tile.isSolid(this.corners.u) && !Tile.isSolid(this.corners.ur)) {
@@ -273,7 +273,7 @@ export class Player extends AnimSprite {
   ice() {
     if (!this.moving) {
       if (Tile.isSolid(this.corners.d)) {
-        if (this.dirrection === Consts.DirRight) {
+        if (this.direction === Consts.DirRight) {
           if (
             !Tile.isSolid(this.corners.dr) &&
             this.corners.dr !== Consts.ObjectFire
@@ -344,7 +344,7 @@ export class Player extends AnimSprite {
 
   jump() {
     if (!this.moving) {
-      if (this.dirrection === Consts.DirRight) {
+      if (this.direction === Consts.DirRight) {
         if (
           Tile.isSolid(this.corners.r) &&
           !Tile.isSolid(this.corners.ur) &&
@@ -379,7 +379,7 @@ export class Player extends AnimSprite {
   doRun() {
     this.counter += 1;
     if (this.counter <= Consts.AnimFrameCount) {
-      this.x += this.speed * this.dirrection;
+      this.x += this.speed * this.direction;
     } else {
       this.setState(Consts.MoveStand, false);
     }
@@ -453,7 +453,7 @@ export class Player extends AnimSprite {
           Consts.AnimSleepStart,
           Consts.AnimSleepEnd,
           true,
-          this.dirrection !== 1 ? Consts.AnimLeftRow : Consts.AnimRightRow,
+          this.direction !== 1 ? Consts.AnimLeftRow : Consts.AnimRightRow,
           48,
           true
         );
@@ -462,7 +462,7 @@ export class Player extends AnimSprite {
           Consts.AnimStandStart,
           Consts.AnimStandEnd,
           true,
-          this.dirrection !== 1 ? Consts.AnimLeftRow : Consts.AnimRightRow,
+          this.direction !== 1 ? Consts.AnimLeftRow : Consts.AnimRightRow,
           8,
           true
         );
@@ -472,7 +472,7 @@ export class Player extends AnimSprite {
         Consts.AnimCrouchStart,
         Consts.AnimCrouchStart,
         false,
-        this.dirrection !== 1 ? Consts.AnimLeftRow : Consts.AnimRightRow,
+        this.direction !== 1 ? Consts.AnimLeftRow : Consts.AnimRightRow,
         8,
         true
       );
@@ -503,7 +503,7 @@ export class Player extends AnimSprite {
             Consts.AnimPushEnd,
             Consts.AnimPushEnd,
             false,
-            this.dirrection === Consts.DirRight
+            this.direction === Consts.DirRight
               ? Consts.AnimRightRow
               : Consts.AnimLeftRow
           );
@@ -513,11 +513,11 @@ export class Player extends AnimSprite {
             Consts.AnimJumpStart,
             Consts.AnimJumpStart,
             false,
-            this.dirrection === Consts.DirRight
+            this.direction === Consts.DirRight
               ? Consts.AnimRightRow
               : Consts.AnimLeftRow
           );
-          this.x += 8 * this.dirrection;
+          this.x += 8 * this.direction;
           this.y -= 8;
           break;
         case 9:
@@ -525,11 +525,11 @@ export class Player extends AnimSprite {
             Consts.AnimJumpEnd,
             Consts.AnimJumpEnd,
             false,
-            this.dirrection === Consts.DirRight
+            this.direction === Consts.DirRight
               ? Consts.AnimRightRow
               : Consts.AnimLeftRow
           );
-          this.x += 8 * this.dirrection;
+          this.x += 8 * this.direction;
           this.y -= 8;
           break;
         case 12:
@@ -537,11 +537,11 @@ export class Player extends AnimSprite {
             2,
             2,
             false,
-            this.dirrection === Consts.DirRight
+            this.direction === Consts.DirRight
               ? Consts.AnimRightRow
               : Consts.AnimLeftRow
           );
-          this.x += 8 * this.dirrection;
+          this.x += 8 * this.direction;
           this.y -= 8;
           break;
         case 18:
@@ -549,11 +549,11 @@ export class Player extends AnimSprite {
             Consts.AnimStand,
             Consts.AnimStand,
             false,
-            this.dirrection === Consts.DirRight
+            this.direction === Consts.DirRight
               ? Consts.AnimRightRow
               : Consts.AnimLeftRow
           );
-          this.x += 8 * this.dirrection;
+          this.x += 8 * this.direction;
           this.y -= 8;
           break;
       }
@@ -564,10 +564,10 @@ export class Player extends AnimSprite {
 
   makeIce() {
     this.engine.sound.play("new-ice");
-    this.engine.addIceBlock(this.xTile + this.dirrection, this.yTile + 1);
-    this.engine.addSparks(this.xTile + this.dirrection, this.yTile + 1);
+    this.engine.addIceBlock(this.xTile + this.direction, this.yTile + 1);
+    this.engine.addSparks(this.xTile + this.direction, this.yTile + 1);
     this.engine.addSparks(
-      this.xTile + this.dirrection,
+      this.xTile + this.direction,
       this.yTile + 1,
       "124, 214, 255",
       5
@@ -576,10 +576,10 @@ export class Player extends AnimSprite {
 
   removeIceBlock() {
     this.engine.sound.play("ice-remove");
-    this.engine.removeIceBlock(this.xTile + this.dirrection, this.yTile + 1);
-    this.engine.addSparks(this.xTile + this.dirrection, this.yTile + 1);
+    this.engine.removeIceBlock(this.xTile + this.direction, this.yTile + 1);
+    this.engine.addSparks(this.xTile + this.direction, this.yTile + 1);
     this.engine.addSparks(
-      this.xTile + this.dirrection,
+      this.xTile + this.direction,
       this.yTile + 1,
       "124, 214, 255",
       5
@@ -587,16 +587,16 @@ export class Player extends AnimSprite {
   }
 
   push() {
-    let ice = this.engine.iceAt(this.xTile + this.dirrection, this.yTile);
-    if (ice && ice.canGlide(this.dirrection)) {
+    let ice = this.engine.iceAt(this.xTile + this.direction, this.yTile);
+    if (ice && ice.canGlide(this.direction)) {
       this.engine.addSparks(
-        this.xTile + this.dirrection,
+        this.xTile + this.direction,
         this.yTile,
         "255, 255, 255",
         3
       );
       this.engine.addSparks(
-        this.xTile + this.dirrection,
+        this.xTile + this.direction,
         this.yTile,
         "124, 214, 255",
         3,
@@ -606,7 +606,7 @@ export class Player extends AnimSprite {
         Consts.AnimPushStart,
         Consts.AnimPushEnd,
         false,
-        this.dirrection === Consts.DirRight
+        this.direction === Consts.DirRight
           ? Consts.AnimRightRow
           : Consts.AnimLeftRow,
         3
@@ -618,10 +618,10 @@ export class Player extends AnimSprite {
   doPush() {
     this.counter += 2;
     if (this.counter > Consts.AnimFrameCount) {
-      const ice = this.engine.iceAt(this.xTile + this.dirrection, this.yTile);
+      const ice = this.engine.iceAt(this.xTile + this.direction, this.yTile);
       if (ice) {
         this.engine.sound.play("ice-push");
-        ice.push(this.dirrection);
+        ice.push(this.direction);
       }
       this.setState(Consts.MoveStand, false);
     }
@@ -645,7 +645,7 @@ export class Player extends AnimSprite {
     if (this.counter === 8) {
       this.engine.sound.play("ice-disabled");
       this.engine.addSparks(
-        this.xTile + this.dirrection,
+        this.xTile + this.direction,
         this.yTile + 1,
         "88,66,66"
       );

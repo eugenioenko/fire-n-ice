@@ -22,7 +22,7 @@ export class Sprite {
     this.state = Consts.MoveStand;
     this.height = height;
     this.width = width;
-    this.dirrection = 0;
+    this.direction = 0;
     this.xTile = tx;
     this.yTile = ty;
     this.x = this.xTile * Consts.TileWidth;

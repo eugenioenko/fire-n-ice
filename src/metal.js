@@ -22,7 +22,7 @@ export class Metal extends AnimSprite {
     this.yTile = ty;
     this.length = length;
     this.animDelay = 9;
-    this.dirrection = 0;
+    this.direction = 0;
     this.falling = false;
   }
 
@@ -64,8 +64,8 @@ export class Metal extends AnimSprite {
   }
 
   collision() {
-    if (!this.canGlide(this.dirrection)) {
-      this.dirrection = 0;
+    if (!this.canGlide(this.direction)) {
+      this.direction = 0;
       this.engine.sound.play("ice-collision");
       this.setState(Consts.MoveStand, false);
       return true;
@@ -101,7 +101,7 @@ export class Metal extends AnimSprite {
   glide() {
     this.counter += 4;
     if (this.counter <= Consts.TileWidth) {
-      this.x += 4 * this.dirrection;
+      this.x += 4 * this.direction;
     } else {
       this.setState(Consts.MoveStand, false);
     }
@@ -117,7 +117,7 @@ export class Metal extends AnimSprite {
   }
 
   push(dir) {
-    this.dirrection = typeof dir === "undefined" ? this.dirrection : dir;
+    this.direction = typeof dir === "undefined" ? this.direction : dir;
     if (!this.collision()) {
       this.moving = true;
       this.setState(Consts.MoveIceMoving, true);

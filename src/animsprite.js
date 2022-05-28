@@ -3,7 +3,7 @@ import { Consts } from "./constants";
 
 export class AnimSprite extends Sprite {
   /**
-   * Animated Sprite, inherts from Sprite.
+   * Animated Sprite, inherits from Sprite.
    * Adds drawing of pictures in the body of sprite
    * @param {object} engine    Engine Engine
    * @param {object} image   Dom image object (img src=)
