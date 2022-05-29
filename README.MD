@@ -4,7 +4,7 @@
 
 ## [Online demo Here](https://eugenioenko.github.io/fire-n-ice/)
 
-![Screenshot](https://eugenioenko.github.io/fire-n-ice/images/thumbnail.png)
+[![Screenshot](https://eugenioenko.github.io/fire-n-ice/images/thumbnail.png)](https://eugenioenko.github.io/fire-n-ice/)
 
 ## Objective
 
