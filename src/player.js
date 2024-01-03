@@ -179,6 +179,7 @@ export class Player extends AnimSprite {
   burn() {
     if (this.state !== Consts.MoveRip) {
       this.engine.sound.playOnce("danger");
+      this.counter = 0;
       this.setState(Consts.MoveRip, true);
       this.setAnim(
         Consts.AnimRipStart,
@@ -212,7 +213,17 @@ export class Player extends AnimSprite {
     this.innerCounter = 0;
   }
 
-  doRip() {}
+  doRip() {
+    this.counter += 1;
+    this.engine.addSparks(this.xTile, this.yTile, "255, 135, 124", 2, 1.2);
+    this.engine.addSparks(this.xTile, this.yTile, "122, 211, 255", 1, 0.7);
+    if (this.counter >= 70) {
+      this.engine.addSparks(this.xTile, this.yTile, "255, 135, 124", 30, 2.0);
+      this.engine.addSparks(this.xTile, this.yTile, "122, 211, 255", 20, 3.0);
+      this.counter = 0;
+      this.engine.keyboard.enter = true;
+    }
+  }
 
   gravity() {
     if (!this.moving) {
