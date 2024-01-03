@@ -234,6 +234,13 @@ export class Player extends AnimSprite {
         this.setState(Consts.MoveDown, true);
         if (this.fallCounter >= 1) {
           this.engine.sound.playOnce("falling");
+          this.engine.addSparks(
+            this.xTile,
+            this.yTile + 1,
+            "255, 255, 255",
+            3,
+            1.1
+          );
           this.setAnim(
             Consts.AnimBigFallStart,
             Consts.AnimBigFallEnd,
@@ -447,6 +454,7 @@ export class Player extends AnimSprite {
   }
 
   doGravity() {
+    this.engine.addSparks(this.xTile, this.yTile + 1, "124, 214, 255", 1, 0.5);
     this.counter += 1;
     if (this.counter <= Consts.AnimFrameCount) {
       this.y += this.speed;
