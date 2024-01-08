@@ -33,4 +33,4 @@ Destroy all the fires on the level by colliding them with blocks of ice
 
 - Game development: Eugene Enko
 - Music composition: Margaret Nelson
-- Level design: wallypg
+- Level design: @wallypg
