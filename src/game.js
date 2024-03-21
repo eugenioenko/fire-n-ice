@@ -12,6 +12,8 @@ export class Game {
    * @param {*} resources  Game resources
    */
   constructor(canvas, resources) {
+    this.time = performance.now();
+    this.skip = 0;
     this.engine = new Engine(canvas, resources);
     this.levels = levels;
     this.state = Consts.GameStatePlay;
@@ -21,6 +23,16 @@ export class Game {
   }
 
   gameLoop_() {
+    const fps = Math.floor(1 / ((performance.now() - this.time) / 1000));
+    // skip every two frames if framerate is above 60Hz
+    if (fps > 90) {
+      this.skip += 1;
+    }
+    if (this.skip >= 2) {
+      this.skip = 0;
+      window.requestAnimationFrame(this.gameLoop);
+      return;
+    }
     switch (this.state) {
       case Consts.GameStateIntro:
         this.doIntro();
@@ -30,6 +42,8 @@ export class Game {
         this.engine.move();
         break;
     }
+
+    this.time = performance.now();
     window.requestAnimationFrame(this.gameLoop);
   }
 
