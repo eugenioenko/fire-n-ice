@@ -6,6 +6,7 @@ import { levels } from "./levels";
 /**
  * Game Loop
  */
+
 export class Game {
   /**
    * @param {*} canvas   The canvas element
@@ -17,7 +18,6 @@ export class Game {
     this.levels = levels;
     this.state = Consts.GameStatePlay;
     this.engine.sound.soundtrack();
-    this.lastFrame = 0;
     this.gameLoop = this.gameLoop_.bind(this); // jshint ignore:line
     setInterval(() => this.gameLoop(), 1000 / 60);
   }
