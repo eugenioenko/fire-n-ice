@@ -1,24 +1,11 @@
-import { Consts } from "./constants";
-import { AnimSprite } from "./animsprite";
-import { Tile } from "./tiles";
-import { Frost } from "./struct";
+import { Consts } from './constants';
+import { AnimSprite } from './animsprite';
+import { Tile } from './tiles';
+import { Frost } from './struct';
 
 export class Ice extends AnimSprite {
   constructor(engine, tx, ty, length, frozen) {
-    super(
-      Consts.ObjectIce,
-      engine,
-      "img_ice",
-      tx,
-      ty,
-      Consts.TileWidth,
-      Consts.TileWidth,
-      0,
-      0,
-      0,
-      1,
-      true
-    );
+    super(Consts.ObjectIce, engine, 'img_ice', tx, ty, Consts.TileWidth, Consts.TileWidth, 0, 0, 0, 1, true);
     this.xTile = tx;
     this.yTile = ty;
     this.length = length;
@@ -27,7 +14,7 @@ export class Ice extends AnimSprite {
     this.animRow = 0;
     this.direction = 0;
     this.falling = false;
-    if (typeof frozen !== "undefined") {
+    if (typeof frozen !== 'undefined') {
       this.frozen = frozen;
     } else {
       this.frozen = new Frost(false, false);
@@ -38,10 +25,7 @@ export class Ice extends AnimSprite {
 
   addBlock(tx) {
     const spriteTypeAtLeftCorner = this.engine.spriteTypeAt(tx - 1, this.yTile);
-    const spriteTypeAtRightCorner = this.engine.spriteTypeAt(
-      this.xTile + this.length + 1,
-      this.yTile
-    );
+    const spriteTypeAtRightCorner = this.engine.spriteTypeAt(this.xTile + this.length + 1, this.yTile);
     if (tx > this.xTile) {
       if (
         this.getTile(tx + 1, this.yTile) === Consts.ObjectWall ||
@@ -94,8 +78,8 @@ export class Ice extends AnimSprite {
           tx + 1,
           this.yTile,
           this.xTile + this.length - tx - 1,
-          new Frost(false, this.frozen.right)
-        )
+          new Frost(false, this.frozen.right),
+        ),
       );
       this.length = tx - this.xTile;
       this.checkUnfreezeRight();
@@ -128,7 +112,7 @@ export class Ice extends AnimSprite {
     }
     if (this.falling) {
       this.falling = false;
-      this.engine.sound.play("ice-collision");
+      this.engine.sound.play('ice-collision');
     }
     return false;
   }
@@ -136,7 +120,7 @@ export class Ice extends AnimSprite {
   collision() {
     if (!this.canGlide(this.direction)) {
       this.direction = 0;
-      this.engine.sound.play("ice-collision");
+      this.engine.sound.play('ice-collision');
       return true;
     }
     return false;
@@ -187,7 +171,7 @@ export class Ice extends AnimSprite {
         this.x,
         this.y,
         this.width,
-        this.height
+        this.height,
       );
     } else if (this.length === 2) {
       this.ctx.drawImage(
@@ -199,7 +183,7 @@ export class Ice extends AnimSprite {
         this.x,
         this.y,
         this.width,
-        this.height
+        this.height,
       );
       this.ctx.drawImage(
         this.image,
@@ -210,7 +194,7 @@ export class Ice extends AnimSprite {
         this.x + Consts.TileWidth,
         this.y,
         this.width,
-        this.height
+        this.height,
       );
     } else {
       this.ctx.drawImage(
@@ -222,7 +206,7 @@ export class Ice extends AnimSprite {
         this.x,
         this.y,
         this.width,
-        this.height
+        this.height,
       );
       this.ctx.drawImage(
         this.image,
@@ -233,7 +217,7 @@ export class Ice extends AnimSprite {
         this.x + Consts.TileWidth * (this.length - 1),
         this.y,
         this.width,
-        this.height
+        this.height,
       );
       for (let i = 1; i < this.length - 1; i++) {
         this.ctx.drawImage(
@@ -245,22 +229,18 @@ export class Ice extends AnimSprite {
           this.x + Consts.TileWidth * i,
           this.y,
           this.width,
-          this.height
+          this.height,
         );
       }
     }
     if (this.frozen.left) {
-      this.ctx.drawImage(
-        this.engine.resources.get("frost"),
-        this.xTile * this.width - 7,
-        this.yTile * this.height
-      );
+      this.ctx.drawImage(this.engine.resources.get('frost'), this.xTile * this.width - 7, this.yTile * this.height);
     }
     if (this.frozen.right) {
       this.ctx.drawImage(
-        this.engine.resources.get("frost"),
+        this.engine.resources.get('frost'),
         (this.xTile + this.length) * this.width - 7,
-        this.yTile * this.height
+        this.yTile * this.height,
       );
     }
 
@@ -288,7 +268,7 @@ export class Ice extends AnimSprite {
   }
 
   push(dir) {
-    this.direction = typeof dir === "undefined" ? this.direction : dir;
+    this.direction = typeof dir === 'undefined' ? this.direction : dir;
     if (!this.collision() && !this.gravity()) {
       this.setState(Consts.MoveIceMoving, true);
     } else {

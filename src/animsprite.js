@@ -1,5 +1,5 @@
-import { Sprite } from "./sprite";
-import { Consts } from "./constants";
+import { Sprite } from './sprite';
+import { Consts } from './constants';
 
 export class AnimSprite extends Sprite {
   /**
@@ -17,20 +17,7 @@ export class AnimSprite extends Sprite {
    * @param {number} end     Animation frame end
    * @param {boolean} loop   Repeat animation
    */
-  constructor(
-    id,
-    engine,
-    image,
-    tx,
-    ty,
-    width,
-    height,
-    offsetX,
-    offsetY,
-    start,
-    end,
-    loop
-  ) {
+  constructor(id, engine, image, tx, ty, width, height, offsetX, offsetY, start, end, loop) {
     super(id, engine, tx, ty, width, height);
     this.image = this.engine.resources.get(image);
     this.animLoop = loop;
@@ -54,9 +41,9 @@ export class AnimSprite extends Sprite {
    * @param {boolean} once  Sets all the new values only one time.
    */
   setAnim(start, end, loop, row, delay, once) {
-    once = typeof once === "undefined" ? false : once;
-    delay = typeof delay === "undefined" ? Consts.AnimDefaultDelay : delay;
-    row = typeof row === "undefined" ? this.animRow : row;
+    once = typeof once === 'undefined' ? false : once;
+    delay = typeof delay === 'undefined' ? Consts.AnimDefaultDelay : delay;
+    row = typeof row === 'undefined' ? this.animRow : row;
     if (!once) {
       this.animStart = start;
       this.animEnd = end;
@@ -65,12 +52,7 @@ export class AnimSprite extends Sprite {
       this.animDelay = delay;
       this.animRow = row;
     } else {
-      if (
-        this.animStart !== start ||
-        this.animEnd !== end ||
-        this.animLoop !== loop ||
-        this.animRow !== row
-      ) {
+      if (this.animStart !== start || this.animEnd !== end || this.animLoop !== loop || this.animRow !== row) {
         this.animStart = start;
         this.animEnd = end;
         this.animCount = start;
@@ -93,7 +75,7 @@ export class AnimSprite extends Sprite {
       this.x + this.offsetX,
       this.y + this.offsetY,
       this.width,
-      this.height
+      this.height,
     );
 
     if (this.animDelayCount++ > this.animDelay) {
@@ -111,27 +93,15 @@ export class AnimSprite extends Sprite {
 
   drawFrost() {
     const leftSprite = this.engine.spriteAt(this.xTile - 1, this.yTile);
-    if (
-      leftSprite &&
-      leftSprite.id === Consts.ObjectIce &&
-      leftSprite.frozen.right
-    ) {
-      this.ctx.drawImage(
-        this.engine.resources.get("frost"),
-        this.xTile * this.width - 7,
-        this.yTile * this.height
-      );
+    if (leftSprite && leftSprite.id === Consts.ObjectIce && leftSprite.frozen.right) {
+      this.ctx.drawImage(this.engine.resources.get('frost'), this.xTile * this.width - 7, this.yTile * this.height);
     }
     const rightSprite = this.engine.spriteAt(this.xTile + 1, this.yTile);
-    if (
-      rightSprite &&
-      rightSprite.id === Consts.ObjectIce &&
-      rightSprite.frozen.left
-    ) {
+    if (rightSprite && rightSprite.id === Consts.ObjectIce && rightSprite.frozen.left) {
       this.ctx.drawImage(
-        this.engine.resources.get("frost"),
+        this.engine.resources.get('frost'),
         (this.xTile + this.length) * this.width - 7,
-        this.yTile * this.height
+        this.yTile * this.height,
       );
     }
   }

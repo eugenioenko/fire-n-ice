@@ -1,10 +1,10 @@
-import { Consts } from "./constants";
-import { Frost } from "./struct";
-import { Ice } from "./ice";
-import { Keyboard } from "./keyboard";
-import { Scene } from "./scene";
-import { Sound } from "./sound";
-import { Sparks } from "./sfx";
+import { Consts } from './constants';
+import { Frost } from './struct';
+import { Ice } from './ice';
+import { Keyboard } from './keyboard';
+import { Scene } from './scene';
+import { Sound } from './sound';
+import { Sparks } from './sfx';
 /**
  * Engine Loop
  */
@@ -14,7 +14,7 @@ export class Engine {
     this.cwidth = canvas.width;
     this.cheight = canvas.height;
     this.resources = resources;
-    this.ctx = this.canvas.getContext("2d");
+    this.ctx = this.canvas.getContext('2d');
     this.sprites = [];
     this.sfxs = [];
     this.player = {};
@@ -24,7 +24,7 @@ export class Engine {
     this.scene = new Scene(this);
     this.editor = false;
     this.noSpriteMoveCount = 0;
-    const level = localStorage.getItem("level");
+    const level = localStorage.getItem('level');
     if (level !== null) {
       this.level = parseInt(level, 10);
     }
@@ -43,7 +43,7 @@ export class Engine {
     }
 
     if (this.editor) {
-      this.ctx.strokeStyle = "rgba(255,255,255,0.5)";
+      this.ctx.strokeStyle = 'rgba(255,255,255,0.5)';
       this.ctx.strokeWidth = 1;
       this.ctx.beginPath();
       for (let x = 0; x < this.cwidth; x += 32) {
@@ -56,21 +56,15 @@ export class Engine {
   }
 
   collision() {
-    const fires = this.sprites.filter(
-      (sprite) => sprite.id === Consts.ObjectFire
-    );
-    if (
-      !fires.length &&
-      !this.editor &&
-      this.player.state !== Consts.MoveLevelExit
-    ) {
+    const fires = this.sprites.filter(sprite => sprite.id === Consts.ObjectFire);
+    if (!fires.length && !this.editor && this.player.state !== Consts.MoveLevelExit) {
       this.player.outro();
     }
   }
 
   nextLevel() {
     this.level++;
-    localStorage.setItem("level", this.level);
+    localStorage.setItem('level', this.level);
     this.scene.load(this.level);
   }
 
@@ -83,11 +77,7 @@ export class Engine {
     }
     let spritesMoving = false;
     for (let i = 0; i < this.sprites.length; ++i) {
-      if (
-        this.sprites[i] &&
-        this.sprites[i].id !== Consts.ObjectPlayer &&
-        this.sprites[i].moving
-      ) {
+      if (this.sprites[i] && this.sprites[i].id !== Consts.ObjectPlayer && this.sprites[i].moving) {
         spritesMoving = true;
       }
     }
@@ -106,7 +96,7 @@ export class Engine {
 
   input() {
     if (this.keyboard.down || this.keyboard.action) {
-      this.player.ice();
+      this.player.iceOrTeleport();
     }
     if (this.keyboard.left) {
       this.player.left();
@@ -115,7 +105,7 @@ export class Engine {
       this.player.right();
     }
     if (this.keyboard.enter) {
-      this.sound.stop("danger");
+      this.sound.stop('danger');
       this.scene.load(this.level);
       this.keyboard.enter = false;
     }
@@ -133,10 +123,7 @@ export class Engine {
   addIceBlock(tx, ty) {
     let foundIceBlocks = [];
     for (let i = 0; i < this.sprites.length; i++) {
-      if (
-        this.sprites[i].id === Consts.ObjectIce &&
-        this.sprites[i].yTile === ty
-      ) {
+      if (this.sprites[i].id === Consts.ObjectIce && this.sprites[i].yTile === ty) {
         let ice = this.sprites[i];
         if (ice.xTile - 1 === tx || ice.xTile + ice.length === tx) {
           foundIceBlocks.push(ice);
@@ -160,15 +147,7 @@ export class Engine {
     let tx = iceblockA.xTile;
     let ty = iceblockA.yTile;
     let length = iceblockA.length + iceblockB.length + 1;
-    this.addSprite(
-      new Ice(
-        this,
-        tx,
-        ty,
-        length,
-        new Frost(iceblockA.frozen.left, iceblockB.frozen.right)
-      )
-    );
+    this.addSprite(new Ice(this, tx, ty, length, new Frost(iceblockA.frozen.left, iceblockB.frozen.right)));
     this.removeSprite(iceblockA);
     this.removeSprite(iceblockB);
   }
@@ -191,11 +170,7 @@ export class Engine {
 
   removeFire(tx, ty) {
     for (let i = 0; i < this.sprites.length; i++) {
-      if (
-        this.sprites[i].yTile === ty &&
-        tx === this.sprites[i].xTile &&
-        this.sprites[i].id === Consts.ObjectFire
-      ) {
+      if (this.sprites[i].yTile === ty && tx === this.sprites[i].xTile && this.sprites[i].id === Consts.ObjectFire) {
         this.sprites.splice(i, 1);
         return;
       }
@@ -221,7 +196,7 @@ export class Engine {
   }
 
   spriteTypeAt(tx, ty, excludeId) {
-    excludeId = typeof excludeId === "undefined" ? Consts.ObjectOut : excludeId;
+    excludeId = typeof excludeId === 'undefined' ? Consts.ObjectOut : excludeId;
     if (tx < 0 || ty < 0 || tx > this.map.width || ty > this.map.height) {
       return Consts.ObjectOut;
     }
@@ -229,10 +204,7 @@ export class Engine {
       return this.map.map[ty][tx];
     } else {
       for (let i = 0; i < this.sprites.length; i++) {
-        if (
-          this.sprites[i].isSpriteAt(tx, ty) &&
-          this.sprites[i].id !== excludeId
-        ) {
+        if (this.sprites[i].isSpriteAt(tx, ty) && this.sprites[i].id !== excludeId) {
           return this.sprites[i].id;
         }
       }

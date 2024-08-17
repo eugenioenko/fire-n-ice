@@ -7,8 +7,8 @@ body {
   background-color: #333;
   margin: 0;
   padding: 0;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
-    Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande',
+    sans-serif;
   font-weight: 300;
   color: #ffb6a9;
   padding-bottom: 10px;
@@ -48,13 +48,13 @@ h1 {
   box-sizing: border-box;
 }
 .wrapper:after {
-  content: " ";
+  content: ' ';
   clear: both;
   display: table;
 }
 
 .wrapper:before {
-  content: " ";
+  content: ' ';
   display: table;
 }
 a {
@@ -89,7 +89,7 @@ ul > li {
 .fa,
 .far,
 .fab {
-  font-size: 38px;
+  font-size: 32px;
   padding: 3px;
   margin: 10px;
   cursor: pointer;

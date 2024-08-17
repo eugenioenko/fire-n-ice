@@ -1,22 +1,9 @@
-import { AnimSprite } from "./animsprite";
-import { Consts } from "./constants";
+import { AnimSprite } from './animsprite';
+import { Consts } from './constants';
 
 export class Jar extends AnimSprite {
   constructor(engine, tx, ty) {
-    super(
-      Consts.ObjectJar,
-      engine,
-      "img_jar",
-      tx,
-      ty,
-      Consts.TileWidth,
-      Consts.TileWidth,
-      0,
-      0,
-      0,
-      3,
-      true
-    );
+    super(Consts.ObjectJar, engine, 'img_jar', tx, ty, Consts.TileWidth, Consts.TileWidth, 0, 0, 0, 3, true);
     this.animDelay = Consts.AnimDefaultDelay * 2;
     this.onFire = false;
     this.animRow = 0;
@@ -64,15 +51,15 @@ export class Jar extends AnimSprite {
   turnOnFire() {
     this.animRow = 1;
     this.onFire = true;
-    this.engine.sound.play("fire-off");
-    this.engine.addSparks(this.xTile, this.yTile - 1, "255, 88, 33", 30);
+    this.engine.sound.play('fire-off');
+    this.engine.addSparks(this.xTile, this.yTile - 1, Consts.ColorOrange, 30);
   }
 
   meltIce() {
     this.engine.removeIceBlock(this.xTile, this.yTile - 1);
-    this.engine.addSparks(this.xTile, this.yTile - 1, "255, 88, 33", 20);
-    this.engine.addSparks(this.xTile, this.yTile - 1, "122, 211, 255", 10);
-    this.engine.sound.play("fire-off");
+    this.engine.addSparks(this.xTile, this.yTile - 1, Consts.ColorOrange, 20);
+    this.engine.addSparks(this.xTile, this.yTile - 1, Consts.ColorBlue, 10);
+    this.engine.sound.play('fire-off');
   }
 
   draw() {

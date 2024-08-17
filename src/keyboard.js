@@ -12,43 +12,33 @@ export class Keyboard {
     this.keyup = this.keyup_.bind(this);
     this.intro = true;
 
-    window.addEventListener("keydown", this.keydown, false);
-    window.addEventListener("keyup", this.keyup, false);
-    document.getElementById("canvas").addEventListener("click", () => {
+    window.addEventListener('keydown', this.keydown, false);
+    window.addEventListener('keyup', this.keyup, false);
+    document.getElementById('canvas').addEventListener('click', () => {
       if (this.intro) {
         this.enter = true;
       }
       this.intro = false;
     });
-    document
-      .getElementById("btn_action")
-      .addEventListener("pointerdown", () => {
-        this.down = true;
-        this.left = false;
-        this.right = false;
-      });
-    document
-      .getElementById("btn_action")
-      .addEventListener("pointerup", () => (this.down = false));
-    document.getElementById("btn_left").addEventListener("pointerdown", () => {
+    document.getElementById('btn_action').addEventListener('pointerdown', () => {
+      this.down = true;
+      this.left = false;
+      this.right = false;
+    });
+    document.getElementById('btn_action').addEventListener('pointerup', () => (this.down = false));
+    document.getElementById('btn_left').addEventListener('pointerdown', () => {
       this.left = true;
       this.right = false;
       this.down = false;
     });
-    document
-      .getElementById("btn_left")
-      .addEventListener("pointerup", () => (this.left = false));
-    document.getElementById("btn_right").addEventListener("pointerdown", () => {
+    document.getElementById('btn_left').addEventListener('pointerup', () => (this.left = false));
+    document.getElementById('btn_right').addEventListener('pointerdown', () => {
       this.right = true;
       this.left = false;
       this.down = false;
     });
-    document
-      .getElementById("btn_right")
-      .addEventListener("pointerup", () => (this.right = false));
-    document
-      .getElementById("btn_select")
-      .addEventListener("click", () => (this.enter = true));
+    document.getElementById('btn_right').addEventListener('pointerup', () => (this.right = false));
+    document.getElementById('btn_select').addEventListener('click', () => (this.enter = true));
   }
 
   keydown_(e) {

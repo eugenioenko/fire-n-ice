@@ -1,12 +1,13 @@
-import { Consts } from "./constants";
-import { Frost } from "./struct";
-import { Fire } from "./fire";
-import { Ice } from "./ice";
-import { Jar } from "./jar";
-import { Metal } from "./metal";
-import { Player } from "./player";
-import { TileMap } from "./tilemap";
-import { levels } from "./levels";
+import { Consts } from './constants';
+import { Frost } from './struct';
+import { Fire } from './fire';
+import { Ice } from './ice';
+import { Jar } from './jar';
+import { Metal } from './metal';
+import { Player } from './player';
+import { TileMap } from './tilemap';
+import { levels } from './levels';
+import { Teleport } from './teleport';
 
 export class Scene {
   constructor(engine) {
@@ -19,7 +20,7 @@ export class Scene {
     data.theme = this.engine.map.theme;
     data.sprites = [];
     for (const sprite of this.engine.sprites) {
-      let value = typeof sprite.length === "undefined" ? 1 : sprite.length;
+      let value = typeof sprite.length === 'undefined' ? 1 : sprite.length;
       value = sprite.id === Consts.ObjectJar ? sprite.onFire : value;
       let fl, fr;
       if (sprite.id === Consts.ObjectIce) {
@@ -40,13 +41,14 @@ export class Scene {
   }
 
   load(index) {
-    if (typeof levels[index] === "undefined") {
+    if (typeof levels[index] === 'undefined') {
       index = 0;
     }
     this.engine.level = index;
     const level = levels[index];
     this.engine.sprites = [];
     this.engine.map = new TileMap(this.engine, level.map, level.theme);
+    const teleports = new Map();
     for (const sprite of level.sprites) {
       switch (sprite.id) {
         case Consts.ObjectPlayer:
@@ -55,13 +57,11 @@ export class Scene {
           break;
         case Consts.ObjectIce:
           let frozen = new Frost(true, true);
-          if (typeof sprite.fl !== "undefined") {
+          if (typeof sprite.fl !== 'undefined') {
             frozen.left = sprite.fl;
             frozen.right = sprite.fr;
           }
-          this.engine.addSprite(
-            new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v), frozen)
-          );
+          this.engine.addSprite(new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v), frozen));
           break;
         case Consts.ObjectMetal:
           this.engine.addSprite(new Metal(this.engine, sprite.x, sprite.y, 1));
@@ -76,6 +76,21 @@ export class Scene {
           }
           this.engine.addSprite(jar);
           break;
+        case Consts.ObjectTeleport:
+          const teleport = new Teleport(this.engine, sprite.x, sprite.y);
+          this.engine.addSprite(teleport);
+          teleport.linkId = sprite.link;
+          teleports.set(sprite.ref, teleport);
+          break;
+      }
+    }
+    // link teleports
+    if (teleports.size) {
+      for (const teleport of teleports.values()) {
+        const linked = teleports.get(teleport.linkId);
+        if (linked) {
+          teleport.link = linked;
+        }
       }
     }
   }

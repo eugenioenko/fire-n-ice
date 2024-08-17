@@ -1,23 +1,10 @@
-import { Consts } from "./constants";
-import { AnimSprite } from "./animsprite";
-import { Tile } from "./tiles";
+import { Consts } from './constants';
+import { AnimSprite } from './animsprite';
+import { Tile } from './tiles';
 
 export class Metal extends AnimSprite {
   constructor(engine, tx, ty, length) {
-    super(
-      Consts.ObjectMetal,
-      engine,
-      "img_metal",
-      tx,
-      ty,
-      Consts.TileWidth,
-      Consts.TileWidth,
-      0,
-      0,
-      0,
-      1,
-      true
-    );
+    super(Consts.ObjectMetal, engine, 'img_metal', tx, ty, Consts.TileWidth, Consts.TileWidth, 0, 0, 0, 1, true);
     this.xTile = tx;
     this.yTile = ty;
     this.length = length;
@@ -41,12 +28,8 @@ export class Metal extends AnimSprite {
     const leftSprite = this.engine.spriteAt(this.xTile - 1, this.yTile);
     return (
       !this.falling &&
-      ((rightSprite &&
-        rightSprite.id === Consts.ObjectIce &&
-        rightSprite.frozen.left) ||
-        (leftSprite &&
-          leftSprite.id === Consts.ObjectIce &&
-          leftSprite.frozen.right))
+      ((rightSprite && rightSprite.id === Consts.ObjectIce && rightSprite.frozen.left) ||
+        (leftSprite && leftSprite.id === Consts.ObjectIce && leftSprite.frozen.right))
     );
   }
 
@@ -58,7 +41,7 @@ export class Metal extends AnimSprite {
     }
     if (this.falling) {
       this.falling = false;
-      this.engine.sound.play("ice-collision");
+      this.engine.sound.play('ice-collision');
     }
     return false;
   }
@@ -66,7 +49,7 @@ export class Metal extends AnimSprite {
   collision() {
     if (!this.canGlide(this.direction)) {
       this.direction = 0;
-      this.engine.sound.play("ice-collision");
+      this.engine.sound.play('ice-collision');
       this.setState(Consts.MoveStand, false);
       return true;
     }
@@ -117,7 +100,7 @@ export class Metal extends AnimSprite {
   }
 
   push(dir) {
-    this.direction = typeof dir === "undefined" ? this.direction : dir;
+    this.direction = typeof dir === 'undefined' ? this.direction : dir;
     if (!this.collision()) {
       this.moving = true;
       this.setState(Consts.MoveIceMoving, true);

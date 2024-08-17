@@ -1,4 +1,4 @@
-import { Consts } from "./constants";
+import { Consts } from './constants';
 
 export class TileMap {
   /**
@@ -16,7 +16,7 @@ export class TileMap {
     this.tileHeight = Consts.TileWidth;
     this.height = this.map.length - 1;
     this.width = this.map[0].length - 1;
-    this.tilesImage = this.engine.resources.get("tilemap");
+    this.tilesImage = this.engine.resources.get('tilemap');
   }
   /**
    * Returns the content of the tile inside the matrix
@@ -60,7 +60,7 @@ export class TileMap {
           i * this.tileWidth,
           j * this.tileHeight,
           this.tileWidth,
-          this.tileHeight
+          this.tileHeight,
         );
       }
     }

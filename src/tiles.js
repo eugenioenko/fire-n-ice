@@ -34,6 +34,10 @@ export const Tile = Object.freeze({
       solid: true,
       freeze: true,
     },
+    [Consts.ObjectTeleport]: {
+      solid: true,
+      freeze: true,
+    },
   },
 
   isSolid: function (id) {

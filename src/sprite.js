@@ -1,5 +1,5 @@
-import { Consts } from "./constants";
-import { Position } from "./struct";
+import { Consts } from './constants';
+import { Position } from './struct';
 
 export class Sprite {
   /**
@@ -34,7 +34,7 @@ export class Sprite {
    * @param {boolean} moving True if sprite is moving
    */
   setState(state, moving) {
-    this.moving = typeof moving === "undefined" ? false : moving;
+    this.moving = typeof moving === 'undefined' ? false : moving;
     this.state = state;
     this.counter = 0;
   }

@@ -1,9 +1,10 @@
-import { Sprite } from "./sprite";
-import { Consts } from "./constants";
+import { Sprite } from './sprite';
+import { Consts } from './constants';
+
 class Particle {
   constructor(ctx, x, y, color, intensity) {
-    this.color = typeof color === "undefined" ? "255,255,255" : color;
-    this.r = 3;
+    this.color = typeof color === 'undefined' ? Consts.ColorWhite : color;
+    this.r = 4;
     this.x = x;
     this.y = y;
     this.vx = (Math.random() * 4 - 2) * intensity;
@@ -16,7 +17,7 @@ class Particle {
   draw() {
     const opacity = this.life / 255;
     this.ctx.beginPath();
-    this.ctx.fillStyle = "rgba(" + this.color + "," + opacity + ")";
+    this.ctx.fillStyle = 'rgba(' + this.color + ',' + opacity + ')';
     this.ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, true);
     this.ctx.closePath();
     this.ctx.fill();
@@ -33,9 +34,9 @@ class Particle {
 export class Sparks extends Sprite {
   constructor(engine, tx, ty, color, length, intensity) {
     super(null, engine, tx, ty, 32, 32);
-    this.color = typeof color === "undefined" ? "255,255,255" : color;
-    this.length = typeof length === "undefined" ? 10 : length;
-    this.intensity = typeof intensity === "undefined" ? 1 : intensity;
+    this.color = typeof color === 'undefined' ? '255,255,255' : color;
+    this.length = typeof length === 'undefined' ? 10 : length;
+    this.intensity = typeof intensity === 'undefined' ? 1 : intensity;
     this.particles = [];
     for (let i = 0; i < this.length; i++) {
       this.particles[i] = new Particle(
@@ -43,7 +44,7 @@ export class Sparks extends Sprite {
         tx * Consts.TileWidth + 16,
         ty * Consts.TileWidth + 16,
         this.color,
-        this.intensity
+        this.intensity,
       );
     }
   }

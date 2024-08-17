@@ -1,23 +1,10 @@
-import { AnimSprite } from "./animsprite";
-import { Tile } from "./tiles";
-import { Consts } from "./constants";
+import { AnimSprite } from './animsprite';
+import { Tile } from './tiles';
+import { Consts } from './constants';
 
 export class Player extends AnimSprite {
   constructor(engine, tx, ty) {
-    super(
-      Consts.ObjectPlayer,
-      engine,
-      "img_dona",
-      tx,
-      ty,
-      48,
-      64,
-      -10,
-      -32,
-      2,
-      2,
-      false
-    );
+    super(Consts.ObjectPlayer, engine, 'img_dona', tx, ty, 48, 64, -10, -32, 2, 2, false);
     this.speed = 2;
     this.direction = 1;
     this.state = 0; //standing top right down left
@@ -33,363 +20,225 @@ export class Player extends AnimSprite {
   }
 
   left() {
-    if (!this.moving) {
-      //if standing then turn
-      if (this.direction !== Consts.DirLeft) {
-        //is not under a brick
-        if (!Tile.isSolid(this.corners.u)) {
-          this.setAnim(
-            Consts.AnimTurnStart,
-            Consts.AnimTurnEnd,
-            false,
-            Consts.AnimRightRow,
-            4
-          );
-        } else {
-          this.setAnim(
-            Consts.AnimCrouchStart,
-            Consts.AnimCrouchStart,
-            false,
-            Consts.AnimLeftRow,
-            4
-          );
-        }
-        this.setState(Consts.MoveTurn, true);
-        this.direction = Consts.DirLeft;
+    if (this.moving) {
+      return;
+    }
+    //if standing then turn
+    if (this.direction !== Consts.DirLeft) {
+      //is not under a brick
+      if (!Tile.isSolid(this.corners.u)) {
+        this.setAnim(Consts.AnimTurnStart, Consts.AnimTurnEnd, false, Consts.AnimRightRow, 4);
       } else {
-        //running
-        if (!Tile.isSolid(this.corners.l) && Tile.isSolid(this.corners.d)) {
-          //not under a brick
-          if (!Tile.isSolid(this.corners.u) && !Tile.isSolid(this.corners.ul)) {
-            this.setAnim(
-              Consts.AnimRunStart,
-              Consts.AnimRunEnd,
-              true,
-              Consts.AnimLeftRow,
-              2
-            );
-          } else {
-            this.setAnim(
-              Consts.AnimCrouchStart,
-              Consts.AnimCrouchEnd,
-              true,
-              Consts.AnimLeftRow,
-              2
-            );
-          }
-          this.setState(Consts.MoveLeft, true);
+        this.setAnim(Consts.AnimCrouchStart, Consts.AnimCrouchStart, false, Consts.AnimLeftRow, 4);
+      }
+      this.setState(Consts.MoveTurn, true);
+      this.direction = Consts.DirLeft;
+    } else {
+      //running
+      if (!Tile.isSolid(this.corners.l) && Tile.isSolid(this.corners.d)) {
+        //not under a brick
+        if (!Tile.isSolid(this.corners.u) && !Tile.isSolid(this.corners.ul)) {
+          this.setAnim(Consts.AnimRunStart, Consts.AnimRunEnd, true, Consts.AnimLeftRow, 2);
+        } else {
+          this.setAnim(Consts.AnimCrouchStart, Consts.AnimCrouchEnd, true, Consts.AnimLeftRow, 2);
         }
-        //hit an ice
-        if (
-          Tile.isSolid(this.corners.d) &&
-          (this.corners.l === Consts.ObjectIce ||
-            this.corners.l === Consts.ObjectMetal)
-        ) {
-          this.push();
-        }
-        //climb
-        if (
-          Tile.isSolid(this.corners.l) &&
-          Tile.isSolid(this.corners.d) &&
-          !Tile.isSolid(this.corners.u) &&
-          !Tile.isSolid(this.corners.ul) &&
-          !this.moving
-        ) {
-          this.setAnim(
-            Consts.AnimPushStart,
-            Consts.AnimPushStart,
-            false,
-            Consts.AnimLeftRow
-          );
-          this.setState(Consts.MoveUp, true);
-        }
+        this.setState(Consts.MoveLeft, true);
+      }
+      //hit an ice
+      if (
+        Tile.isSolid(this.corners.d) &&
+        (this.corners.l === Consts.ObjectIce || this.corners.l === Consts.ObjectMetal)
+      ) {
+        this.push();
+      }
+      //climb
+      if (
+        Tile.isSolid(this.corners.l) &&
+        Tile.isSolid(this.corners.d) &&
+        !Tile.isSolid(this.corners.u) &&
+        !Tile.isSolid(this.corners.ul) &&
+        !this.moving
+      ) {
+        this.setAnim(Consts.AnimPushStart, Consts.AnimPushStart, false, Consts.AnimLeftRow);
+        this.setState(Consts.MoveUp, true);
       }
     }
   }
 
   right() {
-    if (!this.moving) {
-      if (this.direction !== Consts.DirRight) {
-        if (!Tile.isSolid(this.corners.u)) {
-          this.setAnim(
-            Consts.AnimTurnStart,
-            Consts.AnimTurnEnd,
-            false,
-            Consts.AnimLeftRow,
-            4
-          );
-        } else {
-          this.setAnim(
-            Consts.AnimCrouchStart,
-            Consts.AnimCrouchStart,
-            false,
-            Consts.AnimRightRow,
-            4
-          );
-        }
-        this.setState(Consts.MoveTurn, true);
-        this.direction = Consts.DirRight;
+    if (this.moving) {
+      return;
+    }
+    if (this.direction !== Consts.DirRight) {
+      if (!Tile.isSolid(this.corners.u)) {
+        this.setAnim(Consts.AnimTurnStart, Consts.AnimTurnEnd, false, Consts.AnimLeftRow, 4);
       } else {
-        if (!Tile.isSolid(this.corners.r) && Tile.isSolid(this.corners.d)) {
-          if (!Tile.isSolid(this.corners.u) && !Tile.isSolid(this.corners.ur)) {
-            this.setAnim(
-              Consts.AnimRunStart,
-              Consts.AnimRunEnd,
-              true,
-              Consts.AnimRightRow,
-              2
-            );
-          } else {
-            this.setAnim(
-              Consts.AnimCrouchStart,
-              Consts.AnimCrouchEnd,
-              true,
-              Consts.AnimRightRow,
-              2
-            );
-          }
-          this.setState(Consts.MoveRight, true);
+        this.setAnim(Consts.AnimCrouchStart, Consts.AnimCrouchStart, false, Consts.AnimRightRow, 4);
+      }
+      this.setState(Consts.MoveTurn, true);
+      this.direction = Consts.DirRight;
+    } else {
+      if (!Tile.isSolid(this.corners.r) && Tile.isSolid(this.corners.d)) {
+        if (!Tile.isSolid(this.corners.u) && !Tile.isSolid(this.corners.ur)) {
+          this.setAnim(Consts.AnimRunStart, Consts.AnimRunEnd, true, Consts.AnimRightRow, 2);
+        } else {
+          this.setAnim(Consts.AnimCrouchStart, Consts.AnimCrouchEnd, true, Consts.AnimRightRow, 2);
         }
-        if (
-          Tile.isSolid(this.corners.d) &&
-          (this.corners.r === Consts.ObjectIce ||
-            this.corners.r === Consts.ObjectMetal)
-        ) {
-          this.push();
-        }
-        if (
-          Tile.isSolid(this.corners.r) &&
-          Tile.isSolid(this.corners.d) &&
-          !Tile.isSolid(this.corners.u) &&
-          !Tile.isSolid(this.corners.ur) &&
-          !this.moving
-        ) {
-          this.setAnim(
-            Consts.AnimPushStart,
-            Consts.AnimPushStart,
-            false,
-            Consts.AnimRightRow
-          );
-          this.setState(Consts.MoveUp, true);
-        }
+        this.setState(Consts.MoveRight, true);
+      }
+      if (
+        Tile.isSolid(this.corners.d) &&
+        (this.corners.r === Consts.ObjectIce || this.corners.r === Consts.ObjectMetal)
+      ) {
+        this.push();
+      }
+      if (
+        Tile.isSolid(this.corners.r) &&
+        Tile.isSolid(this.corners.d) &&
+        !Tile.isSolid(this.corners.u) &&
+        !Tile.isSolid(this.corners.ur) &&
+        !this.moving
+      ) {
+        this.setAnim(Consts.AnimPushStart, Consts.AnimPushStart, false, Consts.AnimRightRow);
+        this.setState(Consts.MoveUp, true);
       }
     }
   }
 
   burn() {
-    if (this.state !== Consts.MoveRip) {
-      this.engine.sound.playOnce("danger");
-      this.counter = 0;
-      this.setState(Consts.MoveRip, true);
-      this.setAnim(
-        Consts.AnimRipStart,
-        Consts.AnimRipEnd,
-        true,
-        Consts.AnimRightRow
-      );
+    if (this.state === Consts.MoveRip) {
+      return;
     }
+    this.engine.sound.playOnce('danger');
+    this.counter = 0;
+    this.innerCounter = 0;
+    this.setState(Consts.MoveRip, true);
+    this.setAnim(Consts.AnimRipStart, Consts.AnimRipEnd, true, Consts.AnimRightRow);
   }
 
   intro() {
-    this.setAnim(
-      Consts.AnimBigFallStart,
-      Consts.AnimBigFallEnd,
-      true,
-      Consts.AnimRightRow,
-      4
-    );
+    this.setAnim(Consts.AnimBigFallStart, Consts.AnimBigFallEnd, true, Consts.AnimRightRow, 4);
     this.setState(Consts.MoveLevelEnter, true);
   }
 
   outro() {
-    this.setAnim(
-      Consts.AnimFallStart,
-      Consts.AnimBigFallEnd,
-      true,
-      Consts.AnimRightRow,
-      4
-    );
+    this.setAnim(Consts.AnimFallStart, Consts.AnimBigFallEnd, true, Consts.AnimRightRow, 4);
     this.setState(Consts.MoveLevelExit, true);
     this.innerCounter = 0;
   }
 
   doRip() {
     this.counter += 1;
-    this.engine.addSparks(this.xTile, this.yTile, "255, 135, 124", 2, 1.2);
-    this.engine.addSparks(this.xTile, this.yTile, "122, 211, 255", 1, 0.7);
+    if (this.counter % 10 === 0) {
+      this.engine.addSparks(this.xTile, this.yTile, Consts.ColorRed, 5, 1.2);
+      this.engine.addSparks(this.xTile, this.yTile, Consts.ColorBlue, 5, 0.7);
+    }
     if (this.counter >= 70) {
-      this.engine.addSparks(this.xTile, this.yTile, "255, 135, 124", 30, 2.0);
-      this.engine.addSparks(this.xTile, this.yTile, "122, 211, 255", 20, 3.0);
+      this.engine.addSparks(this.xTile, this.yTile, Consts.ColorRed, 15, 2.0);
+      this.engine.addSparks(this.xTile, this.yTile, Consts.ColorBlue, 10, 3.0);
       this.counter = 0;
       this.engine.keyboard.enter = true;
     }
   }
 
   gravity() {
-    if (!this.moving) {
-      if (typeof this.corners.d === "undefined") {
-        console.eror("undefined corner");
-      }
-      if (!Tile.isSolid(this.corners.d)) {
-        this.setState(Consts.MoveDown, true);
-        if (this.fallCounter >= 1) {
-          this.engine.sound.playOnce("falling");
-          this.engine.addSparks(
-            this.xTile,
-            this.yTile + 1,
-            "255, 255, 255",
-            3,
-            1.1
-          );
-          this.setAnim(
-            Consts.AnimBigFallStart,
-            Consts.AnimBigFallEnd,
-            true,
-            Consts.AnimRightRow,
-            1
-          );
-        } else {
-          this.setAnim(
-            Consts.AnimBigFallStart,
-            Consts.AnimBigFallEnd,
-            true,
-            Consts.AnimRightRow,
-            3
-          );
-        }
+    if (this.moving) {
+      return;
+    }
+    if (typeof this.corners.d === 'undefined') {
+      console.error('undefined corner');
+    }
+    if (!Tile.isSolid(this.corners.d)) {
+      this.setState(Consts.MoveDown, true);
+      if (this.fallCounter >= 1) {
+        this.engine.sound.playOnce('falling');
+        this.setAnim(Consts.AnimBigFallStart, Consts.AnimBigFallEnd, true, Consts.AnimRightRow, 1);
       } else {
-        this.engine.sound.stop("falling");
-        if (this.state === Consts.MoveDown) {
-          this.engine.sound.play("fall");
-          this.engine.addSparks(
-            this.xTile,
-            this.yTile,
-            "124, 238, 66",
-            10,
-            0.75
-          );
-          this.engine.addSparks(
-            this.xTile,
-            this.yTile + 1,
-            "122, 211, 255",
-            5,
-            1.25
-          );
-        }
-        this.fallCounter = 0;
-        this.setState(Consts.MoveStand, false);
-        if (this.corners.d === Consts.ObjectJar) {
-          const jar = this.engine.spriteAt(this.xTile, this.yTile + 1);
-          if (jar && jar.onFire) {
-            this.burn();
-          }
+        this.setAnim(Consts.AnimBigFallStart, Consts.AnimBigFallEnd, true, Consts.AnimRightRow, 3);
+      }
+    } else {
+      this.engine.sound.stop('falling');
+      if (this.state === Consts.MoveDown) {
+        this.engine.sound.play('fall');
+        this.engine.addSparks(this.xTile, this.yTile, Consts.ColorGreen, 10, 0.75);
+        this.engine.addSparks(this.xTile, this.yTile, Consts.ColorRed, 5, 1.25);
+      }
+      this.fallCounter = 0;
+      this.setState(Consts.MoveStand, false);
+      if (this.corners.d === Consts.ObjectJar) {
+        const jar = this.engine.spriteAt(this.xTile, this.yTile + 1);
+        if (jar && jar.onFire) {
+          this.burn();
         }
       }
     }
   }
 
+  iceOrTeleport() {
+    if (this.moving) {
+      return;
+    }
+    if (this.corners.d === Consts.ObjectTeleport) {
+      this.teleport();
+    } else {
+      this.ice();
+    }
+  }
+
+  teleport() {
+    if (this.moving) {
+      return;
+    }
+    this.setAnim(Consts.AnimFallStart, Consts.AnimBigFallEnd, true, Consts.AnimRightRow, 4);
+    this.setState(Consts.MoveTeleportOut, true);
+    this.innerCounter = 0;
+    this.doTeleportIn();
+  }
+
   ice() {
-    if (!this.moving) {
-      if (Tile.isSolid(this.corners.d)) {
-        if (this.direction === Consts.DirRight) {
-          if (
-            !Tile.isSolid(this.corners.dr) &&
-            this.corners.dr !== Consts.ObjectFire
-          ) {
-            this.setAnim(
-              Consts.AnimIceStart,
-              Consts.AnimIceEnd,
-              false,
-              Consts.AnimRightRow,
-              4
-            );
-            this.setState(Consts.MoveIceMake, true);
-          } else if (this.corners.dr === Consts.ObjectIce) {
-            this.setAnim(
-              Consts.AnimIceStart,
-              Consts.AnimIceEnd,
-              false,
-              Consts.AnimRightRow,
-              4
-            );
-            this.setState(Consts.MoveIceRemove, true);
-          } else {
-            this.setAnim(
-              Consts.AnimIceStart,
-              Consts.AnimIceEnd,
-              false,
-              Consts.AnimRightRow,
-              4
-            );
-            this.setState(Consts.MoveIceFail, true);
-          }
+    if (this.moving) {
+      return;
+    }
+    if (Tile.isSolid(this.corners.d)) {
+      if (this.direction === Consts.DirRight) {
+        if (!Tile.isSolid(this.corners.dr) && this.corners.dr !== Consts.ObjectFire) {
+          this.setAnim(Consts.AnimIceStart, Consts.AnimIceEnd, false, Consts.AnimRightRow, 4);
+          this.setState(Consts.MoveIceMake, true);
+        } else if (this.corners.dr === Consts.ObjectIce) {
+          this.setAnim(Consts.AnimIceStart, Consts.AnimIceEnd, false, Consts.AnimRightRow, 4);
+          this.setState(Consts.MoveIceRemove, true);
         } else {
-          if (
-            !Tile.isSolid(this.corners.dl) &&
-            this.corners.dl !== Consts.ObjectFire
-          ) {
-            this.setAnim(
-              Consts.AnimIceStart,
-              Consts.AnimIceEnd,
-              false,
-              Consts.AnimLeftRow,
-              4
-            );
-            this.setState(Consts.MoveIceMake, true);
-          } else if (this.corners.dl === Consts.ObjectIce) {
-            this.setAnim(
-              Consts.AnimIceStart,
-              Consts.AnimIceEnd,
-              false,
-              Consts.AnimLeftRow,
-              4
-            );
-            this.setState(Consts.MoveIceRemove, true);
-          } else {
-            this.setAnim(
-              Consts.AnimIceStart,
-              Consts.AnimIceEnd,
-              false,
-              Consts.AnimLeftRow,
-              4
-            );
-            this.setState(Consts.MoveIceFail, true);
-          }
+          this.setAnim(Consts.AnimIceStart, Consts.AnimIceEnd, false, Consts.AnimRightRow, 4);
+          this.setState(Consts.MoveIceFail, true);
+        }
+      } else {
+        if (!Tile.isSolid(this.corners.dl) && this.corners.dl !== Consts.ObjectFire) {
+          this.setAnim(Consts.AnimIceStart, Consts.AnimIceEnd, false, Consts.AnimLeftRow, 4);
+          this.setState(Consts.MoveIceMake, true);
+        } else if (this.corners.dl === Consts.ObjectIce) {
+          this.setAnim(Consts.AnimIceStart, Consts.AnimIceEnd, false, Consts.AnimLeftRow, 4);
+          this.setState(Consts.MoveIceRemove, true);
+        } else {
+          this.setAnim(Consts.AnimIceStart, Consts.AnimIceEnd, false, Consts.AnimLeftRow, 4);
+          this.setState(Consts.MoveIceFail, true);
         }
       }
     }
   }
 
   jump() {
-    if (!this.moving) {
-      if (this.direction === Consts.DirRight) {
-        if (
-          Tile.isSolid(this.corners.r) &&
-          !Tile.isSolid(this.corners.ur) &&
-          !Tile.isSolid(this.corners.u)
-        ) {
-          this.setAnim(
-            Consts.AnimPushStart,
-            Consts.AnimPushStart,
-            false,
-            Consts.AnimRightRow
-          );
-          this.setState(Consts.MoveUp, true);
-        }
-      } else {
-        if (
-          Tile.isSolid(this.corners.l) &&
-          !Tile.isSolid(this.corners.ul) &&
-          !Tile.isSolid(this.corners.u)
-        ) {
-          this.setAnim(
-            Consts.AnimPushStart,
-            Consts.AnimPushStart,
-            false,
-            Consts.AnimLeftRow
-          );
-          this.setState(Consts.MoveUp, true);
-        }
+    if (this.moving) {
+      return;
+    }
+    if (this.direction === Consts.DirRight) {
+      if (Tile.isSolid(this.corners.r) && !Tile.isSolid(this.corners.ur) && !Tile.isSolid(this.corners.u)) {
+        this.setAnim(Consts.AnimPushStart, Consts.AnimPushStart, false, Consts.AnimRightRow);
+        this.setState(Consts.MoveUp, true);
+      }
+    } else {
+      if (Tile.isSolid(this.corners.l) && !Tile.isSolid(this.corners.ul) && !Tile.isSolid(this.corners.u)) {
+        this.setAnim(Consts.AnimPushStart, Consts.AnimPushStart, false, Consts.AnimLeftRow);
+        this.setState(Consts.MoveUp, true);
       }
     }
   }
@@ -415,16 +264,16 @@ export class Player extends AnimSprite {
     if (this.counter % 10 === 0) {
       this.innerCounter += 1;
       if (this.innerCounter === 1) {
-        this.engine.addSparks(this.xTile, this.yTile, "124, 238, 66", 25, 0.5);
+        this.engine.addSparks(this.xTile, this.yTile, Consts.ColorGreen, 25, 0.5);
       }
       if (this.innerCounter === 3) {
-        this.engine.addSparks(this.xTile, this.yTile, "255, 135, 124", 30, 1);
+        this.engine.addSparks(this.xTile, this.yTile, Consts.ColorRed, 30, 1);
       }
       if (this.innerCounter === 5) {
-        this.engine.addSparks(this.xTile, this.yTile, "122, 211, 255", 35, 1.5);
+        this.engine.addSparks(this.xTile, this.yTile, Consts.ColorBlue, 35, 1.5);
       }
       if (this.innerCounter % 2 === 0 && this.innerCounter < 6) {
-        this.engine.sound.play("climb");
+        this.engine.sound.play('climb');
       }
     }
     if (this.innerCounter % 2 === 1) {
@@ -433,7 +282,7 @@ export class Player extends AnimSprite {
       this.y -= 1;
     }
     if (this.innerCounter >= 6) {
-      this.engine.sound.play("state-leave");
+      this.engine.sound.play('state-leave');
       this.setState(Consts.MoveStand, false);
       this.engine.nextLevel();
     }
@@ -442,19 +291,18 @@ export class Player extends AnimSprite {
   doIntro() {
     this.counter += 1;
     if (this.counter === 8) {
-      this.engine.addSparks(this.xTile, this.yTile, "124, 238, 66", 20, 2.5);
-      this.engine.addSparks(this.xTile, this.yTile, "255, 135, 124", 35, 1);
-      this.engine.addSparks(this.xTile, this.yTile, "122, 211, 255", 20, 1.5);
-      this.engine.sound.play("stage-enter");
+      this.engine.addSparks(this.xTile, this.yTile, Consts.ColorGreen, 20, 2.5);
+      this.engine.addSparks(this.xTile, this.yTile, Consts.ColorRed, 35, 1);
+      this.engine.addSparks(this.xTile, this.yTile, Consts.ColorBlue, 20, 1.5);
+      this.engine.sound.play('stage-enter');
     }
     if (this.counter >= 32) {
-      this.engine.sound.stop("falling");
+      this.engine.sound.stop('falling');
       this.setState(Consts.MoveStand, false);
     }
   }
 
   doGravity() {
-    this.engine.addSparks(this.xTile, this.yTile + 1, "124, 214, 255", 1, 0.5);
     this.counter += 1;
     if (this.counter <= Consts.AnimFrameCount) {
       this.y += this.speed;
@@ -474,7 +322,7 @@ export class Player extends AnimSprite {
           true,
           this.direction !== 1 ? Consts.AnimLeftRow : Consts.AnimRightRow,
           48,
-          true
+          true,
         );
       } else {
         this.setAnim(
@@ -483,7 +331,7 @@ export class Player extends AnimSprite {
           true,
           this.direction !== 1 ? Consts.AnimLeftRow : Consts.AnimRightRow,
           8,
-          true
+          true,
         );
       }
     } else {
@@ -493,7 +341,7 @@ export class Player extends AnimSprite {
         false,
         this.direction !== 1 ? Consts.AnimLeftRow : Consts.AnimRightRow,
         8,
-        true
+        true,
       );
     }
   }
@@ -503,28 +351,14 @@ export class Player extends AnimSprite {
     if (this.counter <= 18) {
       switch (this.counter) {
         case 3:
-          this.engine.sound.play("climb");
-          this.engine.addSparks(
-            this.xTile,
-            this.yTile,
-            "124, 238, 66",
-            10,
-            0.75
-          );
-          this.engine.addSparks(
-            this.xTile,
-            this.yTile,
-            "255, 135, 124",
-            5,
-            1.25
-          );
+          this.engine.sound.play('climb');
+          this.engine.addSparks(this.xTile, this.yTile, Consts.ColorGreen, 10, 0.75);
+          this.engine.addSparks(this.xTile, this.yTile, Consts.ColorRed, 5, 1.25);
           this.setAnim(
             Consts.AnimPushEnd,
             Consts.AnimPushEnd,
             false,
-            this.direction === Consts.DirRight
-              ? Consts.AnimRightRow
-              : Consts.AnimLeftRow
+            this.direction === Consts.DirRight ? Consts.AnimRightRow : Consts.AnimLeftRow,
           );
           break;
         case 6:
@@ -532,9 +366,7 @@ export class Player extends AnimSprite {
             Consts.AnimJumpStart,
             Consts.AnimJumpStart,
             false,
-            this.direction === Consts.DirRight
-              ? Consts.AnimRightRow
-              : Consts.AnimLeftRow
+            this.direction === Consts.DirRight ? Consts.AnimRightRow : Consts.AnimLeftRow,
           );
           this.x += 8 * this.direction;
           this.y -= 8;
@@ -544,22 +376,13 @@ export class Player extends AnimSprite {
             Consts.AnimJumpEnd,
             Consts.AnimJumpEnd,
             false,
-            this.direction === Consts.DirRight
-              ? Consts.AnimRightRow
-              : Consts.AnimLeftRow
+            this.direction === Consts.DirRight ? Consts.AnimRightRow : Consts.AnimLeftRow,
           );
           this.x += 8 * this.direction;
           this.y -= 8;
           break;
         case 12:
-          this.setAnim(
-            2,
-            2,
-            false,
-            this.direction === Consts.DirRight
-              ? Consts.AnimRightRow
-              : Consts.AnimLeftRow
-          );
+          this.setAnim(2, 2, false, this.direction === Consts.DirRight ? Consts.AnimRightRow : Consts.AnimLeftRow);
           this.x += 8 * this.direction;
           this.y -= 8;
           break;
@@ -568,9 +391,7 @@ export class Player extends AnimSprite {
             Consts.AnimStand,
             Consts.AnimStand,
             false,
-            this.direction === Consts.DirRight
-              ? Consts.AnimRightRow
-              : Consts.AnimLeftRow
+            this.direction === Consts.DirRight ? Consts.AnimRightRow : Consts.AnimLeftRow,
           );
           this.x += 8 * this.direction;
           this.y -= 8;
@@ -582,53 +403,30 @@ export class Player extends AnimSprite {
   }
 
   makeIce() {
-    this.engine.sound.play("new-ice");
+    this.engine.sound.play('new-ice');
     this.engine.addIceBlock(this.xTile + this.direction, this.yTile + 1);
     this.engine.addSparks(this.xTile + this.direction, this.yTile + 1);
-    this.engine.addSparks(
-      this.xTile + this.direction,
-      this.yTile + 1,
-      "124, 214, 255",
-      5
-    );
+    this.engine.addSparks(this.xTile + this.direction, this.yTile + 1, Consts.ColorBlue, 5);
   }
 
   removeIceBlock() {
-    this.engine.sound.play("ice-remove");
+    this.engine.sound.play('ice-remove');
     this.engine.removeIceBlock(this.xTile + this.direction, this.yTile + 1);
     this.engine.addSparks(this.xTile + this.direction, this.yTile + 1);
-    this.engine.addSparks(
-      this.xTile + this.direction,
-      this.yTile + 1,
-      "124, 214, 255",
-      5
-    );
+    this.engine.addSparks(this.xTile + this.direction, this.yTile + 1, Consts.ColorBlue, 5);
   }
 
   push() {
     let ice = this.engine.iceAt(this.xTile + this.direction, this.yTile);
     if (ice && ice.canGlide(this.direction)) {
-      this.engine.addSparks(
-        this.xTile + this.direction,
-        this.yTile,
-        "255, 255, 255",
-        3
-      );
-      this.engine.addSparks(
-        this.xTile + this.direction,
-        this.yTile,
-        "124, 214, 255",
-        3,
-        1.5
-      );
+      this.engine.addSparks(this.xTile + this.direction, this.yTile, Consts.ColorWhite, 3);
+      this.engine.addSparks(this.xTile + this.direction, this.yTile, Consts.ColorBlue, 3, 1.5);
       this.setAnim(
         Consts.AnimPushStart,
         Consts.AnimPushEnd,
         false,
-        this.direction === Consts.DirRight
-          ? Consts.AnimRightRow
-          : Consts.AnimLeftRow,
-        3
+        this.direction === Consts.DirRight ? Consts.AnimRightRow : Consts.AnimLeftRow,
+        3,
       );
       this.setState(Consts.MovePush, true);
     }
@@ -639,7 +437,7 @@ export class Player extends AnimSprite {
     if (this.counter > Consts.AnimFrameCount) {
       const ice = this.engine.iceAt(this.xTile + this.direction, this.yTile);
       if (ice) {
-        this.engine.sound.play("ice-push");
+        this.engine.sound.play('ice-push');
         ice.push(this.direction);
       }
       this.setState(Consts.MoveStand, false);
@@ -662,12 +460,8 @@ export class Player extends AnimSprite {
 
   doFailIce() {
     if (this.counter === 8) {
-      this.engine.sound.play("ice-disabled");
-      this.engine.addSparks(
-        this.xTile + this.direction,
-        this.yTile + 1,
-        "88,66,66"
-      );
+      this.engine.sound.play('ice-disabled');
+      this.engine.addSparks(this.xTile + this.direction, this.yTile + 1, '88,66,66');
     }
     this.counter += 1;
     if (this.counter >= Consts.AnimFrameCount) {
@@ -675,11 +469,35 @@ export class Player extends AnimSprite {
     }
   }
 
+  doTeleportIn() {
+    this.counter += 1;
+    if (this.counter % 10 === 0) {
+      this.innerCounter += 1;
+      if (this.innerCounter === 1) {
+        this.engine.sound.play('climb');
+        this.engine.addSparks(this.xTile, this.yTile, Consts.ColorGreen, 10, 0.5);
+      }
+      if (this.innerCounter === 2) {
+        this.engine.addSparks(this.xTile, this.yTile, Consts.ColorGreen, 10, 1.5);
+      }
+    }
+    if (this.innerCounter >= 2) {
+      this.doTeleportOut();
+    }
+  }
+
+  doTeleportOut() {
+    const teleport = this.engine.spriteAt(this.xTile, this.yTile + 1);
+    this.x = teleport.link.x;
+    this.y = teleport.link.y - 32;
+    this.updatePosition();
+    this.engine.addSparks(this.xTile, this.yTile, Consts.ColorGreen, 15, 1.5);
+    this.engine.sound.play('ice-remove');
+    this.setState(Consts.MoveStand, false);
+  }
+
   collisions() {
-    if (
-      this.engine.spriteTypeAt(this.xTile, this.yTile, Consts.ObjectPlayer) ===
-      Consts.ObjectFire
-    ) {
+    if (this.engine.spriteTypeAt(this.xTile, this.yTile, Consts.ObjectPlayer) === Consts.ObjectFire) {
       this.burn();
     }
   }
@@ -727,6 +545,9 @@ export class Player extends AnimSprite {
         break;
       case Consts.MoveLevelExit:
         this.doOutro();
+        break;
+      case Consts.MoveTeleportOut:
+        this.doTeleportIn();
         break;
       case Consts.MoveLevelEnter:
         this.doIntro();
