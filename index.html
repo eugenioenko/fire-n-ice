@@ -3,32 +3,16 @@
   <head>
     <title>Fire 'n Ice</title>
     <link rel="stylesheet" type="text/css" href="./css/styles.css" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="./images/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="./favicon-16x16.png"
-    />
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-    />
-    <meta
-      property="og:image"
-      content="https://eugenioenko.github.io/fire-n-ice/images/thumbnail.png"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
+    <meta property="og:image" content="https://eugenioenko.github.io/fire-n-ice/images/thumbnail.png" />
     <meta
       property="og:description"
       content="Fire'n Ice is a remake in progress of a NES game with the same name, known also as Solomon's Key 2"
     />
-    <script src="./dist/firenice.js"></script>
+    <script src="./dist/firenice.min.js"></script>
   </head>
   <body>
     <div class="wrapper">
@@ -36,30 +20,35 @@
       <p>
         A remake of the game from NES with the same name.
         <a href="https://github.com/eugenioenko/fire-n-ice"
-          ><i class="fab fa-github" style="font-size: 16px; margin: 0"></i>View
-          project page</a
+          ><i class="fab fa-github" style="font-size: 16px; margin: 0"></i>View project page</a
         >
       </p>
     </div>
     <div class="wrapper">
       <canvas id="canvas" height="416" width="544">
         <div style="display: none">
-          <audio id="sfx-ice-push" src="sounds/sfx-ice-push.mp3"></audio>
-          <audio id="sfx-fire-off" src="sounds/sfx-fire-off.mp3"></audio>
-          <audio id="sfx-falling" src="sounds/sfx-falling.mp3"></audio>
-          <audio id="sfx-new-ice" src="sounds/sfx-new-ice.mp3"></audio>
-          <audio id="sfx-climb" src="sounds/sfx-climb.mp3"></audio>
-          <audio
-            id="sfx-ice-collision"
-            src="sounds/sfx-ice-collision.mp3"
-          ></audio>
-          <audio id="sfx-stage-enter" src="sounds/sfx-stage-enter.mp3"></audio>
-          <audio id="sfx-danger" src="sounds/sfx-danger.mp3"></audio>
-          <audio id="sfx-ice-remove" src="sounds/sfx-ice-remove.mp3"></audio>
-          <audio id="sfx-state-leave" src="sounds/sfx-state-leave.mp3"></audio>
-          <audio id="sfx-disabled" src="sounds/sfx-disabled.mp3"></audio>
-          <audio id="sfx-fall" src="sounds/sfx-fall.mp3"></audio>
-          <audio id="sfx-music-sparks" src="music/sparks.mp3"></audio>
+          <img src="images/tilemap.png" alt="image" />
+          <img src="images/ice.png" alt="image" />
+          <img src="images/jar.png" alt="image" />
+          <img src="images/fire.png" alt="image" />
+          <img src="images/dona.png" alt="image" />
+          <img src="images/intro.png" alt="image" />
+          <img src="images/metal.png" alt="image" />
+          <img src="images/teleport.png" alt="image" />
+          <img src="images/frozen.png" alt="image" />
+          <audio preload="auto" id="sfx-ice-push" src="sounds/sfx-ice-push.mp3"></audio>
+          <audio preload="auto" id="sfx-fire-off" src="sounds/sfx-fire-off.mp3"></audio>
+          <audio preload="auto" id="sfx-falling" src="sounds/sfx-falling.mp3"></audio>
+          <audio preload="auto" id="sfx-new-ice" src="sounds/sfx-new-ice.mp3"></audio>
+          <audio preload="auto" id="sfx-climb" src="sounds/sfx-climb.mp3"></audio>
+          <audio preload="auto" id="sfx-ice-collision" src="sounds/sfx-ice-collision.mp3"></audio>
+          <audio preload="auto" id="sfx-stage-enter" src="sounds/sfx-stage-enter.mp3"></audio>
+          <audio preload="auto" id="sfx-danger" src="sounds/sfx-danger.mp3"></audio>
+          <audio preload="auto" id="sfx-ice-remove" src="sounds/sfx-ice-remove.mp3"></audio>
+          <audio preload="auto" id="sfx-state-leave" src="sounds/sfx-state-leave.mp3"></audio>
+          <audio preload="auto" id="sfx-disabled" src="sounds/sfx-disabled.mp3"></audio>
+          <audio preload="auto" id="sfx-fall" src="sounds/sfx-fall.mp3"></audio>
+          <audio preload="auto" id="sfx-music-sparks" src="music/sparks.mp3"></audio>
         </div>
       </canvas>
       <div class="bg-dark" id="loader">
@@ -81,17 +70,11 @@
         <h3>Level Select</h3>
         <div id="lvl-select"></div>
         <script>
-          let $select = document.getElementById("lvl-select");
+          let $select = document.getElementById('lvl-select');
           let levels = 30;
-          let options = "";
+          let options = '';
           for (let i = 0; i <= levels; ++i) {
-            options +=
-              '<button class="lvl" lvl="' +
-              i +
-              '"' +
-              ">[" +
-              (i + 1) +
-              "]</button>";
+            options += '<button class="lvl" lvl="' + i + '"' + '>[' + (i + 1) + ']</button>';
           }
           $select.innerHTML += options;
         </script>
