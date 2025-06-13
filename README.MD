@@ -1,6 +1,6 @@
 # Fire'n Ice (Solomon's Key 2)
 
-> Fire'n Ice is a work-in-progress remake of the classic NES game, bringing nostalgia to modern browsers while introducing updated features and gameplay mechanics.
+> Fire'n Ice is a remake of the classic NES game, bringing nostalgia to modern browsers while introducing updated features and gameplay mechanics.
 
 ## [Online Demo Here](https://eugenioenko.github.io/fire-n-ice/)
 
