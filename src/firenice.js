@@ -84,9 +84,24 @@ function loadGameEditor() {
   game.engine.keyboard.intro = false;
   game.engine.sound.music.pause();
 
-  canvas.addEventListener('click', e => {
-    const xTile = Math.floor(e.offsetX / 32);
-    const yTile = Math.floor(e.offsetY / 32);
+  let isDrawing = false;
+  let lastTileX = -1;
+  let lastTileY = -1;
+
+  function getTileCoords(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+      x: Math.floor((e.clientX - rect.left) * scaleX / 32),
+      y: Math.floor((e.clientY - rect.top) * scaleY / 32),
+    };
+  }
+
+  function placeTool(xTile, yTile) {
+    if (xTile < 0 || yTile < 0 || xTile >= game.engine.map.map[0].length || yTile >= game.engine.map.map.length) {
+      return;
+    }
     if (tool < 2) {
       game.engine.map.map[yTile][xTile] = tool;
     } else {
@@ -112,12 +127,46 @@ function loadGameEditor() {
           break;
       }
     }
+  }
+
+  canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+    const { x, y } = getTileCoords(e);
+    lastTileX = x;
+    lastTileY = y;
+    placeTool(x, y);
   });
 
-  document.getElementById('theme-selector').addEventListener('change', e => {
-    game.engine.map.theme = parseInt(e.target.value, 10);
-    e.target.blur();
+  canvas.addEventListener('mousemove', (e) => {
+    if (!isDrawing) return;
+    const { x, y } = getTileCoords(e);
+    // Only place if we moved to a new tile and tool supports dragging (tiles only)
+    if ((x !== lastTileX || y !== lastTileY) && tool < 2) {
+      placeTool(x, y);
+      lastTileX = x;
+      lastTileY = y;
+    }
   });
+
+  canvas.addEventListener('mouseup', () => {
+    isDrawing = false;
+    lastTileX = -1;
+    lastTileY = -1;
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    isDrawing = false;
+    lastTileX = -1;
+    lastTileY = -1;
+  });
+
+  const themeSelector = document.getElementById('theme-selector');
+  if (themeSelector) {
+    themeSelector.addEventListener('change', (e) => {
+      game.engine.map.theme = parseInt(e.target.value, 10);
+      e.target.blur();
+    });
+  }
 
   document.getElementById('btn-save').addEventListener('click', () => {
     document.getElementById('txt-level').value = JSON.stringify(game.engine.scene.save());
