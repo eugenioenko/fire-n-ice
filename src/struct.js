@@ -14,13 +14,6 @@ export class Position {
   }
 }
 
-export class Coor {
-  constructor(tx, ty) {
-    this.xTile = tx;
-    this.yTile = ty;
-  }
-}
-
 export class Frost {
   constructor(left, right) {
     this.left = left;

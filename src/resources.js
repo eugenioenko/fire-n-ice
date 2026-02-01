@@ -4,7 +4,7 @@ export class Resources {
     this.resources = {};
     this.loaded = 0;
     this.canvas = document.getElementById('canvas');
-    if (canvas) {
+    if (this.canvas) {
       this.ctx = this.canvas.getContext('2d');
     }
   }
