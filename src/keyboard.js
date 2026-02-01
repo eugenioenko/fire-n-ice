@@ -17,31 +17,73 @@ export class Keyboard {
 
     window.addEventListener('keydown', this.keydown, false);
     window.addEventListener('keyup', this.keyup, false);
-    document.getElementById('canvas').addEventListener('click', () => {
-      if (this.intro) {
-        this.enter = true;
-      }
-      this.intro = false;
-    });
-    document.getElementById('btn_action').addEventListener('pointerdown', () => {
+
+    // Canvas click to start
+    const canvas = document.getElementById('canvas');
+    if (canvas) {
+      canvas.addEventListener('click', () => {
+        if (this.intro) {
+          this.enter = true;
+        }
+        this.intro = false;
+      });
+    }
+
+    // Mobile controls - bind with null checks for compatibility
+    this.bindMobileButton('btn_action', 'pointerdown', () => {
       this.down = true;
+      this.action = true;
       this.left = false;
       this.right = false;
     });
-    document.getElementById('btn_action').addEventListener('pointerup', () => (this.down = false));
-    document.getElementById('btn_left').addEventListener('pointerdown', () => {
+    this.bindMobileButton('btn_action', 'pointerup', () => {
+      this.down = false;
+      this.action = false;
+    });
+    this.bindMobileButton('btn_action', 'pointerleave', () => {
+      this.down = false;
+      this.action = false;
+    });
+
+    this.bindMobileButton('btn_left', 'pointerdown', () => {
       this.left = true;
       this.right = false;
-      this.down = false;
     });
-    document.getElementById('btn_left').addEventListener('pointerup', () => (this.left = false));
-    document.getElementById('btn_right').addEventListener('pointerdown', () => {
+    this.bindMobileButton('btn_left', 'pointerup', () => (this.left = false));
+    this.bindMobileButton('btn_left', 'pointerleave', () => (this.left = false));
+
+    this.bindMobileButton('btn_right', 'pointerdown', () => {
       this.right = true;
       this.left = false;
-      this.down = false;
     });
-    document.getElementById('btn_right').addEventListener('pointerup', () => (this.right = false));
-    document.getElementById('btn_select').addEventListener('click', () => (this.enter = true));
+    this.bindMobileButton('btn_right', 'pointerup', () => (this.right = false));
+    this.bindMobileButton('btn_right', 'pointerleave', () => (this.right = false));
+
+    this.bindMobileButton('btn_up', 'pointerdown', () => (this.up = true));
+    this.bindMobileButton('btn_up', 'pointerup', () => (this.up = false));
+    this.bindMobileButton('btn_up', 'pointerleave', () => (this.up = false));
+
+    this.bindMobileButton('btn_down', 'pointerdown', () => {
+      this.down = true;
+      this.action = true;
+    });
+    this.bindMobileButton('btn_down', 'pointerup', () => {
+      this.down = false;
+      this.action = false;
+    });
+    this.bindMobileButton('btn_down', 'pointerleave', () => {
+      this.down = false;
+      this.action = false;
+    });
+
+    this.bindMobileButton('btn_select', 'click', () => (this.enter = true));
+  }
+
+  bindMobileButton(id, event, handler) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener(event, handler);
+    }
   }
 
   keydown_(e) {
