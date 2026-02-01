@@ -82,18 +82,18 @@ export class Metal extends AnimSprite {
   }
 
   glide() {
-    this.counter += 4;
+    this.counter += Consts.PhysicsSpeed;
     if (this.counter <= Consts.TileWidth) {
-      this.x += 4 * this.direction;
+      this.x += Consts.PhysicsSpeed * this.direction;
     } else {
       this.setState(Consts.MoveStand, false);
     }
   }
 
   doDown() {
-    this.counter += 4;
+    this.counter += Consts.PhysicsSpeed;
     if (this.counter <= Consts.TileWidth) {
-      this.y += 4;
+      this.y += Consts.PhysicsSpeed;
     } else {
       this.setState(Consts.MoveStand, false);
     }

@@ -1,15 +1,24 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/firenice.js',
-    devtool: 'inline-source-map',
-    mode: 'development',
-    watch: true,
-    resolve: {
-        extensions: ['.js']
+  entry: './src/firenice.js',
+  devtool: 'inline-source-map',
+  mode: 'development',
+  watch: true,
+  resolve: {
+    extensions: ['.js'],
+  },
+  output: {
+    filename: 'firenice.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, './'),
     },
-    output: {
-        filename: 'firenice.js',
-        path: path.resolve(__dirname, 'dist')
-    }
+    compress: true,
+    port: 8080,
+    hot: true,
+    open: true,
+  },
 };

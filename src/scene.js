@@ -15,7 +15,7 @@ export class Scene {
   }
 
   save() {
-    let data = {};
+    const data = {};
     data.map = this.engine.map.map;
     data.theme = this.engine.map.theme;
     data.sprites = [];
@@ -55,33 +55,36 @@ export class Scene {
           this.engine.player = new Player(this.engine, sprite.x, sprite.y);
           this.engine.addSprite(this.engine.player);
           break;
-        case Consts.ObjectIce:
-          let frozen = new Frost(true, true);
+        case Consts.ObjectIce: {
+          const frozen = new Frost(true, true);
           if (typeof sprite.fl !== 'undefined') {
             frozen.left = sprite.fl;
             frozen.right = sprite.fr;
           }
           this.engine.addSprite(new Ice(this.engine, sprite.x, sprite.y, parseInt(sprite.v), frozen));
           break;
+        }
         case Consts.ObjectMetal:
           this.engine.addSprite(new Metal(this.engine, sprite.x, sprite.y, 1));
           break;
         case Consts.ObjectFire:
           this.engine.addSprite(new Fire(this.engine, sprite.x, sprite.y));
           break;
-        case Consts.ObjectJar:
+        case Consts.ObjectJar: {
           const jar = new Jar(this.engine, sprite.x, sprite.y);
-          if (sprite.v == 1) {
+          if (sprite.v === 1) {
             jar.turnOnFire();
           }
           this.engine.addSprite(jar);
           break;
-        case Consts.ObjectTeleport:
+        }
+        case Consts.ObjectTeleport: {
           const teleport = new Teleport(this.engine, sprite.x, sprite.y);
           this.engine.addSprite(teleport);
           teleport.linkId = sprite.link;
           teleports.set(sprite.ref, teleport);
           break;
+        }
       }
     }
     // link teleports

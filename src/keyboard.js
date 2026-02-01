@@ -8,6 +8,9 @@ export class Keyboard {
     this.left = false;
     this.right = false;
     this.action = false;
+    this.escape = false;
+    this.mKey = false;
+    this.sKey = false;
     this.keydown = this.keydown_.bind(this);
     this.keyup = this.keyup_.bind(this);
     this.intro = true;
@@ -43,49 +46,60 @@ export class Keyboard {
 
   keydown_(e) {
     e.preventDefault();
-    switch (e.keyCode) {
-      case 37: // Left
+    switch (e.key) {
+      case 'ArrowLeft':
         this.left = true;
         this.right = false;
         break;
-      case 38: // Up
+      case 'ArrowUp':
         this.up = true;
         break;
-      case 39: // Right
+      case 'ArrowRight':
         this.right = true;
         this.left = false;
         break;
-      case 40: // Down
-      case 32: // Space
+      case 'ArrowDown':
+      case ' ':
         this.action = true;
         this.left = false;
         this.right = false;
         this.down = true;
         break;
-      case 13: //Enter
+      case 'Enter':
         this.enter = false;
+        break;
+      case 'Escape':
+        this.escape = true;
+        break;
+      case 'm':
+      case 'M':
+        this.mKey = true;
+        break;
+      case 's':
+      case 'S':
+        this.sKey = true;
         break;
     }
   }
 
   keyup_(e) {
     e.preventDefault();
-    switch (e.keyCode) {
-      case 37: // Left
+    switch (e.key) {
+      case 'ArrowLeft':
         this.left = false;
         break;
-      case 38: // Up
+      case 'ArrowUp':
         this.up = false;
         break;
-      case 39: // Right
+      case 'ArrowRight':
         this.right = false;
         break;
-      case 40: // Down
-      case 32: // Space
+      case 'ArrowDown':
+      case ' ':
         this.action = false;
         this.down = false;
         break;
-      case 13: //Enter
+      case 'Enter':
         this.enter = true;
         break;
     }

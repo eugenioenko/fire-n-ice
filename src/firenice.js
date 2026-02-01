@@ -10,7 +10,7 @@ window.addEventListener('load', async () => {
   if (window.FIRENICE_EDITOR_MODE) {
     doStartClick();
   }
-  loader.addEventListener('click', () => doStartClick());
+  document.getElementById('loader').addEventListener('click', () => doStartClick());
 });
 
 async function doStartClick() {
@@ -60,19 +60,19 @@ async function loadGameResources() {
 }
 
 function loadLevelFromEvent(event) {
-  let lvl = event.target.getAttribute('lvl');
+  const lvl = event.target.getAttribute('lvl');
   game.engine.level = parseInt(lvl, 10);
   game.engine.scene.load(game.engine.level);
 }
 
 function startGame(resources) {
-  let canvas = document.getElementById('canvas');
-  let game = new Game(canvas, resources);
+  const canvas = document.getElementById('canvas');
+  const game = new Game(canvas, resources);
   window.game = game;
   document.querySelectorAll('button.lvl').forEach(btn => {
     btn.addEventListener('click', loadLevelFromEvent);
   });
-  let lvlSelector = document.getElementById('level-selector');
+  const lvlSelector = document.getElementById('level-selector');
   lvlSelector.style.opacity = 1;
 }
 

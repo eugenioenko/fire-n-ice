@@ -5,13 +5,13 @@ import { Consts } from './constants';
 export class Player extends AnimSprite {
   constructor(engine, tx, ty) {
     super(Consts.ObjectPlayer, engine, 'img_dona', tx, ty, 48, 64, -10, -32, 2, 2, false);
-    this.speed = 2;
+    this.speed = Consts.PlayerSpeed;
     this.direction = 1;
     this.state = 0; //standing top right down left
     this.moving = false;
     this.tileWidth = Consts.TileWidth;
     this.tileHeight = Consts.TileWidth;
-    this.animDelay = 3;
+    this.animDelay = Consts.PlayerAnimDelay;
     this.counter = 0;
     this.fallCounter = 0;
     this.innerCounter = 0;
@@ -129,11 +129,11 @@ export class Player extends AnimSprite {
 
   doRip() {
     this.counter += 1;
-    if (this.counter % 10 === 0) {
+    if (this.counter % Consts.SparkInterval === 0) {
       this.engine.addSparks(this.xTile, this.yTile, Consts.ColorRed, 5, 1.2);
       this.engine.addSparks(this.xTile, this.yTile, Consts.ColorBlue, 5, 0.7);
     }
-    if (this.counter >= 70) {
+    if (this.counter >= Consts.RipDuration) {
       this.engine.addSparks(this.xTile, this.yTile, Consts.ColorRed, 15, 2.0);
       this.engine.addSparks(this.xTile, this.yTile, Consts.ColorBlue, 10, 3.0);
       this.counter = 0;
@@ -261,7 +261,7 @@ export class Player extends AnimSprite {
 
   doOutro() {
     this.counter += 1;
-    if (this.counter % 10 === 0) {
+    if (this.counter % Consts.SparkInterval === 0) {
       this.innerCounter += 1;
       if (this.innerCounter === 1) {
         this.engine.addSparks(this.xTile, this.yTile, Consts.ColorGreen, 25, 0.5);
@@ -296,7 +296,7 @@ export class Player extends AnimSprite {
       this.engine.addSparks(this.xTile, this.yTile, Consts.ColorBlue, 20, 1.5);
       this.engine.sound.play('stage-enter');
     }
-    if (this.counter >= 32) {
+    if (this.counter >= Consts.IntroDuration) {
       this.engine.sound.stop('falling');
       this.setState(Consts.MoveStand, false);
     }
@@ -315,7 +315,7 @@ export class Player extends AnimSprite {
 
   doStand() {
     if (!Tile.isSolid(this.corners.u)) {
-      if (this.standCounter++ > 500) {
+      if (this.standCounter++ > Consts.SleepThreshold) {
         this.setAnim(
           Consts.AnimSleepStart,
           Consts.AnimSleepEnd,
@@ -417,7 +417,7 @@ export class Player extends AnimSprite {
   }
 
   push() {
-    let ice = this.engine.iceAt(this.xTile + this.direction, this.yTile);
+    const ice = this.engine.iceAt(this.xTile + this.direction, this.yTile);
     if (ice && ice.canGlide(this.direction)) {
       this.engine.addSparks(this.xTile + this.direction, this.yTile, Consts.ColorWhite, 3);
       this.engine.addSparks(this.xTile + this.direction, this.yTile, Consts.ColorBlue, 3, 1.5);
@@ -471,7 +471,7 @@ export class Player extends AnimSprite {
 
   doTeleportIn() {
     this.counter += 1;
-    if (this.counter % 10 === 0) {
+    if (this.counter % Consts.SparkInterval === 0) {
       this.innerCounter += 1;
       if (this.innerCounter === 1) {
         this.engine.sound.play('climb');
@@ -488,6 +488,10 @@ export class Player extends AnimSprite {
 
   doTeleportOut() {
     const teleport = this.engine.spriteAt(this.xTile, this.yTile + 1);
+    if (!teleport || !teleport.link) {
+      this.setState(Consts.MoveStand, false);
+      return;
+    }
     this.x = teleport.link.x;
     this.y = teleport.link.y - 32;
     this.updatePosition();

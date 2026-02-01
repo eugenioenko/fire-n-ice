@@ -10,7 +10,7 @@ export class Ice extends AnimSprite {
     this.yTile = ty;
     this.length = length;
     this.animEnd = 1;
-    this.animDelay = 9;
+    this.animDelay = Consts.IceAnimDelay;
     this.animRow = 0;
     this.direction = 0;
     this.falling = false;
@@ -128,7 +128,7 @@ export class Ice extends AnimSprite {
 
   move() {
     for (let i = 0; i < this.length; i++) {
-      let tile_down = this.spriteTypeAt(this.xTile + i, this.yTile + 1);
+      const tile_down = this.spriteTypeAt(this.xTile + i, this.yTile + 1);
       if (tile_down && tile_down !== Consts.ObjectFire) {
         this.corners.d = tile_down;
       }
@@ -248,18 +248,18 @@ export class Ice extends AnimSprite {
   }
 
   glide() {
-    this.counter += 4;
+    this.counter += Consts.PhysicsSpeed;
     if (this.counter <= Consts.TileWidth) {
-      this.x += 4 * this.direction;
+      this.x += Consts.PhysicsSpeed * this.direction;
     } else {
       this.push();
     }
   }
 
   doDown() {
-    this.counter += 4;
+    this.counter += Consts.PhysicsSpeed;
     if (this.counter <= Consts.TileWidth) {
-      this.y += 4;
+      this.y += Consts.PhysicsSpeed;
     } else {
       if (!this.gravity()) {
         this.setState(Consts.MoveStand, false);

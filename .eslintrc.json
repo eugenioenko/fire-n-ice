@@ -1,0 +1,31 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["eslint:recommended"],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "globals": {
+    "game": "readonly",
+    "tool": "readonly",
+    "canvas": "readonly"
+  },
+  "rules": {
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "eqeqeq": ["error", "always"],
+    "no-undef": "error",
+    "no-console": "off",
+    "prefer-const": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["**/__tests__/**/*.js"],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
+}

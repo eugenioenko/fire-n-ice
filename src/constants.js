@@ -1,5 +1,19 @@
 export const Consts = Object.freeze({
+  // Grid
   TileWidth: 32,
+
+  // Physics
+  PhysicsSpeed: 4,
+  PlayerSpeed: 2,
+
+  // Timing
+  SparkInterval: 10,
+  RipDuration: 70,
+  IntroDuration: 32,
+  SleepThreshold: 500,
+  PlayerAnimDelay: 3,
+  IceAnimDelay: 9,
+
   MoveStand: 0,
   MoveLeft: 1,
   MoveRight: 2,
@@ -11,7 +25,7 @@ export const Consts = Object.freeze({
   MoveIceMoving: 8,
   MoveIceCheck: 9,
   MoveRip: 10,
-  MovePush: 8,
+  MovePush: 16,
   MoveIceFail: 11,
   MoveLevelExit: 12,
   MoveLevelEnter: 13,
@@ -62,6 +76,8 @@ export const Consts = Object.freeze({
   ObjectTeleport: 8,
   GameStatePlay: 1,
   GameStateIntro: 2,
+  GameStatePaused: 3,
+  GameStateTransition: 4,
   ColorGreen: '124, 238, 66',
   ColorBlue: '122, 211, 255',
   ColorOrange: '255, 88, 33',

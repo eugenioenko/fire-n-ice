@@ -63,6 +63,12 @@ export class Engine {
   }
 
   nextLevel() {
+    if (this.onLevelComplete) {
+      this.onLevelComplete(this.level);
+    }
+  }
+
+  loadNextLevel() {
     this.level++;
     localStorage.setItem('level', this.level);
     this.scene.load(this.level);
@@ -121,10 +127,10 @@ export class Engine {
   }
 
   addIceBlock(tx, ty) {
-    let foundIceBlocks = [];
+    const foundIceBlocks = [];
     for (let i = 0; i < this.sprites.length; i++) {
       if (this.sprites[i].id === Consts.ObjectIce && this.sprites[i].yTile === ty) {
-        let ice = this.sprites[i];
+        const ice = this.sprites[i];
         if (ice.xTile - 1 === tx || ice.xTile + ice.length === tx) {
           foundIceBlocks.push(ice);
         }
@@ -144,9 +150,9 @@ export class Engine {
   }
 
   joinIceBlocks(iceblockA, iceblockB) {
-    let tx = iceblockA.xTile;
-    let ty = iceblockA.yTile;
-    let length = iceblockA.length + iceblockB.length + 1;
+    const tx = iceblockA.xTile;
+    const ty = iceblockA.yTile;
+    const length = iceblockA.length + iceblockB.length + 1;
     this.addSprite(new Ice(this, tx, ty, length, new Frost(iceblockA.frozen.left, iceblockB.frozen.right)));
     this.removeSprite(iceblockA);
     this.removeSprite(iceblockB);
