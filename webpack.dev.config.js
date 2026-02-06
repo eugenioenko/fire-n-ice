@@ -11,6 +11,7 @@ module.exports = {
   output: {
     filename: 'firenice.js',
     path: path.resolve(__dirname, 'dist'),
+    library: { name: 'FireNIce', type: 'var' },
   },
   devServer: {
     static: {

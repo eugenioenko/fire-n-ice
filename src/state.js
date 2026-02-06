@@ -38,7 +38,7 @@ export class GameState {
     }
   }
 
-  startLevel() {
+  startLevelTimer() {
     this.levelStartTime = performance.now();
   }
 

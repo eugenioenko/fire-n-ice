@@ -50,7 +50,7 @@ export class Sound {
     this.savePreferences();
     if (this.music) {
       if (this.musicOn) {
-        this.music.play().catch(() => {});
+        this.music.play().catch(() => { });
       } else {
         this.music.pause();
       }
@@ -81,7 +81,7 @@ export class Sound {
     if (!audio) return;
     audio.volume = this.sfxVolume;
     audio.currentTime = 0;
-    audio.play().catch(() => {});
+    audio.play().catch(() => { });
   }
 
   playOnce(sfx) {
@@ -90,7 +90,7 @@ export class Sound {
     if (!this.soundOn) return;
     audio.volume = this.sfxVolume;
     audio.currentTime = 0;
-    audio.play().catch(() => {});
+    audio.play().catch(() => { });
   }
 
   stop(sfx) {
@@ -107,7 +107,16 @@ export class Sound {
     this.music.volume = this.musicVolume;
     this.music.loop = true;
     if (this.musicOn) {
-      this.music.play().catch(() => {});
+      this.music.play().catch(() => {
+        // Browser blocked autoplay — resume on first user interaction                                                                          
+        const resume = () => {
+          if (this.musicOn && this.music) {
+            this.music.play().catch(() => { });
+          }
+          document.removeEventListener('keydown', resume);
+        };
+        document.addEventListener('keydown', resume, { once: true });
+      });
     }
   }
 }
