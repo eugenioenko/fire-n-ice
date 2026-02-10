@@ -6,6 +6,9 @@
 
 [![Screenshot](https://eugenioenko.github.io/fire-n-ice/images/thumbnail.png)](https://eugenioenko.github.io/fire-n-ice/)
 
+If you are interested in the online version repository:
+[Solomon online](https://github.com/eugenioenko/solomon)
+
 ## Table of Contents
 
 - [About](#about)
@@ -189,3 +192,4 @@ Contributions are welcome! Here's how to get involved:
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
