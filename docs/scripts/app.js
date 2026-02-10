@@ -21,10 +21,7 @@ function loadLevelFromEvent(event) {
 function startGame(resources) {
   const canvas = document.getElementById('canvas');
   game = new FireNIce.Game({
-    canvas, resources, gameMode: 'level', onLevelComplete: () => {
-      console.log('Level completed!');
-    },
-    level: FireNIce.levels[3],
+    canvas, resources, gameMode: 'game'
   });
   window.game = game;
   document.querySelectorAll('button.lvl').forEach((btn) => {
