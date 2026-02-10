@@ -132,19 +132,11 @@ describe('Keyboard', () => {
   });
 
   describe('canvas click', () => {
-    it('should set enter and exit intro mode on canvas click', () => {
+    it('should not set enter on canvas click (listener disabled)', () => {
       const canvas = document.getElementById('canvas');
       canvas.click();
-      expect(keyboard.enter).toBe(true);
-      expect(keyboard.intro).toBe(false);
-    });
-
-    it('should not set enter if already past intro', () => {
-      keyboard.intro = false;
-      keyboard.enter = false;
-      const canvas = document.getElementById('canvas');
-      canvas.click();
-      expect(keyboard.enter).toBe(false);
+      expect(keyboard.enter).toBeUndefined();
+      expect(keyboard.intro).toBe(true);
     });
   });
 

@@ -50,9 +50,9 @@ describe('GameState', () => {
     });
   });
 
-  describe('startLevel', () => {
+  describe('startLevelTimer', () => {
     it('should set levelStartTime', () => {
-      gameState.startLevel();
+      gameState.startLevelTimer();
       expect(gameState.levelStartTime).toBeGreaterThan(0);
     });
   });
@@ -60,7 +60,7 @@ describe('GameState', () => {
   describe('completeLevel', () => {
     beforeEach(() => {
       jest.spyOn(performance, 'now').mockReturnValue(5000);
-      gameState.startLevel();
+      gameState.startLevelTimer();
     });
 
     afterEach(() => {
