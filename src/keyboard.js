@@ -14,19 +14,22 @@ export class Keyboard {
     this.keydown = this.keydown_.bind(this);
     this.keyup = this.keyup_.bind(this);
     this.intro = true;
+    this.mobileHandlers = [];
 
     window.addEventListener('keydown', this.keydown, false);
     window.addEventListener('keyup', this.keyup, false);
 
     // Canvas click to start
     const canvas = document.getElementById('canvas');
+    this.canvasClickHandler = () => {
+      if (this.intro) {
+        this.enter = true;
+      }
+      this.intro = false;
+    };
     if (canvas) {
-      canvas.addEventListener('click', () => {
-        if (this.intro) {
-          this.enter = true;
-        }
-        this.intro = false;
-      });
+      // todo enable for game mode
+      // canvas.addEventListener('click', this.canvasClickHandler);
     }
 
     // Mobile controls - bind with null checks for compatibility
@@ -83,10 +86,33 @@ export class Keyboard {
     const el = document.getElementById(id);
     if (el) {
       el.addEventListener(event, handler);
+      this.mobileHandlers.push({ element: el, event, handler });
     }
   }
 
+  destroy() {
+    // Remove window event listeners
+    window.removeEventListener('keydown', this.keydown, false);
+    window.removeEventListener('keyup', this.keyup, false);
+
+    // Remove canvas click listener
+    const canvas = document.getElementById('canvas');
+    if (canvas && this.canvasClickHandler) {
+      canvas.removeEventListener('click', this.canvasClickHandler);
+    }
+
+    // Remove all mobile button listeners
+    for (const { element, event, handler } of this.mobileHandlers) {
+      element.removeEventListener(event, handler);
+    }
+    this.mobileHandlers = [];
+  }
+
   keydown_(e) {
+    const tag = e.target && e.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
+      return;
+    }
     e.preventDefault();
     switch (e.key) {
       case 'ArrowLeft':

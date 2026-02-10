@@ -10,8 +10,9 @@ import { levels } from './levels';
 import { Teleport } from './teleport';
 
 export class Scene {
-  constructor(engine) {
+  constructor(engine, level = null) {
     this.engine = engine;
+    this.level = level;
   }
 
   save() {
@@ -27,6 +28,11 @@ export class Scene {
         fl = sprite.frozen.left;
         fr = sprite.frozen.right;
       }
+      let ref, link;
+      if (sprite.id === Consts.ObjectTeleport) {
+        ref = sprite.refId;
+        link = sprite.linkId;
+      }
       data.sprites.push({
         id: sprite.id,
         x: sprite.xTile,
@@ -34,6 +40,8 @@ export class Scene {
         v: value,
         fl: fl,
         fr: fr,
+        ref: ref,
+        link: link,
       });
     }
 
@@ -45,7 +53,14 @@ export class Scene {
       index = 0;
     }
     this.engine.level = index;
-    const level = levels[index];
+
+    let level;
+    if (this.level) {
+      level = this.level;
+    } else {
+      level = levels[index];
+    }
+
     this.engine.sprites = [];
     this.engine.map = new TileMap(this.engine, level.map, level.theme);
     const teleports = new Map();

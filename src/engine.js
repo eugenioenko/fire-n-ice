@@ -9,7 +9,14 @@ import { Sparks } from './sfx';
  * Engine Loop
  */
 export class Engine {
-  constructor(canvas, resources) {
+  /**
+   * @param {Object} options - Engine options
+   * @param {HTMLCanvasElement} options.canvas - The canvas element
+   * @param {Object} options.resources - Game resources
+   * @param {Function} [options.onLevelComplete] - Callback for level completion
+   * @param {Object} [options.level] - Initial level data
+   */
+  constructor({ canvas, resources, onLevelComplete = null, level = null }) {
     this.canvas = canvas;
     this.cwidth = canvas.width;
     this.cheight = canvas.height;
@@ -21,12 +28,14 @@ export class Engine {
     this.level = 0;
     this.keyboard = new Keyboard();
     this.sound = new Sound(resources);
-    this.scene = new Scene(this);
-    this.editor = false;
+    this.scene = new Scene(this, level);
+    this.gameMode = 'game';
+    this.onLevelCompleteCallback = onLevelComplete;
     this.noSpriteMoveCount = 0;
-    const level = localStorage.getItem('level');
+
+    const lvl = localStorage.getItem('level');
     if (level !== null) {
-      this.level = parseInt(level, 10);
+      this.level = parseInt(lvl, 10);
     }
     this.scene.load(this.level);
   }
@@ -41,36 +50,28 @@ export class Engine {
     for (let i = 0; i < this.sfxs.length; ++i) {
       this.sfxs[i].draw();
     }
-
-    if (this.editor) {
-      this.ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-      this.ctx.strokeWidth = 1;
-      this.ctx.beginPath();
-      for (let x = 0; x < this.cwidth; x += 32) {
-        for (let y = 0; y < this.cheight; y += 32) {
-          this.ctx.strokeRect(x, y, x + 32, y + 32);
-        }
-      }
-      this.ctx.closePath();
-    }
   }
 
   collision() {
+    const gameIsEditorMode = this.gameMode === 'editor';
     const fires = this.sprites.filter(sprite => sprite.id === Consts.ObjectFire);
-    if (!fires.length && !this.editor && this.player.state !== Consts.MoveLevelExit) {
+    if (!fires.length && !gameIsEditorMode && this.player.state !== Consts.MoveLevelExit) {
       this.player.outro();
     }
   }
 
   nextLevel() {
-    if (this.onLevelComplete) {
-      this.onLevelComplete(this.level);
+    const gameIsEditor = this.gameMode === 'editor';
+    if (this.onLevelCompleteCallback && !gameIsEditor) {
+      this.onLevelCompleteCallback(this.level);
     }
   }
 
   loadNextLevel() {
     this.level++;
-    localStorage.setItem('level', this.level);
+    if (this.gameMode === 'game') {
+      localStorage.setItem('level', this.level);
+    }
     this.scene.load(this.level);
   }
 

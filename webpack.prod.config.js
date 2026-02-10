@@ -10,5 +10,6 @@ module.exports = {
   output: {
     filename: 'firenice.min.js',
     path: path.resolve(__dirname, 'dist'),
+    library: { name: 'FireNIce', type: 'var' },
   },
 };

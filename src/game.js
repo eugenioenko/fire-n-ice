@@ -9,20 +9,31 @@ import { levels } from './levels';
 
 export class Game {
   /**
-   * @param {*} canvas   The canvas element
-   * @param {*} resources  Game resources
+   * @param {Object} options - Game options
+   * @param {HTMLCanvasElement} options.canvas - The canvas element
+   * @param {Object} options.resources - Game resources
+   * @param {string} options.gameMode - Game mode: 'game', 'level', or 'editor'
+   * @param {onLevelComplete} [options.onLevelComplete] - Callback for level completion
+   * @param {Object} [options.level] - Initial level data
    */
-  constructor(canvas, resources) {
+  constructor({ canvas, resources, gameMode = 'game', onLevelComplete = null, level = null }) {
     this.time = performance.now();
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
-    this.engine = new Engine(canvas, resources);
+    this.engine = new Engine({
+      canvas,
+      resources,
+      level,
+      onLevelComplete: (levelIndex) => this.onLevelComplete(levelIndex)
+    });
     this.gameState = new GameState();
     this.levels = levels;
     this.state = Consts.GameStatePlay;
+    this.gameMode = gameMode;
+    this.engine.gameMode = gameMode;
     this.engine.sound.soundtrack();
-    this.gameState.startLevel();
-    this.engine.onLevelComplete = levelIndex => this.onLevelComplete(levelIndex);
+    this.gameState.startLevelTimer();
+    this.onLevelCompleteCallback = onLevelComplete;
 
     // Transition properties
     this.transitionPhase = null; // 'closing' or 'opening'
@@ -33,7 +44,7 @@ export class Game {
     this.transitionCenterY = 0;
 
     this.gameLoop = this.gameLoop_.bind(this);
-    setInterval(() => this.gameLoop(), 1000 / 60);
+    this.intervalId = setInterval(() => this.gameLoop(), 1000 / 60);
   }
 
   gameLoop_() {
@@ -50,7 +61,6 @@ export class Game {
     }
 
     this.engine.draw();
-    this.drawHUD();
     this.engine.move();
 
     // Draw opening transition on top if active
@@ -59,16 +69,13 @@ export class Game {
     }
   }
 
-  drawHUD() {
-    const fireCount = this.engine.sprites.filter(s => s.id === Consts.ObjectFire).length;
-
-    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-    this.ctx.fillRect(5, 5, 130, 25);
-
-    this.ctx.fillStyle = '#fff';
-    this.ctx.font = '14px monospace';
-    this.ctx.textAlign = 'left';
-    this.ctx.fillText(` Lvl ${this.engine.level + 1}  🔥 ${fireCount}`, 12, 22);
+  startNextlevel() {
+    this.gameState.startLevelTimer();
+    this.engine.loadNextLevel();
+    // Switch to opening phase, centered on new player position
+    this.transitionPhase = 'opening';
+    this.transitionCenterX = this.engine.player.x + 16;
+    this.transitionCenterY = this.engine.player.y + 16;
   }
 
   onLevelComplete(levelIndex) {
@@ -80,42 +87,31 @@ export class Game {
     this.transitionRadius = this.maxRadius;
     this.transitionPhase = 'closing';
     this.state = Consts.GameStateTransition;
+
+    if (this.onLevelCompleteCallback) {
+      this.onLevelCompleteCallback(levelIndex);
+    }
   }
 
   updateTransition() {
     if (this.transitionPhase === 'closing') {
-      // Draw the current game state
       this.engine.draw();
-
-      // Draw closing circle
       this.drawCircleTransition();
-
-      // Shrink the circle
       this.transitionRadius -= this.transitionSpeed;
-
       if (this.transitionRadius <= 0) {
         this.transitionRadius = 0;
 
         // Load next level
-        this.gameState.startLevel();
-        this.engine.loadNextLevel();
+        const isGameModeGame = this.gameMode === 'game';
+        if (isGameModeGame) {
+          this.startNextlevel();
+        }
 
-        // Switch to opening phase, centered on new player position
-        this.transitionPhase = 'opening';
-        this.transitionCenterX = this.engine.player.x + 16;
-        this.transitionCenterY = this.engine.player.y + 16;
       }
     } else if (this.transitionPhase === 'opening') {
-      // Draw the new level
       this.engine.draw();
-      this.drawHUD();
-
-      // Draw opening circle
       this.drawCircleTransition();
-
-      // Expand the circle
       this.transitionRadius += this.transitionSpeed;
-
       if (this.transitionRadius >= this.maxRadius) {
         // Transition complete
         this.transitionPhase = null;
@@ -200,5 +196,18 @@ export class Game {
     this.ctx.fillText('ENTER - Restart level', this.canvas.width / 2, this.canvas.height / 2 + 15);
     this.ctx.fillText(`M - Music: ${this.engine.sound.musicOn ? 'ON' : 'OFF'}`, this.canvas.width / 2, this.canvas.height / 2 + 40);
     this.ctx.fillText(`S - Sound: ${this.engine.sound.soundOn ? 'ON' : 'OFF'}`, this.canvas.width / 2, this.canvas.height / 2 + 65);
+  }
+
+  destroy() {
+    // Clear the game loop interval
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+
+    // Destroy keyboard to remove event listeners
+    if (this.engine && this.engine.keyboard) {
+      this.engine.keyboard.destroy();
+    }
   }
 }
