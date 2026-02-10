@@ -8,7 +8,7 @@ async function doStartClick() {
   const loader = document.getElementById('loader');
   loader.style.display = 'none';
   loader.style.opacity = 0;
-  const resources = await FireNIce.loadGameResources();
+  const resources = await FireNIce.loadGameResources('/fire-n-ice');
   startGame(resources);
 }
 

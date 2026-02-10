@@ -51,32 +51,32 @@ export class Resources {
 
 
 
-export async function loadGameResources() {
+export async function loadGameResources(urlPrefix = '') {
   let resolve;
   const promise = new Promise((res) => (resolve = res));
   const resources = new Resources();
-  resources.add('image', 'tilemap', '/images/tilemap.png');
-  resources.add('image', 'img_ice', '/images/ice.png');
-  resources.add('image', 'img_jar', '/images/jar.png');
-  resources.add('image', 'img_fire', '/images/fire.png');
-  resources.add('image', 'img_dona', '/images/dona.png');
-  resources.add('image', 'img_intro', '/images/intro.png');
-  resources.add('image', 'img_metal', '/images/metal.png');
-  resources.add('image', 'img_teleport', '/images/teleport.png');
-  resources.add('image', 'frost', '/images/frozen.png');
-  resources.add('audio', 'sfx-ice-push', '/sounds/sfx-ice-push.mp3');
-  resources.add('audio', 'sfx-fire-off', '/sounds/sfx-fire-off.mp3');
-  resources.add('audio', 'sfx-falling', '/sounds/sfx-falling.mp3');
-  resources.add('audio', 'sfx-new-ice', '/sounds/sfx-new-ice.mp3');
-  resources.add('audio', 'sfx-climb', '/sounds/sfx-climb.mp3');
-  resources.add('audio', 'sfx-ice-collision', '/sounds/sfx-ice-collision.mp3');
-  resources.add('audio', 'sfx-stage-enter', '/sounds/sfx-stage-enter.mp3');
-  resources.add('audio', 'sfx-danger', '/sounds/sfx-danger.mp3');
-  resources.add('audio', 'sfx-ice-remove', '/sounds/sfx-ice-remove.mp3');
-  resources.add('audio', 'sfx-state-leave', '/sounds/sfx-state-leave.mp3');
-  resources.add('audio', 'sfx-disabled', '/sounds/sfx-disabled.mp3');
-  resources.add('audio', 'sfx-fall', '/sounds/sfx-fall.mp3');
-  resources.add('audio', 'sfx-music-sparks', '/music/sparks.mp3');
+  resources.add('image', 'tilemap', `${urlPrefix}/images/tilemap.png`);
+  resources.add('image', 'img_ice', `${urlPrefix}/images/ice.png`);
+  resources.add('image', 'img_jar', `${urlPrefix}/images/jar.png`);
+  resources.add('image', 'img_fire', `${urlPrefix}/images/fire.png`);
+  resources.add('image', 'img_dona', `${urlPrefix}/images/dona.png`);
+  resources.add('image', 'img_intro', `${urlPrefix}/images/intro.png`);
+  resources.add('image', 'img_metal', `${urlPrefix}/images/metal.png`);
+  resources.add('image', 'img_teleport', `${urlPrefix}/images/teleport.png`);
+  resources.add('image', 'frost', `${urlPrefix}/images/frozen.png`);
+  resources.add('audio', 'sfx-ice-push', `${urlPrefix}/sounds/sfx-ice-push.mp3`);
+  resources.add('audio', 'sfx-fire-off', `${urlPrefix}/sounds/sfx-fire-off.mp3`);
+  resources.add('audio', 'sfx-falling', `${urlPrefix}/sounds/sfx-falling.mp3`);
+  resources.add('audio', 'sfx-new-ice', `${urlPrefix}/sounds/sfx-new-ice.mp3`);
+  resources.add('audio', 'sfx-climb', `${urlPrefix}/sounds/sfx-climb.mp3`);
+  resources.add('audio', 'sfx-ice-collision', `${urlPrefix}/sounds/sfx-ice-collision.mp3`);
+  resources.add('audio', 'sfx-stage-enter', `${urlPrefix}/sounds/sfx-stage-enter.mp3`);
+  resources.add('audio', 'sfx-danger', `${urlPrefix}/sounds/sfx-danger.mp3`);
+  resources.add('audio', 'sfx-ice-remove', `${urlPrefix}/sounds/sfx-ice-remove.mp3`);
+  resources.add('audio', 'sfx-state-leave', `${urlPrefix}/sounds/sfx-state-leave.mp3`);
+  resources.add('audio', 'sfx-disabled', `${urlPrefix}/sounds/sfx-disabled.mp3`);
+  resources.add('audio', 'sfx-fall', `${urlPrefix}/sounds/sfx-fall.mp3`);
+  resources.add('audio', 'sfx-music-sparks', `${urlPrefix}/music/sparks.mp3`);
 
   resources.ready(() => {
     resolve(resources);
