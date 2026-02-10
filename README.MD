@@ -6,6 +6,9 @@
 
 [![Screenshot](https://eugenioenko.github.io/fire-n-ice/images/thumbnail.png)](https://eugenioenko.github.io/fire-n-ice/)
 
+If you are interested in the online version repository:
+[Solomon online](https://github.com/eugenioenko/solomon)
+
 ## Table of Contents
 
 - [About](#about)
