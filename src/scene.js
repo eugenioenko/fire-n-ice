@@ -31,7 +31,7 @@ export class Scene {
       let ref, link;
       if (sprite.id === Consts.ObjectTeleport) {
         ref = sprite.refId;
-        link = sprite.linkid;
+        link = sprite.linkId;
       }
       data.sprites.push({
         id: sprite.id,
