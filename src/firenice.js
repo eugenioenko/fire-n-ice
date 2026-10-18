@@ -1,5 +1,3 @@
-import { Resources } from './resources';
-
 export { Consts } from './constants';
 export { Fire } from './fire';
 export { Game } from './game';

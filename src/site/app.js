@@ -1,4 +1,6 @@
-var game;
+import * as FireNIce from '../firenice';
+
+let game;
 
 window.addEventListener('load', async () => {
   document.getElementById('loader').addEventListener('click', () => doStartClick());
@@ -8,7 +10,7 @@ async function doStartClick() {
   const loader = document.getElementById('loader');
   loader.style.display = 'none';
   loader.style.opacity = 0;
-  const resources = await FireNIce.loadGameResources('/fire-n-ice');
+  const resources = await FireNIce.loadGameResources('./');
   startGame(resources);
 }
 
