@@ -52,6 +52,7 @@ export class Resources {
 
 
 export async function loadGameResources(urlPrefix = '') {
+  urlPrefix = urlPrefix.replace(/\/+$/, '');
   let resolve;
   const promise = new Promise((res) => (resolve = res));
   const resources = new Resources();

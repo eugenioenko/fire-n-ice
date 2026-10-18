@@ -941,8 +941,8 @@ export const levels = [
     sprites: [
       { id: 7, x: 12, y: 8, v: 1 },
       { id: 5, x: 10, y: 9, v: true },
-      { id: 8, x: 16, y: 9, v: false },
-      { id: 8, x: 10, y: 5, v: false },
+      { id: 8, x: 16, y: 9, v: false, ref: 0, link: 1 },
+      { id: 8, x: 10, y: 5, v: false, ref: 1, link: 0 },
       { id: 6, x: 6, y: 10, v: 1 },
     ],
   },

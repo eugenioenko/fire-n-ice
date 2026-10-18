@@ -96,6 +96,7 @@ export class Scene {
         case Consts.ObjectTeleport: {
           const teleport = new Teleport(this.engine, sprite.x, sprite.y);
           this.engine.addSprite(teleport);
+          teleport.refId = sprite.ref;
           teleport.linkId = sprite.link;
           teleports.set(sprite.ref, teleport);
           break;

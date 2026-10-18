@@ -3,6 +3,9 @@ import { Engine } from './engine';
 import { GameState } from './state';
 import { levels } from './levels';
 
+const FRAME_DURATION = 1000 / 60;
+const MAX_CATCH_UP_TIME = FRAME_DURATION * 5;
+
 /**
  * Game Loop
  */
@@ -17,7 +20,7 @@ export class Game {
    * @param {Object} [options.level] - Initial level data
    */
   constructor({ canvas, resources, gameMode = 'game', onLevelComplete = null, level = null }) {
-    this.time = performance.now();
+    this.time = null;
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.engine = new Engine({
@@ -44,7 +47,35 @@ export class Game {
     this.transitionCenterY = 0;
 
     this.gameLoop = this.gameLoop_.bind(this);
-    this.intervalId = setInterval(() => this.gameLoop(), 1000 / 60);
+    this.accumulator = 0;
+    this.animate = this.animate_.bind(this);
+    this.onVisibilityChange = () => {
+      this.time = null;
+      this.accumulator = 0;
+    };
+    document.addEventListener('visibilitychange', this.onVisibilityChange);
+    this.frameId = requestAnimationFrame(this.animate);
+  }
+
+  animate_(timestamp) {
+    if (this.frameId === null) {
+      return;
+    }
+
+    if (this.time !== null) {
+      // Bound catch-up work after a stall; keep drawing and movement on one 60 Hz clock.
+      this.accumulator = Math.min(this.accumulator + timestamp - this.time, MAX_CATCH_UP_TIME);
+      // Allow for floating-point rounding at exact frame boundaries.
+      while (this.accumulator + 1e-7 >= FRAME_DURATION && this.frameId !== null) {
+        this.accumulator = Math.max(0, this.accumulator - FRAME_DURATION);
+        this.gameLoop();
+      }
+    }
+    this.time = timestamp;
+
+    if (this.frameId !== null) {
+      this.frameId = requestAnimationFrame(this.animate);
+    }
   }
 
   gameLoop_() {
@@ -199,11 +230,11 @@ export class Game {
   }
 
   destroy() {
-    // Clear the game loop interval
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
+    if (this.frameId !== null) {
+      cancelAnimationFrame(this.frameId);
+      this.frameId = null;
     }
+    document.removeEventListener('visibilitychange', this.onVisibilityChange);
 
     // Destroy keyboard to remove event listeners
     if (this.engine && this.engine.keyboard) {

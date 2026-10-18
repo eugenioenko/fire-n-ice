@@ -35,3 +35,7 @@ scss/.sass-cache/*
 # Node modules
 node_modules/
 node_modules/*
+
+# Generated site and local Vite cache
+dist/
+.vite/

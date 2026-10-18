@@ -103,8 +103,8 @@ Create your own puzzles with the built-in level editor:
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm
+- Node.js 22.12+ (CI uses Node.js 24)
+- pnpm 11.3 (pinned in `package.json`)
 
 ### Setup
 
@@ -116,28 +116,86 @@ cd fire-n-ice
 # Install dependencies
 pnpm install
 
-# Start development server
-pnpm run serve
+# Start the Vite development server at http://localhost:5173
+pnpm dev
 
-# Or build for production
-pnpm run build
+# Build the complete site and the reusable engine bundle
+pnpm build
+
+# Preview the production build at http://localhost:8081
+pnpm preview
 ```
 
 ### Available Scripts
 
 | Command | Description |
 |---------|-------------|
-| `pnpm run dev` | Development build with watch mode |
-| `pnpm run serve` | Dev server with hot reload at localhost:8080 |
-| `pnpm run build` | Production build (minified) |
+| `pnpm dev` | Vite development server at localhost:5173 |
+| `pnpm serve` | Alias for the Vite development server |
+| `pnpm build` | Build the site and reusable engine into `dist/` |
+| `pnpm build:lib` | Build only the classic `FireNIce` engine bundle |
+| `pnpm preview` | Preview `dist/` at localhost:8081 |
+| `pnpm preview:http` | Serve `dist/` with http-server at localhost:8081 |
+| `pnpm test:site` | Check the built site at `/` and `/fire-n-ice/` |
 | `pnpm run lint` | Run ESLint |
 | `pnpm test` | Run Jest tests |
+
+### Project layout
+
+- `index.html` and `editor.html`: Vite page entry points.
+- `src/`: Game engine, page modules, and tests.
+- `public/`: Static CSS, images, music, and sounds copied into every build.
+- `dist/`: Generated production site; ignored by Git.
+
+Asset paths are relative to the page. The same build works at a domain root, a
+GitHub Pages project URL, or another subdirectory. Run the commands from this
+repository; no parent-directory server or extra `fire-n-ice/` copy is needed.
+
+### Local verification
+
+```bash
+pnpm lint
+pnpm test --runInBand
+pnpm build
+pnpm test:site
+pnpm preview
+```
+
+Open `http://localhost:8081/` for the game and
+`http://localhost:8081/editor.html` for the editor. The site check starts a temporary
+http-server, verifies both root and `/fire-n-ice/` asset paths, and checks the
+classic engine exports. Use either preview command on port 8081 at a time.
+
+### GitHub Pages deployment
+
+In the repository's **Settings → Pages → Build and deployment**, set **Source** to
+**GitHub Actions** when switching to this layout. The previous `/docs` publishing
+source is no longer used.
+
+The workflow runs lint, unit tests, the Vite builds, and the root/subdirectory
+checks. Pull requests run these checks without deploying. Pushes to `master`, or
+manual workflow runs on `master`, upload `dist/` and deploy it to GitHub Pages.
+It uses the current official action major versions: checkout/setup-node v7,
+configure-pages v6, and upload-pages-artifact/deploy-pages v5.
+
+### Embedding in Solomon or another application
+
+`pnpm build` also produces `dist/scripts/firenice.min.js`, an IIFE library exposing
+the existing `FireNIce` global. `pnpm build:lib` rebuilds that bundle alone. Keep the
+bundle and `images/`, `sounds/`, and `music/` directories from the same tagged
+revision when updating a consumer.
+
+`FireNIce.loadGameResources()` retains root-relative asset URLs for existing
+consumers such as Solomon. The standalone pages use
+`FireNIce.loadGameResources('./')`; a consumer can also pass an explicit asset
+base such as `/games/fire-n-ice/`. Load the classic bundle with a regular script
+tag and keep the audio elements expected by the engine in the embedding page.
 
 ### Tech Stack
 
 - **Vanilla JavaScript** - No frameworks, pure JS
 - **HTML5 Canvas** - Game rendering
-- **Webpack** - Module bundling
+- **Vite** - Development server, site build, and reusable engine bundling
 - **ESLint + Prettier** - Code quality
 
 ## Roadmap
